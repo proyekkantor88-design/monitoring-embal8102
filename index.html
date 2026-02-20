@@ -45,33 +45,51 @@
         </label>
     </div>
 </div>
-            <div class="mt-6 overflow-x-auto">
-    <table class="w-full text-sm text-left border-collapse">
-        <thead class="bg-gray-50 text-gray-700 uppercase text-xs">
-            <tr>
-                <th class="p-4 border">Komponen Belanja</th>
-                <th class="p-4 border text-center">Pagu Alokasi</th>
-                <th class="p-4 border text-center">Jan - Mar</th>
-                <th class="p-4 border text-center">Apr - Jun</th>
-                <th class="p-4 border text-center">Jul - Sep</th>
-                <th class="p-4 border text-center">Okt - Des</th>
-                <th class="p-4 border text-center">Aksi</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white">
-            <tr class="hover:bg-gray-50">
-                <td class="p-4 border font-medium">Belanja Gawai & ATK Kantor</td>
-                <td class="p-4 border text-right">Rp 50.000.000</td>
-                <td class="p-4 border"><input type="number" class="w-full p-2 border rounded shadow-sm focus:ring-2 focus:ring-indigo-500" placeholder="0"></td>
-                <td class="p-4 border"><input type="number" class="w-full p-2 border rounded shadow-sm focus:ring-2 focus:ring-indigo-500" placeholder="0"></td>
-                <td class="p-4 border"><input type="number" class="w-full p-2 border rounded shadow-sm focus:ring-2 focus:ring-indigo-500" placeholder="0"></td>
-                <td class="p-4 border"><input type="number" class="w-full p-2 border rounded shadow-sm focus:ring-2 focus:ring-indigo-500" placeholder="0"></td>
-                <td class="p-4 border text-center">
-                    <button class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition">Simpan</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+           <div class="mt-6 bg-white p-4 rounded-lg shadow-sm">
+    <div class="flex justify-between items-center mb-4">
+        <h4 class="text-lg font-semibold text-gray-700">Rencana Penarikan Anggaran - Triwulan I 2026</h4>
+        <div class="flex gap-2">
+            <label class="bg-indigo-600 text-white px-4 py-2 rounded shadow-sm hover:bg-indigo-700 cursor-pointer text-sm">
+                Upload Excel Sesuai Template
+                <input type="file" class="hidden" id="excel-upload">
+            </label>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto border rounded-lg">
+        <table class="w-full text-xs text-left">
+            <thead class="bg-gray-100 text-gray-600 uppercase border-b">
+                <tr>
+                    <th class="p-3 border-r whitespace-nowrap">Subbag/Fungsi</th>
+                    <th class="p-3 border-r whitespace-nowrap">Kegiatan</th>
+                    <th class="p-3 border-r whitespace-nowrap">KRO</th>
+                    <th class="p-3 border-r whitespace-nowrap">RO</th>
+                    <th class="p-3 border-r whitespace-nowrap">Komp</th>
+                    <th class="p-3 border-r whitespace-nowrap">Akun</th>
+                    <th class="p-3 border-r whitespace-nowrap">Detil / Rincian Uraian</th>
+                    <th class="p-3 border-r whitespace-nowrap text-right">Anggaran (Rp)</th>
+                    <th class="p-3 border-r whitespace-nowrap">Bulan RPD</th>
+                    <th class="p-3 text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr class="hover:bg-blue-50 transition">
+                    <td class="p-3 border-r">Sosial</td>
+                    <td class="p-3 border-r">2905</td>
+                    <td class="p-3 border-r">BMA</td>
+                    <td class="p-3 border-r">004</td>
+                    <td class="p-3 border-r">051</td>
+                    <td class="p-3 border-r">521211</td>
+                    <td class="p-3 border-r max-w-xs truncate">paket data pelatihan petugas februari</td>
+                    <td class="p-3 border-r text-right font-semibold">300.000</td>
+                    <td class="p-3 border-r">Februari</td>
+                    <td class="p-3 text-center">
+                        <button class="text-indigo-600 hover:underline">Edit</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
             </div>
     </main>
