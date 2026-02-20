@@ -165,7 +165,10 @@
             let totalFiltered = 0;
 
             const filtered = dataLokal.filter(item => {
-                return (selTim === "" || item.tim === selTim) &&
+                // Kak, di sini logikanya kita buat fleksibel: cek 'tim' ATAU 'subbag'
+                const nilaiTim = item.tim || item.subbag || "-";
+                
+                return (selTim === "" || nilaiTim === selTim) &&
                        (selKegiatan === "" || item.kegiatan === selKegiatan) &&
                        (selAkun === "" || item.akun === selAkun) &&
                        (selBulan === "" || item.bulan === selBulan);
@@ -174,10 +177,13 @@
             filtered.forEach((data) => {
                 const nominal = Number(data.anggaran || 0);
                 totalFiltered += nominal;
+                
+                // Pastikan tampilan Tim mengambil dari salah satu field yang ada
+                const labelTim = data.tim || data.subbag || "-";
 
                 html += `
                     <tr class="border-b hover:bg-slate-50 transition">
-                        <td class="p-3">${data.tim}</td>
+                        <td class="p-3">${labelTim}</td>
                         <td class="p-3">${data.kegiatan}</td>
                         <td class="p-3 text-center font-bold text-blue-600">${data.akun}</td>
                         <td class="p-3 text-center text-gray-500">${data.detail_pok || '-'}</td>
@@ -213,7 +219,8 @@
             try {
                 btn.disabled = true; btn.innerText = "...";
                 await addDoc(collection(db, "rpd_entries"), {
-                    tim, kegiatan, akun, detail_pok, rincian,
+                    tim, // Data baru akan disimpan dengan field 'tim'
+                    kegiatan, akun, detail_pok, rincian,
                     anggaran: Number(anggaranValue), bulan, createdAt: new Date()
                 });
                 alert("Data Berhasil Disimpan!");
@@ -227,7 +234,7 @@
             }
         };
 
-        // --- 4. FUNGSI HAPUS ---
+        // Sisanya sama (Hapus & Cetak) ...
         window.hapusData = async function(id) {
             if(confirm("Hapus data ini?")) {
                 try { await deleteDoc(doc(db, "rpd_entries", id)); } 
@@ -235,7 +242,6 @@
             }
         };
 
-        // --- 5. FUNGSI CETAK ---
         window.cetakLaporan = function() {
             const tableContent = document.getElementById('table-body-view').innerHTML;
             const total = document.getElementById('total-display').innerText;
@@ -268,9 +274,6 @@
                         <h3 style="margin:0">BADAN PUSAT STATISTIK KABUPATEN MALUKU TENGGARA</h3>
                         <h2 style="margin:5px 0">LAPORAN RENCANA PENARIKAN DANA (RPD)</h2>
                     </div>
-                    <div style="font-size:11px; margin-bottom:15px">
-                        <strong>Filter:</strong> Tim: ${fTim} | Bulan: ${fBulan}
-                    </div>
                     <table>
                         <thead>
                             <tr>
@@ -294,11 +297,6 @@
                             </tr>
                         </tfoot>
                     </table>
-                    <div class="footer">
-                        <div class="ttd">
-                            Langgur, ${tgl}<br>Pembuat Laporan,<br><br><br><br><br>( ............................................ )
-                        </div>
-                    </div>
                 </body>
                 </html>
             `);
