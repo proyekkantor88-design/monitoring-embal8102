@@ -8,7 +8,7 @@
 </head>
 <body class="bg-slate-100 flex">
 
-    <aside class="w-64 h-screen bg-indigo-900 text-white p-5 sticky top-0">
+    <aside class="w-64 h-screen bg-indigo-900 text-white p-5 sticky top-0 no-print">
         <h1 class="text-2xl font-bold mb-10 border-b border-indigo-700 pb-3">EMBAL BPS</h1>
         <nav>
             <ul class="space-y-4">
@@ -24,16 +24,16 @@
     </aside>
 
     <main class="flex-1 p-8">
-        <header class="flex justify-between items-center mb-8">
+        <header class="flex justify-between items-center mb-8 no-print">
             <h2 class="text-2xl font-bold text-slate-800">Entri Rencana Penarikan Dana</h2>
             <span class="bg-white px-4 py-2 rounded shadow text-sm">Satker: BPS Kab. Maluku Tenggara</span>
         </header>
 
-        <div class="bg-white p-6 rounded-lg shadow-md mb-10">
+        <div class="bg-white p-6 rounded-lg shadow-md mb-10 no-print">
             <h4 class="text-lg font-semibold text-gray-700 mb-4 text-center border-b pb-2">Form Input RPD</h4>
             <div class="overflow-x-auto">
                 <table class="w-full text-xs text-left">
-                    <thead class="bg-slate-50 text-slate-600 uppercase">
+                    <thead class="bg-slate-50 text-slate-600 uppercase border">
                         <tr>
                             <th class="p-2 border">Subbag</th>
                             <th class="p-2 border">Kegiatan</th>
@@ -68,60 +68,55 @@
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-600">
-            <h4 class="text-xl font-bold text-slate-800 mb-4">Monitoring RPD Terinput</h4>
-            
-            <div class="grid grid-cols-4 gap-4 mb-6 bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+            <div class="flex justify-between items-center mb-6 no-print">
+                <h4 class="text-xl font-bold text-slate-800">Monitoring RPD Terinput</h4>
+                <button onclick="cetakLaporan()" class="flex items-center bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition text-sm font-bold">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    CETAK LAPORAN
+                </button>
+            </div>
+
+            <div class="grid grid-cols-4 gap-4 mb-6 bg-indigo-50 p-4 rounded-lg border border-indigo-100 no-print">
                 <div>
-                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Cari Subbag</label>
-                    <select id="f-subbag" onchange="applyFilter()" class="w-full p-1 text-xs border rounded focus:ring-2 focus:ring-indigo-300 outline-none">
-                        <option value="">Semua Subbag</option>
-                        <option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option>
-                    </select>
+                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Subbag</label>
+                    <select id="f-subbag" onchange="applyFilter()" class="w-full p-1 text-xs border rounded outline-none"><option value="">Semua Subbag</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Cari Kegiatan</label>
-                    <select id="f-kegiatan" onchange="applyFilter()" class="w-full p-1 text-xs border rounded focus:ring-2 focus:ring-indigo-300 outline-none">
-                        <option value="">Semua Kegiatan</option>
-                        <option>2905</option><option>2906</option>
-                    </select>
+                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Kegiatan</label>
+                    <select id="f-kegiatan" onchange="applyFilter()" class="w-full p-1 text-xs border rounded outline-none"><option value="">Semua Kegiatan</option><option>2905</option><option>2906</option></select>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Cari Akun</label>
-                    <select id="f-akun" onchange="applyFilter()" class="w-full p-1 text-xs border rounded focus:ring-2 focus:ring-indigo-300 outline-none">
-                        <option value="">Semua Akun</option>
-                        <option>521211</option><option>521213</option><option>524111</option>
-                    </select>
+                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Akun</label>
+                    <select id="f-akun" onchange="applyFilter()" class="w-full p-1 text-xs border rounded outline-none"><option value="">Semua Akun</option><option>521211</option><option>521213</option><option>524111</option></select>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Cari Bulan</label>
-                    <select id="f-bulan" onchange="applyFilter()" class="w-full p-1 text-xs border rounded focus:ring-2 focus:ring-indigo-300 outline-none">
-                        <option value="">Semua Bulan</option>
-                        <option>Januari</option><option>Februari</option><option>Maret</option>
-                    </select>
+                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Bulan</label>
+                    <select id="f-bulan" onchange="applyFilter()" class="w-full p-1 text-xs border rounded outline-none"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option></select>
                 </div>
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-xs text-left border-collapse">
+                <table id="table-rpd" class="w-full text-xs text-left border-collapse">
                     <thead class="bg-slate-50 text-slate-600 uppercase font-bold border-b-2">
                         <tr>
                             <th class="p-3">Subbag</th>
                             <th class="p-3">Kegiatan</th>
                             <th class="p-3 text-center">Akun</th>
+                            <th class="p-3 text-center">Detil POK</th>
                             <th class="p-3">Rincian</th>
                             <th class="p-3 text-right">Anggaran (Rp)</th>
                             <th class="p-3 text-center">Bulan</th>
-                            <th class="p-3 text-center">Aksi</th>
+                            <th class="p-3 text-center no-print">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="table-body-view">
                         </tbody>
                     <tfoot class="bg-indigo-50 font-bold border-t-2 border-indigo-200">
                         <tr>
-                            <td colspan="4" class="p-3 text-right text-indigo-900">TOTAL TERFILTER:</td>
+                            <td colspan="5" class="p-3 text-right text-indigo-900">TOTAL TERFILTER:</td>
                             <td id="total-display" class="p-3 text-right text-indigo-700 text-sm">Rp 0</td>
-                            <td colspan="2"></td>
-                        </tr>
+                            <td colspan="2" class="no-print"></td>
+                            <td class="hidden print-cell"></td> </tr>
                     </tfoot>
                 </table>
             </div>
@@ -145,16 +140,16 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let dataLokal = []; // Menampung semua data dari server
+        let dataLokal = [];
 
-        // --- 1. MONITORING DATA (LIVE) ---
+        // --- 1. MONITORING LIVE ---
         const q = query(collection(db, "rpd_entries"), orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
             dataLokal = [];
-            snapshot.forEach((docSnapshot) => {
-                dataLokal.push({ id: docSnapshot.id, ...docSnapshot.data() });
+            snapshot.forEach((docSnap) => {
+                dataLokal.push({ id: docSnap.id, ...docSnap.data() });
             });
-            window.applyFilter(); // Update tampilan setiap ada data baru
+            window.applyFilter();
         });
 
         // --- 2. LOGIKA FILTER ---
@@ -170,14 +165,14 @@
             let html = "";
             let totalFiltered = 0;
 
-            const dataTerfilter = dataLokal.filter(item => {
+            const filtered = dataLokal.filter(item => {
                 return (selSubbag === "" || item.subbag === selSubbag) &&
                        (selKegiatan === "" || item.kegiatan === selKegiatan) &&
                        (selAkun === "" || item.akun === selAkun) &&
                        (selBulan === "" || item.bulan === selBulan);
             });
 
-            dataTerfilter.forEach((data) => {
+            filtered.forEach((data) => {
                 const nominal = Number(data.anggaran || 0);
                 totalFiltered += nominal;
 
@@ -186,21 +181,22 @@
                         <td class="p-3">${data.subbag}</td>
                         <td class="p-3">${data.kegiatan}</td>
                         <td class="p-3 text-center font-bold text-blue-600">${data.akun}</td>
+                        <td class="p-3 text-center text-gray-500">${data.detail_pok || '-'}</td>
                         <td class="p-3">${data.rincian}</td>
                         <td class="p-3 text-right font-bold">Rp ${nominal.toLocaleString('id-ID')}</td>
                         <td class="p-3 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded">${data.bulan}</span></td>
-                        <td class="p-3 text-center">
-                            <button onclick="hapusData('${data.id}')" class="text-red-500 hover:underline">Hapus</button>
+                        <td class="p-3 text-center no-print">
+                            <button onclick="hapusData('${data.id}')" class="text-red-500 hover:underline text-[10px]">Hapus</button>
                         </td>
                     </tr>
                 `;
             });
 
-            tableBody.innerHTML = html || '<tr><td colspan="7" class="p-5 text-center text-gray-400">Data tidak ditemukan.</td></tr>';
+            tableBody.innerHTML = html || '<tr><td colspan="8" class="p-5 text-center text-gray-400">Data tidak ditemukan.</td></tr>';
             totalDisplay.innerText = "Rp " + totalFiltered.toLocaleString('id-ID');
         }
 
-        // --- 3. SIMPAN DATA ---
+        // --- 3. FUNGSI SIMPAN ---
         window.simpanKeFirebase = async function() {
             const btn = document.getElementById('btn-simpan');
             const subbag = document.getElementById('in-subbag').value;
@@ -208,44 +204,109 @@
             const akun = document.getElementById('in-akun').value;
             const detail_pok = document.getElementById('in-detail-pok').value;
             const rincian = document.getElementById('in-rincian').value;
-            const anggaranValue = document.getElementById('in-anggaran').value;
+            const anggaran = document.getElementById('in-anggaran').value;
             const bulan = document.getElementById('in-bulan').value;
 
-            if (!anggaranValue || anggaranValue <= 0) {
-                alert("Masukkan jumlah anggaran yang valid!");
-                return;
+            if (!anggaran || anggaran <= 0) {
+                alert("Masukkan jumlah anggaran!"); return;
             }
 
             try {
-                btn.disabled = true;
-                btn.innerText = "...";
+                btn.disabled = true; btn.innerText = "...";
                 await addDoc(collection(db, "rpd_entries"), {
                     subbag, kegiatan, akun, detail_pok, rincian,
-                    anggaran: Number(anggaranValue),
-                    bulan,
-                    createdAt: new Date()
+                    anggaran: Number(anggaran), bulan, createdAt: new Date()
                 });
-                alert("Data RPD Berhasil Disimpan!");
+                alert("Data Disimpan!");
                 document.getElementById('in-rincian').value = "";
                 document.getElementById('in-anggaran').value = "";
                 document.getElementById('in-detail-pok').value = "";
             } catch (e) {
                 alert("Error: " + e.message);
             } finally {
-                btn.disabled = false;
-                btn.innerText = "SIMPAN";
+                btn.disabled = false; btn.innerText = "SIMPAN";
             }
         };
 
-        // --- 4. HAPUS DATA ---
+        // --- 4. FUNGSI HAPUS ---
         window.hapusData = async function(id) {
-            if(confirm("Hapus data ini?")) {
-                try {
-                    await deleteDoc(doc(db, "rpd_entries", id));
-                } catch (e) {
-                    alert("Gagal hapus: " + e.message);
-                }
+            if(confirm("Hapus data?")) {
+                try { await deleteDoc(doc(db, "rpd_entries", id)); } 
+                catch (e) { alert("Gagal: " + e.message); }
             }
+        };
+
+        // --- 5. FUNGSI CETAK ---
+        window.cetakLaporan = function() {
+            const tableContent = document.getElementById('table-body-view').innerHTML;
+            const total = document.getElementById('total-display').innerText;
+            const fSubbag = document.getElementById('f-subbag').value || 'Semua';
+            const fBulan = document.getElementById('f-bulan').value || 'Semua';
+            const tgl = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            const printWin = window.open('', '', 'height=700,width=900');
+            printWin.document.write(`
+                <html>
+                <head>
+                    <title>Cetak Laporan RPD</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; }
+                        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+                        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+                        th, td { border: 1px solid #333; padding: 6px; text-align: left; }
+                        th { background: #f2f2f2; }
+                        .text-right { text-align: right; }
+                        .text-center { text-align: center; }
+                        .footer { margin-top: 40px; display: flex; justify-content: flex-end; }
+                        .ttd { text-align: center; width: 250px; }
+                        .no-print { display: none; }
+                        .meta { font-size: 12px; margin-bottom: 10px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h3 style="margin:0">BADAN PUSAT STATISTIK KABUPATEN MALUKU TENGGARA</h3>
+                        <h2 style="margin:5px 0">LAPORAN RENCANA PENARIKAN DANA (RPD)</h2>
+                        <p style="margin:0; font-size:12px">Sistem Monitoring Belanja - EMBAL</p>
+                    </div>
+                    <div class="meta">
+                        Subbag: <b>${fSubbag}</b> | Bulan: <b>${fBulan}</b>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Subbag</th>
+                                <th>Kegiatan</th>
+                                <th>Akun</th>
+                                <th>Detil POK</th>
+                                <th>Rincian</th>
+                                <th>Anggaran (Rp)</th>
+                                <th>Bulan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableContent.replace(/<button.*?button>/g, '')}
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-weight:bold; background:#f9f9f9">
+                                <td colspan="5" class="text-right">TOTAL TERFILTER</td>
+                                <td class="text-right">${total}</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="footer">
+                        <div class="ttd">
+                            Langgur, ${tgl}<br>
+                            Pembuat Laporan,<br><br><br><br>
+                            ( ............................................ )
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+            printWin.print();
         };
     </script>
 </body>
