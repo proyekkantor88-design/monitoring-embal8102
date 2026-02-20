@@ -30,197 +30,140 @@
         </header>
 
         <div class="bg-white p-6 rounded-lg shadow-md">
-            <p class="text-slate-500">Silakan masukkan rencana penarikan dana di sini...</p>
-            <div class="flex justify-between items-center mb-4">
-    <h4 class="text-lg font-semibold text-gray-700">Daftar Komponen</h4>
-    <div class="flex gap-2">
-        <a href="#" class="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded shadow-sm hover:bg-gray-300 transition text-sm">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-            Download Template
-        </a>
-        <label class="flex items-center bg-indigo-600 text-white px-4 py-2 rounded shadow-sm hover:bg-indigo-700 cursor-pointer transition text-sm">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-            Upload Excel
-            <input type="file" class="hidden" id="excel-upload" accept=".xlsx, .xls">
-        </label>
-    </div>
-</div>
-           <div class="mt-6 bg-white p-4 rounded-lg shadow-sm">
-    <div class="flex justify-between items-center mb-4">
-        <h4 class="text-lg font-semibold text-gray-700">Rencana Penarikan Anggaran - Triwulan I 2026</h4>
-        <div class="flex gap-2">
-            <label class="bg-indigo-600 text-white px-4 py-2 rounded shadow-sm hover:bg-indigo-700 cursor-pointer text-sm">
-                Upload Excel Sesuai Template
-                <input type="file" class="hidden" id="excel-upload">
-            </label>
-        </div>
-    </div>
-
-    <div class="overflow-x-auto border rounded-lg">
-        <table class="w-full text-xs text-left">
-            <thead class="bg-gray-100 text-gray-600 uppercase border-b">
-                <tr>
-                    <th class="p-3 border-r whitespace-nowrap">Subbag/Fungsi</th>
-                    <th class="p-3 border-r whitespace-nowrap">Kegiatan</th>
-                    <th class="p-3 border-r whitespace-nowrap">KRO</th>
-                    <th class="p-3 border-r whitespace-nowrap">RO</th>
-                    <th class="p-3 border-r whitespace-nowrap">Komp</th>
-                    <th class="p-3 border-r whitespace-nowrap">Akun</th>
-                    <th class="p-3 border-r whitespace-nowrap">Detil POK </th>
-                    <th class="p-3 border-r whitespace-nowrap">Rincian Uraian</th>
-                    <th class="p-3 border-r whitespace-nowrap text-right">Anggaran (Rp)</th>
-                    <th class="p-3 border-r whitespace-nowrap">Bulan RPD</th>
-                    <th class="p-3 text-center">Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="table-body">
-    <tr class="hover:bg-blue-50 transition text-xs">
-        <td class="p-2 border-r">
-            <select class="w-full bg-transparent focus:ring-0 cursor-pointer">
-                <option>Sosial</option>
-                <option>Produksi</option>
-                <option>Distribusi</option>
-                <option>Neraca</option>
-                <option>IPDS</option>
-                <option>Umum</option>
-            </select>
-        </td>
-        <td class="p-2 border-r">
-            <select class="w-full bg-transparent focus:ring-0 cursor-pointer">
-                <option>2905</option>
-                <option>2906</option>
-            </select>
-        </td>
-        <td class="p-2 border-r">
-            <select class="w-full bg-transparent focus:ring-0 cursor-pointer">
-                <option>BMA</option>
-                <option>BCA</option>
-            </select>
-        </td>
-        <td class="p-2 border-r">
-            <select class="w-full bg-transparent focus:ring-0 cursor-pointer">
-                <option>004</option>
-                <option>994</option>
-            </select>
-        </td>
-        <td class="p-2 border-r">
-            <select class="w-full bg-transparent focus:ring-0 cursor-pointer">
-                <option>051</option>
-                <option>052</option>
-            </select>
-        </td>
-        <td class="p-2 border-r">
-            <select class="w-full bg-transparent focus:ring-0 cursor-pointer text-blue-600 font-bold">
-                <option>521211</option>
-                <option>521213</option>
-                <option>524111</option>
-            </select>
-        </td>
-        <td class="p-2 border-r">
-            <input type="text" class="w-full p-1 border rounded focus:border-indigo-500 outline-none" placeholder="Ketik rincian...">
-        </td>
-        <td class="p-2 border-r">
-            <input type="text" class="w-full p-1 border rounded focus:border-indigo-500 outline-none" placeholder="Ketik rincian...">
-        </td>
-        <td class="p-2 border-r">
-            <input type="number" class="w-full p-1 border rounded text-right font-semibold" placeholder="0">
-        </td>
-        <td class="p-2 border-r">
-            <select class="w-full bg-transparent focus:ring-0">
-                <option>Januari</option>
-                <option>Februari</option>
-                <option>Maret</option>
-            </select>
-        </td>
-        <td class="p-2 text-center">
-            <button onclick="simpanKeFirebase()" class="bg-indigo-600 text-white px-3 py-1 rounded">
-    SIMPAN
-</button>
-        </td>
-    </tr>
-</tbody>
-        </table>
-    </div>
-</div>
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="text-lg font-semibold text-gray-700">Rencana Penarikan Anggaran - Triwulan I 2026</h4>
+                <div class="flex gap-2">
+                    <button class="bg-gray-200 px-4 py-2 rounded text-sm hover:bg-gray-300 transition">Download Template</button>
+                    <label class="bg-indigo-600 text-white px-4 py-2 rounded shadow-sm hover:bg-indigo-700 cursor-pointer transition text-sm">
+                        Upload Excel
+                        <input type="file" class="hidden" id="excel-upload">
+                    </label>
+                </div>
             </div>
+
+            <div class="overflow-x-auto border rounded-lg">
+                <table class="w-full text-xs text-left">
+                    <thead class="bg-gray-100 text-gray-600 uppercase border-b">
+                        <tr>
+                            <th class="p-3 border-r whitespace-nowrap">Subbag/Fungsi</th>
+                            <th class="p-3 border-r whitespace-nowrap">Kegiatan</th>
+                            <th class="p-3 border-r whitespace-nowrap">KRO</th>
+                            <th class="p-3 border-r whitespace-nowrap">RO</th>
+                            <th class="p-3 border-r whitespace-nowrap">Komp</th>
+                            <th class="p-3 border-r whitespace-nowrap">Akun</th>
+                            <th class="p-3 border-r whitespace-nowrap">Detil POK</th>
+                            <th class="p-3 border-r whitespace-nowrap">Rincian Uraian</th>
+                            <th class="p-3 border-r whitespace-nowrap text-right">Anggaran (Rp)</th>
+                            <th class="p-3 border-r whitespace-nowrap">Bulan RPD</th>
+                            <th class="p-3 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr class="hover:bg-blue-50 transition text-xs">
+                            <td class="p-2 border-r">
+                                <select id="subbag" class="w-full bg-transparent focus:ring-0">
+                                    <option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option>
+                                </select>
+                            </td>
+                            <td class="p-2 border-r">
+                                <select id="kegiatan" class="w-full bg-transparent focus:ring-0">
+                                    <option>2905</option><option>2906</option>
+                                </select>
+                            </td>
+                            <td class="p-2 border-r">
+                                <select id="kro" class="w-full bg-transparent focus:ring-0"><option>BMA</option><option>BCA</option></select>
+                            </td>
+                            <td class="p-2 border-r">
+                                <select id="ro" class="w-full bg-transparent focus:ring-0"><option>004</option><option>994</option></select>
+                            </td>
+                            <td class="p-2 border-r">
+                                <select id="komp" class="w-full bg-transparent focus:ring-0"><option>051</option><option>052</option></select>
+                            </td>
+                            <td class="p-2 border-r">
+                                <select id="akun" class="w-full bg-transparent font-bold text-blue-600 focus:ring-0">
+                                    <option>521211</option><option>521213</option><option>524111</option>
+                                </select>
+                            </td>
+                            <td class="p-2 border-r">
+                                <input type="text" id="detail_pok" class="w-full p-1 border rounded focus:border-indigo-500 outline-none" placeholder="...">
+                            </td>
+                            <td class="p-2 border-r">
+                                <input type="text" id="rincian" class="w-full p-1 border rounded focus:border-indigo-500 outline-none" placeholder="...">
+                            </td>
+                            <td class="p-2 border-r">
+                                <input type="number" id="anggaran" class="w-full p-1 border rounded text-right font-semibold" placeholder="0">
+                            </td>
+                            <td class="p-2 border-r">
+                                <select id="bulan" class="w-full bg-transparent focus:ring-0">
+                                    <option>Januari</option><option>Februari</option><option>Maret</option>
+                                </select>
+                            </td>
+                            <td class="p-2 text-center">
+                                <button id="btn-simpan" onclick="simpanKeFirebase()" class="bg-indigo-600 text-white px-4 py-1 rounded hover:bg-indigo-700 transition font-bold">
+                                    SIMPAN
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
-</script>
+
     <script type="module">
-    window.simpanKeFirebase = async function() {
-    // 1. Ambil data dari elemen berdasarkan ID
-    const dataInput = {
-        subbag: document.getElementById('subbag-select').value,
-        kegiatan: document.getElementById('kegiatan-select').value,
-        detail: document.getElementById('detail-input').value,
-        anggaran: Number(document.getElementById('anggaran-input').value),
-        bulan: document.getElementById('bulan-select').value,
-        createdAt: new Date()
-    };
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // 2. Kirim ke Firebase
-    try {
-        const docRef = await addDoc(collection(db, "rpd_entries"), dataInput);
-        alert("Berhasil! Data tersimpan dengan ID: " + docRef.id);
-    } catch (e) {
-        console.error("Error: ", e);
-        alert("Gagal simpan data.");
-    }
-}
-       <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_PnAtxsdajd0Hltq9X1e0eYcsiASFPxE",
+            authDomain: "proyekkantor-88.firebaseapp.com",
+            projectId: "proyekkantor-88",
+            storageBucket: "proyekkantor-88.firebasestorage.app",
+            messagingSenderId: "381153923700",
+            appId: "1:381153923700:web:4db81ac1a35b42ef4eb721",
+            measurementId: "G-VSG9T55J5D"
+        };
 
-  // PASTE KODE CONFIG ANDA DI SINI
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyC_PnAtxsdajd0Hltq9X1e0eYcsiASFPxE",
-  authDomain: "proyekkantor-88.firebaseapp.com",
-  projectId: "proyekkantor-88",
-  storageBucket: "proyekkantor-88.firebasestorage.app",
-  messagingSenderId: "381153923700",
-  appId: "1:381153923700:web:4db81ac1a35b42ef4eb721",
-  measurementId: "G-VSG9T55J5D"
-};
- 
-  // Inisialisasi Firebase & Database
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-  // Fungsi Simpan agar bisa dipanggil tombol
-  window.simpanKeFirebase = async function() {
-    const btn = document.getElementById('btn-simpan');
-    
-    // Ambil data dari input sesuai ID di HTML
-    const dataInput = {
-        subbag: document.getElementById('subbag').value,
-        kegiatan: document.getElementById('kegiatan').value,
-        kro: document.getElementById('kro').value,
-        detail_pok: document.getElementById('detail_pok').value,
-        rincian: document.getElementById('rincian').value,
-        anggaran: Number(document.getElementById('anggaran').value),
-        bulan: document.getElementById('bulan').value,
-        createdAt: new Date()
-    };
+        window.simpanKeFirebase = async function() {
+            const btn = document.getElementById('btn-simpan');
+            
+            // Ambil data berdasarkan ID yang sudah kita buat di tabel
+            const dataInput = {
+                subbag: document.getElementById('subbag').value,
+                kegiatan: document.getElementById('kegiatan').value,
+                kro: document.getElementById('kro').value,
+                ro: document.getElementById('ro').value,
+                komponen: document.getElementById('komp').value,
+                akun: document.getElementById('akun').value,
+                detail_pok: document.getElementById('detail_pok').value,
+                rincian: document.getElementById('rincian').value,
+                anggaran: Number(document.getElementById('anggaran').value),
+                bulan: document.getElementById('bulan').value,
+                createdAt: new Date()
+            };
 
-    try {
-        btn.disabled = true;
-        btn.innerText = "Proses...";
-        
-        // Simpan ke collection bernama 'rpd_entries'
-        await addDoc(collection(db, "rpd_entries"), dataInput);
-        
-        alert("Sip! Data RPD Berhasil Tersimpan di Firebase.");
-        
-        // Kosongkan input manual setelah simpan
-        document.getElementById('rincian').value = "";
-        document.getElementById('anggaran').value = "";
-    } catch (e) {
-        alert("Gagal simpan: " + e.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerText = "SIMPAN";
-    }
-  };
-</script>
+            try {
+                btn.disabled = true;
+                btn.innerText = "Proses...";
+                
+                await addDoc(collection(db, "rpd_entries"), dataInput);
+                
+                alert("Sip! Data RPD Berhasil Tersimpan di Firebase.");
+                
+                // Kosongkan input manual saja setelah simpan
+                document.getElementById('detail_pok').value = "";
+                document.getElementById('rincian').value = "";
+                document.getElementById('anggaran').value = "";
+            } catch (e) {
+                alert("Gagal simpan: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "SIMPAN";
+            }
+        };
+    </script>
 </body>
 </html>
