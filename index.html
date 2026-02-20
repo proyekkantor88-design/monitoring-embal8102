@@ -132,7 +132,31 @@
         // Fungsi Simpan (Dibuat window agar bisa diakses onclick tombol)
         window.simpanKeFirebase = async function() {
             const btn = document.getElementById('btn-simpan');
-            
+            import { onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Fungsi untuk menarik data secara Real-Time
+const q = query(collection(db, "rpd_entries"), orderBy("createdAt", "desc"));
+
+onSnapshot(q, (snapshot) => {
+    const tableBody = document.getElementById('table-body-view'); // Pastikan ID ini ada di tabel baru
+    let html = "";
+    
+    snapshot.forEach((doc) => {
+        const data = doc.data();
+        html += `
+            <tr class="border-b hover:bg-gray-50">
+                <td class="p-2">${data.subbag}</td>
+                <td class="p-2">${data.kegiatan}</td>
+                <td class="p-2">${data.akun}</td>
+                <td class="p-2">${data.rincian}</td>
+                <td class="p-2 text-right font-bold">Rp ${data.anggaran.toLocaleString()}</td>
+                <td class="p-2">${data.bulan}</td>
+            </tr>
+        `;
+    });
+    
+    tableBody.innerHTML = html;
+});
             // Mengambil data dari ID yang sudah kita buat di elemen tabel
             try {
                 const dataInput = {
