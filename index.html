@@ -182,5 +182,25 @@
     }
   }
 </script>
+    window.simpanKeFirebase = async function() {
+    // 1. Ambil data dari elemen berdasarkan ID
+    const dataInput = {
+        subbag: document.getElementById('subbag-select').value,
+        kegiatan: document.getElementById('kegiatan-select').value,
+        detail: document.getElementById('detail-input').value,
+        anggaran: Number(document.getElementById('anggaran-input').value),
+        bulan: document.getElementById('bulan-select').value,
+        createdAt: new Date()
+    };
+
+    // 2. Kirim ke Firebase
+    try {
+        const docRef = await addDoc(collection(db, "rpd_entries"), dataInput);
+        alert("Berhasil! Data tersimpan dengan ID: " + docRef.id);
+    } catch (e) {
+        console.error("Error: ", e);
+        alert("Gagal simpan data.");
+    }
+}
 </body>
 </html>
