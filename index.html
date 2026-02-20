@@ -110,6 +110,8 @@
         </div>
     </main>
 
+   </main>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -127,25 +129,26 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Fungsi Simpan (Dibuat window agar bisa diakses onclick tombol)
         window.simpanKeFirebase = async function() {
             const btn = document.getElementById('btn-simpan');
             
-            // Ambil data berdasarkan ID yang sudah kita buat di tabel
-            const dataInput = {
-                subbag: document.getElementById('subbag').value,
-                kegiatan: document.getElementById('kegiatan').value,
-                kro: document.getElementById('kro').value,
-                ro: document.getElementById('ro').value,
-                komponen: document.getElementById('komp').value,
-                akun: document.getElementById('akun').value,
-                detail_pok: document.getElementById('detail_pok').value,
-                rincian: document.getElementById('rincian').value,
-                anggaran: Number(document.getElementById('anggaran').value),
-                bulan: document.getElementById('bulan').value,
-                createdAt: new Date()
-            };
-
+            // Mengambil data dari ID yang sudah kita buat di elemen tabel
             try {
+                const dataInput = {
+                    subbag: document.getElementById('subbag').value,
+                    kegiatan: document.getElementById('kegiatan').value,
+                    kro: document.getElementById('kro').value,
+                    ro: document.getElementById('ro').value,
+                    komponen: document.getElementById('komp').value,
+                    akun: document.getElementById('akun').value,
+                    detail_pok: document.getElementById('detail_pok').value,
+                    rincian: document.getElementById('rincian').value,
+                    anggaran: Number(document.getElementById('anggaran').value),
+                    bulan: document.getElementById('bulan').value,
+                    createdAt: new Date()
+                };
+
                 btn.disabled = true;
                 btn.innerText = "Proses...";
                 
@@ -153,11 +156,12 @@
                 
                 alert("Sip! Data RPD Berhasil Tersimpan di Firebase.");
                 
-                // Kosongkan input manual saja setelah simpan
+                // Reset input manual
                 document.getElementById('detail_pok').value = "";
                 document.getElementById('rincian').value = "";
                 document.getElementById('anggaran').value = "";
             } catch (e) {
+                console.error(e);
                 alert("Gagal simpan: " + e.message);
             } finally {
                 btn.disabled = false;
