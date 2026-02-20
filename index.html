@@ -124,4 +124,88 @@
             storageBucket: "proyekkantor-88.firebasestorage.app",
             messagingSenderId: "381153923700",
             appId: "1:381153923700:web:4db81ac1a35b42ef4eb721",
-            measurementId: "G-VSG9T5
+            measurementId: "G-VSG9T55J5D"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- 1. MONITORING REAL-TIME + PENJUMLAHAN TOTAL ---
+        const q = query(collection(db, "rpd_entries"), orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const tableBody = document.getElementById('table-body-view');
+            const totalElement = document.getElementById('total-anggaran');
+            let html = "";
+            let totalAnggaran = 0;
+
+            snapshot.forEach((docSnapshot) => {
+                const data = docSnapshot.data();
+                const id = docSnapshot.id;
+                
+                totalAnggaran += Number(data.anggaran || 0);
+
+                html += `
+                    <tr class="border-b hover:bg-gray-50 transition">
+                        <td class="p-3">${data.subbag}</td>
+                        <td class="p-3">${data.kegiatan}</td>
+                        <td class="p-3 text-center font-bold text-blue-600">${data.akun}</td>
+                        <td class="p-3">${data.rincian}</td>
+                        <td class="p-3 text-right font-bold">Rp ${data.anggaran.toLocaleString('id-ID')}</td>
+                        <td class="p-3 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-1 rounded">${data.bulan}</span></td>
+                        <td class="p-3 text-center">
+                            <button onclick="hapusData('${id}')" class="text-red-500 hover:text-red-700 font-bold text-[10px]">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tableBody.innerHTML = html || '<tr><td colspan="7" class="p-10 text-center text-slate-400">Belum ada data.</td></tr>';
+            totalElement.innerText = "Rp " + totalAnggaran.toLocaleString('id-ID');
+        });
+
+        // --- 2. SIMPAN DATA ---
+        window.simpanKeFirebase = async function() {
+            const btn = document.getElementById('btn-simpan');
+            try {
+                const dataInput = {
+                    subbag: document.getElementById('subbag').value,
+                    kegiatan: document.getElementById('kegiatan').value,
+                    kro: document.getElementById('kro').value,
+                    ro: document.getElementById('ro').value,
+                    komponen: document.getElementById('komp').value,
+                    akun: document.getElementById('akun').value,
+                    detail_pok: document.getElementById('detail_pok').value,
+                    rincian: document.getElementById('rincian').value,
+                    anggaran: Number(document.getElementById('anggaran').value),
+                    bulan: document.getElementById('bulan').value,
+                    createdAt: new Date()
+                };
+
+                btn.disabled = true;
+                btn.innerText = "Proses...";
+                await addDoc(collection(db, "rpd_entries"), dataInput);
+                alert("Sip! Data RPD Berhasil di Simpan.");
+                
+                document.getElementById('detail_pok').value = "";
+                document.getElementById('rincian').value = "";
+                document.getElementById('anggaran').value = "";
+            } catch (e) {
+                alert("Gagal simpan: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "SIMPAN";
+            }
+        };
+
+        // --- 3. HAPUS DATA ---
+        window.hapusData = async function(id) {
+            if(confirm("Hapus data ini?")) {
+                try {
+                    await deleteDoc(doc(db, "rpd_entries", id));
+                } catch (e) {
+                    alert("Gagal hapus: " + e.message);
+                }
+            }
+        };
+    </script>
+</body>
+</html>
