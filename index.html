@@ -145,42 +145,6 @@
 </div>
             </div>
     </main>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  // PASTE KODE CONFIG KAMU DI SINI
-  const firebaseConfig = {
-    apiKey: "AIzaSy...",
-    authDomain: "proyekkantor-88.firebaseapp.com",
-    projectId: "proyekkantor-88",
-    // ... isi sisanya sesuai yang dari firebase
-  };
-
-  // Inisialisasi
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Fungsi untuk Simpan Data
-  window.simpanKeFirebase = async function() {
-    // Ambil nilai dari dropdown dan input yang ada di gambar kamu
-    const dataInput = {
-        subbag: document.querySelector('select:nth-child(1)').value,
-        kegiatan: document.querySelector('select:nth-child(2)').value,
-        kro: document.querySelector('select:nth-child(3)').value,
-        detail: document.querySelector('input[type="text"]').value,
-        anggaran: Number(document.querySelector('input[type="number"]').value),
-        bulan: document.querySelector('select:last-of-type').value,
-        createdAt: new Date()
-    };
-
-    try {
-        await addDoc(collection(db, "rpd_entries"), dataInput);
-        alert("Sip! Data RPD Berhasil Tersimpan di Firebase.");
-    } catch (e) {
-        alert("Gagal simpan: " + e.message);
-    }
-  }
 </script>
     <script type="module">
     window.simpanKeFirebase = async function() {
