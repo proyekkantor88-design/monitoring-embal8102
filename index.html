@@ -166,6 +166,59 @@
         alert("Gagal simpan data.");
     }
 }
-        </script>
+       <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // PASTE KODE CONFIG ANDA DI SINI
+  const firebaseConfig = {
+    apiKey: "AIzaSy...", 
+    authDomain: "proyekkantor-88.firebaseapp.com",
+    projectId: "proyekkantor-88",
+    storageBucket: "proyekkantor-88.appspot.com",
+    messagingSenderId: "XXXXXXXXX",
+    appId: "XXXXXXXXX"
+  };
+
+  // Inisialisasi Firebase & Database
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Fungsi Simpan agar bisa dipanggil tombol
+  window.simpanKeFirebase = async function() {
+    const btn = document.getElementById('btn-simpan');
+    
+    // Ambil data dari input sesuai ID di HTML
+    const dataInput = {
+        subbag: document.getElementById('subbag').value,
+        kegiatan: document.getElementById('kegiatan').value,
+        kro: document.getElementById('kro').value,
+        detail_pok: document.getElementById('detail_pok').value,
+        rincian: document.getElementById('rincian').value,
+        anggaran: Number(document.getElementById('anggaran').value),
+        bulan: document.getElementById('bulan').value,
+        createdAt: new Date()
+    };
+
+    try {
+        btn.disabled = true;
+        btn.innerText = "Proses...";
+        
+        // Simpan ke collection bernama 'rpd_entries'
+        await addDoc(collection(db, "rpd_entries"), dataInput);
+        
+        alert("Sip! Data RPD Berhasil Tersimpan di Firebase.");
+        
+        // Kosongkan input manual setelah simpan
+        document.getElementById('rincian').value = "";
+        document.getElementById('anggaran').value = "";
+    } catch (e) {
+        alert("Gagal simpan: " + e.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "SIMPAN";
+    }
+  };
+</script>
 </body>
 </html>
