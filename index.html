@@ -32,32 +32,48 @@
                 <h2 id="page-title" class="text-2xl font-bold">Input Perencanaan RPD</h2>
                 <p class="text-sm text-slate-500">BPS Kabupaten Maluku Tenggara</p>
             </div>
-            <div class="flex gap-2">
-                <button onclick="cetakLaporan()" class="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700 font-bold transition text-sm">CETAK LAPORAN</button>
-            </div>
+            <button onclick="cetakLaporan()" class="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700 font-bold transition text-sm">CETAK LAPORAN</button>
         </header>
 
         <section id="section-input-rpd" class="tab-content">
             <div class="bg-white p-6 rounded-lg shadow-md mb-8 border-l-4 border-indigo-500 no-print">
                 <h4 class="text-sm font-bold uppercase text-indigo-600 mb-4">Form Perencanaan</h4>
-                <div class="grid grid-cols-3 gap-4 mb-4">
+                <div class="grid grid-cols-4 gap-4 mb-4">
                     <div><label class="block text-[10px] font-bold">TIM</label><select id="in-tim" class="w-full p-2 border rounded text-xs"><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
                     <div><label class="block text-[10px] font-bold">AKUN</label><select id="in-akun" class="w-full p-2 border rounded text-xs"><option>521211</option><option>521213</option><option>524111</option></select></div>
+                    <div><label class="block text-[10px] font-bold">DETIL POK</label><input type="text" id="in-detil" class="w-full p-2 border rounded text-xs" placeholder="Contoh: Honor Pengelola..."></div>
                     <div><label class="block text-[10px] font-bold">BULAN</label><select id="in-bulan" class="w-full p-2 border rounded text-xs"><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
                 </div>
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div><label class="block text-[10px] font-bold">RINCIAN URAIAN</label><input type="text" id="in-rincian" class="w-full p-2 border rounded text-xs" placeholder="Contoh: Honor petugas..."></div>
+                    <div><label class="block text-[10px] font-bold">RINCIAN URAIAN</label><input type="text" id="in-rincian" class="w-full p-2 border rounded text-xs" placeholder="Masukkan rincian kegiatan..."></div>
                     <div><label class="block text-[10px] font-bold">ANGGARAN (RP)</label><input type="number" id="in-anggaran" class="w-full p-2 border rounded text-xs" placeholder="0"></div>
                 </div>
                 <button onclick="simpanKeFirebase()" class="w-full bg-indigo-600 text-white py-2 rounded font-bold hover:bg-indigo-700 transition">SIMPAN RENCANA</button>
             </div>
 
-            <div class="bg-white p-6 rounded-lg shadow-md">
+            <div class="bg-slate-50 p-4 rounded-t-lg border-x border-t no-print flex gap-4 items-end">
+                <div class="flex-1">
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Cari Tim</label>
+                    <select id="f-tim-rpd" onchange="renderTables()" class="w-full p-1 text-xs border rounded"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select>
+                </div>
+                <div class="flex-1">
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Cari Akun</label>
+                    <select id="f-akun-rpd" onchange="renderTables()" class="w-full p-1 text-xs border rounded"><option value="">Semua Akun</option><option>521211</option><option>521213</option><option>524111</option></select>
+                </div>
+                <div class="flex-1">
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Cari Bulan</label>
+                    <select id="f-bulan-rpd" onchange="renderTables()" class="w-full p-1 text-xs border rounded"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option></select>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-b-lg shadow-md border-x border-b">
                 <h4 class="font-bold mb-4 text-slate-700 uppercase text-xs">Daftar Perencanaan RPD</h4>
                 <table class="w-full text-xs text-left border">
                     <thead class="bg-slate-100">
                         <tr>
                             <th class="p-3 border">Tim</th>
+                            <th class="p-3 border text-center">Akun</th>
+                            <th class="p-3 border">Detil</th>
                             <th class="p-3 border">Rincian</th>
                             <th class="p-3 border text-right">Anggaran</th>
                             <th class="p-3 border text-center">Bulan</th>
@@ -72,30 +88,28 @@
         <section id="section-realisasi-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
                 <h4 class="font-bold mb-4 text-slate-700 uppercase text-xs">Evaluasi & Input Realisasi</h4>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-[11px] text-left border">
-                        <thead class="bg-slate-50 font-bold uppercase">
-                            <tr>
-                                <th class="p-3 border">Tim</th>
-                                <th class="p-3 border">Rincian</th>
-                                <th class="p-3 border text-right">Rencana (A)</th>
-                                <th class="p-3 border text-right bg-orange-50 text-orange-800">Realisasi (B)</th>
-                                <th class="p-3 border text-right">Sisa (A-B)</th>
-                                <th class="p-3 border text-center no-print">Input Realisasi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="body-realisasi-only"></tbody>
-                        <tfoot class="bg-slate-800 text-white font-bold">
-                            <tr>
-                                <td colspan="2" class="p-3 text-right">TOTAL:</td>
-                                <td id="tot-rpd" class="p-3 text-right">Rp 0</td>
-                                <td id="tot-real" class="p-3 text-right bg-orange-600">Rp 0</td>
-                                <td id="tot-sisa" class="p-3 text-right">Rp 0</td>
-                                <td class="no-print"></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                <table class="w-full text-[11px] text-left border">
+                    <thead class="bg-slate-50 font-bold uppercase text-center">
+                        <tr>
+                            <th class="p-3 border">Tim</th>
+                            <th class="p-3 border">Rincian</th>
+                            <th class="p-3 border text-right">Rencana (A)</th>
+                            <th class="p-3 border text-right bg-orange-50 text-orange-800">Realisasi (B)</th>
+                            <th class="p-3 border text-right">Sisa (A-B)</th>
+                            <th class="p-3 border text-center no-print">Update Realisasi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body-realisasi-only"></tbody>
+                    <tfoot class="bg-slate-800 text-white font-bold">
+                        <tr>
+                            <td colspan="2" class="p-3 text-right">TOTAL:</td>
+                            <td id="tot-rpd" class="p-3 text-right">Rp 0</td>
+                            <td id="tot-real" class="p-3 text-right bg-orange-600">Rp 0</td>
+                            <td id="tot-sisa" class="p-3 text-right">Rp 0</td>
+                            <td class="no-print"></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </section>
     </main>
@@ -118,81 +132,76 @@
         const db = getFirestore(app);
         let dataLokal = [];
 
-        // --- NAVIGATION ---
-        window.switchTab = function(tabId) {
+        window.switchTab = (tabId) => {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
             document.getElementById('section-' + tabId).classList.remove('hidden');
             document.getElementById('page-title').innerText = tabId === 'input-rpd' ? 'Input Perencanaan RPD' : 'Input Realisasi RPD';
-        }
+        };
 
-        // --- DATA MONITORING ---
-        const q = query(collection(db, "rpd_entries"), orderBy("createdAt", "desc"));
-        onSnapshot(q, (snapshot) => {
-            dataLokal = [];
-            snapshot.forEach((docSnap) => {
-                dataLokal.push({ id: docSnap.id, ...docSnap.data() });
-            });
+        onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (snapshot) => {
+            dataLokal = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
             renderTables();
         });
 
-        function renderTables() {
+        window.renderTables = () => {
             const bodyRPD = document.getElementById('body-rpd-only');
             const bodyReal = document.getElementById('body-realisasi-only');
+            
+            // Filter Perencanaan RPD
+            const fTim = document.getElementById('f-tim-rpd').value;
+            const fAkun = document.getElementById('f-akun-rpd').value;
+            const fBulan = document.getElementById('f-bulan-rpd').value;
+
             let htmlRPD = "", htmlReal = "";
             let sumRPD = 0, sumReal = 0;
 
-            dataLokal.forEach((data) => {
+            dataLokal.forEach(data => {
                 const rpd = Number(data.anggaran || 0);
                 const real = Number(data.realisasi || 0);
                 const sisa = rpd - real;
                 const tim = data.tim || data.subbag || "-";
 
+                // Logika Filter RPD
+                if ((fTim === "" || tim === fTim) && (fAkun === "" || data.akun === fAkun) && (fBulan === "" || data.bulan === fBulan)) {
+                    htmlRPD += `
+                        <tr class="border-b">
+                            <td class="p-3 border">${tim}</td>
+                            <td class="p-3 border text-center font-bold text-blue-600">${data.akun || '-'}</td>
+                            <td class="p-3 border text-slate-500 italic">${data.detail_pok || '-'}</td>
+                            <td class="p-3 border font-medium">${data.rincian}</td>
+                            <td class="p-3 border text-right">Rp ${rpd.toLocaleString('id-ID')}</td>
+                            <td class="p-3 border text-center">${data.bulan}</td>
+                            <td class="p-3 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500">Hapus</button></td>
+                        </tr>`;
+                }
+
+                // Tampilan Realisasi (Selalu Semua Data)
                 sumRPD += rpd; sumReal += real;
-
-                // Tampilan Tab Input RPD
-                htmlRPD += `
-                    <tr class="border-b">
-                        <td class="p-3 border">${tim}</td>
-                        <td class="p-3 border">${data.rincian}</td>
-                        <td class="p-3 border text-right">Rp ${rpd.toLocaleString('id-ID')}</td>
-                        <td class="p-3 border text-center">${data.bulan}</td>
-                        <td class="p-3 border text-center no-print">
-                            <button onclick="hapusData('${data.id}')" class="text-red-500 hover:underline">Hapus</button>
-                        </td>
-                    </tr>
-                `;
-
-                // Tampilan Tab Input Realisasi
                 htmlReal += `
                     <tr class="border-b">
                         <td class="p-3 border">${tim}</td>
                         <td class="p-3 border">${data.rincian}</td>
                         <td class="p-3 border text-right">Rp ${rpd.toLocaleString('id-ID')}</td>
-                        <td class="p-3 border text-right bg-orange-50 font-bold">Rp ${real.toLocaleString('id-ID')}</td>
+                        <td class="p-3 border text-right bg-orange-50 font-bold text-orange-800">Rp ${real.toLocaleString('id-ID')}</td>
                         <td class="p-3 border text-right font-bold ${sisa < 0 ? 'text-red-600' : 'text-green-600'}">Rp ${sisa.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border text-center no-print">
-                            <input type="number" onchange="updateReal('${data.id}', this.value)" 
-                                class="w-24 p-1 border rounded text-right text-xs" value="${real}">
-                        </td>
-                    </tr>
-                `;
+                        <td class="p-2 border text-center no-print"><input type="number" onchange="updateReal('${data.id}', this.value)" class="w-24 p-1 border rounded text-right text-xs" value="${real}"></td>
+                    </tr>`;
             });
 
-            bodyRPD.innerHTML = htmlRPD;
+            bodyRPD.innerHTML = htmlRPD || '<tr><td colspan="7" class="p-5 text-center">Data tidak ditemukan.</td></tr>';
             bodyReal.innerHTML = htmlReal;
             document.getElementById('tot-rpd').innerText = "Rp " + sumRPD.toLocaleString('id-ID');
             document.getElementById('tot-real').innerText = "Rp " + sumReal.toLocaleString('id-ID');
             document.getElementById('tot-sisa').innerText = "Rp " + (sumRPD - sumReal).toLocaleString('id-ID');
-        }
-
-        window.updateReal = async function(id, val) {
-            await updateDoc(doc(db, "rpd_entries", id), { realisasi: Number(val) });
         };
 
-        window.simpanKeFirebase = async function() {
+        window.updateReal = async (id, val) => { await updateDoc(doc(db, "rpd_entries", id), { realisasi: Number(val) }); };
+
+        window.simpanKeFirebase = async () => {
             const data = {
                 tim: document.getElementById('in-tim').value,
                 akun: document.getElementById('in-akun').value,
+                detail_pok: document.getElementById('in-detil').value,
                 bulan: document.getElementById('in-bulan').value,
                 rincian: document.getElementById('in-rincian').value,
                 anggaran: Number(document.getElementById('in-anggaran').value),
@@ -203,14 +212,12 @@
             await addDoc(collection(db, "rpd_entries"), data);
             document.getElementById('in-rincian').value = "";
             document.getElementById('in-anggaran').value = "";
-            alert("Rencana Berhasil Disimpan!");
+            document.getElementById('in-detil').value = "";
+            alert("Rencana Disimpan!");
         };
 
-        window.hapusData = async function(id) {
-            if(confirm("Hapus data?")) await deleteDoc(doc(db, "rpd_entries", id));
-        };
-
-        window.cetakLaporan = function() { window.print(); };
+        window.hapusData = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.cetakLaporan = () => { window.print(); };
     </script>
 </body>
 </html>
