@@ -8,37 +8,50 @@
     <style>
         @media print { 
             .no-print { display: none !important; } 
-            .main-content { padding: 0 !important; }
+            .main-content { padding: 0 !important; margin-left: 0 !important; }
         }
         .tab-content { transition: opacity 0.3s ease-in-out; }
-        /* Scrollbar Sidebar Ramping */
-        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: #4338ca; border-radius: 10px; }
+        /* Transisi Sidebar */
+        #sidebar { transition: all 0.3s ease-in-out; width: 16rem; }
+        #sidebar.hidden-sidebar { margin-left: -16rem; }
+        .main-container { transition: all 0.3s ease-in-out; }
+        
+        /* Tipografi Khusus agar Sejajar */
+        .judul-rpd {
+            letter-spacing: -0.02em; /* Mengatur kerapatan agar A sejajar L */
+            display: inline-block;
+            width: 100%;
+            text-align: justify;
+        }
     </style>
 </head>
-<body class="bg-slate-100 flex font-sans text-slate-900">
+<body class="bg-slate-100 flex font-sans text-slate-900 overflow-x-hidden">
 
-    <aside class="w-72 h-screen bg-indigo-900 text-white p-5 sticky top-0 no-print flex flex-col shadow-xl">
-        <div class="mb-6 border-b border-indigo-700 pb-4">
-            <div class="flex items-center gap-2 mb-2">
-                <img src="https://raw.githubusercontent.com/ArielAnas/bps-assets/main/logo-bps-white.png" alt="Logo" class="w-10 h-10" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg'">
-                <h1 class="text-3xl font-extrabold italic tracking-tighter text-white">EMBAL</h1>
+    <aside id="sidebar" class="h-screen bg-indigo-950 text-white p-5 fixed top-0 left-0 no-print flex flex-col shadow-2xl z-50">
+        <div class="mb-6 border-b border-indigo-800 pb-4">
+            <div class="flex items-center gap-2 mb-1">
+                <img src="https://raw.githubusercontent.com/ArielAnas/bps-assets/main/logo-bps-white.png" alt="Logo" class="w-8 h-8" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg'">
+                <h1 class="text-3xl font-black italic tracking-tighter text-white">EMBAL</h1>
             </div>
-            <p class="text-[12.5px] text-orange-400 font-bold leading-none uppercase tracking-normal">Evaluasi Monitoring Belanja</p>
-            <p class="text-[10px] text-indigo-300 font-medium uppercase mt-2 tracking-wider">BPS Kab. Maluku Tenggara</p>
+            <p class="text-[10.5px] text-orange-400 font-bold uppercase leading-none tracking-[0.035em]">
+                Evaluasi Monitoring Belanja
+            </p>
+            <p class="text-[9px] text-indigo-300 font-medium uppercase mt-2 tracking-widest">
+                BPS Kab. Maluku Tenggara
+            </p>
         </div>
         
-        <nav class="flex-1 overflow-y-auto sidebar-scroll">
+        <nav class="flex-1 overflow-y-auto">
             <ul class="space-y-2">
-                <li><a href="#" onclick="location.reload()" class="block hover:bg-indigo-800 p-2 rounded-lg transition text-sm font-medium">Dashboard</a></li>
-                <li class="mt-6 border-t border-indigo-800 pt-4">
-                    <span class="px-2 text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Menu RPD</span>
+                <li><a href="#" onclick="location.reload()" class="block hover:bg-indigo-900 p-2 rounded-lg transition text-sm font-medium">Dashboard</a></li>
+                <li class="mt-6 border-t border-indigo-900 pt-4">
+                    <span class="px-2 text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Menu Utama</span>
                     <ul class="mt-2 space-y-1">
-                        <li><button onclick="switchTab('input-rpd')" class="flex items-center gap-3 w-full p-2 text-sm text-slate-300 hover:text-white hover:bg-indigo-800 rounded-lg transition">
+                        <li><button onclick="switchTab('input-rpd')" class="flex items-center gap-3 w-full p-2 text-sm text-slate-300 hover:text-white hover:bg-indigo-900 rounded-lg transition">
                             <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span> Input RPD
                         </button></li>
-                        <li><button onclick="switchTab('realisasi-rpd')" class="flex items-center gap-3 w-full p-2 text-sm text-slate-300 hover:text-white hover:bg-indigo-800 rounded-lg transition">
-                            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span> Realisasi
+                        <li><button onclick="switchTab('realisasi-rpd')" class="flex items-center gap-3 w-full p-2 text-sm text-slate-300 hover:text-white hover:bg-indigo-900 rounded-lg transition">
+                            <span class="w-1.5 h-1.5 bg-indigo-400 rounded-full"></span> Realisasi
                         </button></li>
                     </ul>
                 </li>
@@ -46,22 +59,21 @@
         </nav>
     </aside>
 
-    <main class="flex-1 p-8 main-content">
+    <main id="main-content" class="flex-1 p-8 ml-64 main-container">
         <header class="flex justify-between items-center mb-8 no-print border-b pb-4 border-slate-200">
             <div class="flex items-center gap-4">
-                <h2 class="text-xl font-bold text-indigo-900">Input Perencanaan RPD</h2>
+                <button onclick="toggleSidebar()" class="p-2 bg-indigo-100 text-indigo-900 rounded-lg hover:bg-indigo-200 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+                <h2 class="text-xl font-bold text-indigo-900">Perencanaan RPD</h2>
                 <div class="flex gap-2">
-                    <select id="sel-tw" class="p-1 border rounded bg-white text-xs font-bold outline-none shadow-sm cursor-pointer">
-                        <option>Triwulanan I</option><option>Triwulanan II</option><option>Triwulanan III</option><option>Triwulanan IV</option>
-                    </select>
-                    <select id="sel-tahun" class="p-1 border rounded bg-white text-xs font-bold outline-none shadow-sm cursor-pointer">
-                        <option>2026</option><option>2027</option><option>2028</option>
-                    </select>
+                    <select id="sel-tw" class="p-1 border rounded bg-white text-xs font-bold outline-none shadow-sm"><option>Triwulanan I</option><option>Triwulanan II</option><option>Triwulanan III</option><option>Triwulanan IV</option></select>
+                    <select id="sel-tahun" class="p-1 border rounded bg-white text-xs font-bold outline-none shadow-sm"><option>2026</option><option>2027</option><option>2028</option></select>
                 </div>
             </div>
             <button onclick="cetakLaporan()" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg shadow font-bold transition flex items-center gap-2 text-sm">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                CETAK LAPORAN
+                CETAK
             </button>
         </header>
 
@@ -96,9 +108,7 @@
                 <div class="p-4 overflow-x-auto">
                     <table class="w-full text-[10px] text-left border">
                         <thead class="bg-slate-50 uppercase font-bold text-slate-600 text-center">
-                            <tr>
-                                <th class="p-2 border">Tim</th><th class="p-2 border">Keg.</th><th class="p-2 border">KRO</th><th class="p-2 border">RO</th><th class="p-2 border">Komp.</th><th class="p-2 border">Akun</th><th class="p-2 border">Detil POK</th><th class="p-2 border">Rincian</th><th class="p-2 border">Anggaran</th><th class="p-2 border">Bulan</th><th class="p-2 border no-print">Aksi</th>
-                            </tr>
+                            <tr><th class="p-2 border">Tim</th><th class="p-2 border">Keg.</th><th class="p-2 border">KRO</th><th class="p-2 border">RO</th><th class="p-2 border">Komp.</th><th class="p-2 border">Akun</th><th class="p-2 border">Detil POK</th><th class="p-2 border">Rincian</th><th class="p-2 border">Anggaran</th><th class="p-2 border">Bulan</th><th class="p-2 border no-print">Aksi</th></tr>
                         </thead>
                         <tbody id="body-rpd-only"></tbody>
                     </table>
@@ -114,7 +124,7 @@
                     </thead>
                     <tbody id="body-realisasi-only"></tbody>
                     <tfoot class="bg-slate-800 text-white font-bold">
-                        <tr><td colspan="2" class="p-4 text-right font-bold uppercase">Total Terfilter:</td><td id="tot-rpd" class="p-4 text-right">Rp 0</td><td id="tot-real" class="p-4 text-right bg-orange-600">Rp 0</td><td id="tot-sisa" class="p-4 text-right">Rp 0</td><td class="no-print"></td></tr>
+                        <tr><td colspan="2" class="p-4 text-right">TOTAL:</td><td id="tot-rpd" class="p-4 text-right">Rp 0</td><td id="tot-real" class="p-4 text-right bg-orange-600">Rp 0</td><td id="tot-sisa" class="p-4 text-right">Rp 0</td><td class="no-print"></td></tr>
                     </tfoot>
                 </table>
             </div>
@@ -140,6 +150,15 @@
         let dataLokal = [];
         let editId = null;
 
+        // FUNGSI TOGGLE SIDEBAR
+        window.toggleSidebar = () => {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            sidebar.classList.toggle('hidden-sidebar');
+            mainContent.classList.toggle('ml-64');
+            mainContent.classList.toggle('ml-0');
+        };
+
         window.switchTab = (tabId) => {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
             document.getElementById('section-' + tabId).classList.remove('hidden');
@@ -152,7 +171,6 @@
 
         window.setEdit = (id) => { editId = id; renderTables(); };
         window.cancelEdit = () => { editId = null; renderTables(); };
-
         window.saveEdit = async (id) => {
             const row = document.querySelector(`tr[data-id="${id}"]`);
             const updated = {
@@ -168,8 +186,7 @@
                 bulan: row.querySelector('.ed-bulan').value
             };
             await updateDoc(doc(db, "rpd_entries", id), updated);
-            editId = null;
-            renderTables();
+            editId = null; renderTables();
         };
 
         window.renderTables = () => {
@@ -178,56 +195,29 @@
             const fTim = document.getElementById('f-tim-rpd')?.value || "";
             const fKeg = document.getElementById('f-keg-rpd')?.value || "";
             const fBulan = document.getElementById('f-bulan-rpd')?.value || "";
-
-            let htmlRPD = "", htmlReal = "";
-            let sumRPD = 0, sumReal = 0;
+            let htmlRPD = "", htmlReal = "", sumRPD = 0, sumReal = 0;
 
             dataLokal.forEach(data => {
                 const rpd = Number(data.anggaran || 0);
                 const real = Number(data.realisasi || 0);
                 const tim = data.tim || data.subbag || "-";
-                const keg = data.kegiatan || "-";
-                const isEditing = editId === data.id;
-
-                if ((fTim === "" || tim === fTim) && (fKeg === "" || keg === fKeg) && (fBulan === "" || data.bulan === fBulan)) {
-                    if (isEditing) {
-                        htmlRPD += `<tr class="bg-orange-50" data-id="${data.id}">
-                            <td class="p-1 border"><input type="text" class="ed-tim w-full p-1 border text-[9px]" value="${tim}"></td>
-                            <td class="p-1 border"><input type="text" class="ed-keg w-full p-1 border text-[9px]" value="${keg}"></td>
-                            <td class="p-1 border"><input type="text" class="ed-kro w-full p-1 border text-[9px]" value="${data.kro || ''}"></td>
-                            <td class="p-1 border"><input type="text" class="ed-ro w-full p-1 border text-[9px]" value="${data.ro || ''}"></td>
-                            <td class="p-1 border"><input type="text" class="ed-komp w-full p-1 border text-[9px]" value="${data.komponen || ''}"></td>
-                            <td class="p-1 border"><input type="text" class="ed-akun w-full p-1 border text-[9px]" value="${data.akun || ''}"></td>
-                            <td class="p-1 border"><input type="text" class="ed-detil w-full p-1 border text-[9px]" value="${data.detail_pok || ''}"></td>
-                            <td class="p-1 border"><input type="text" class="ed-rincian w-full p-1 border text-[9px]" value="${data.rincian || ''}"></td>
-                            <td class="p-1 border"><input type="number" class="ed-anggaran w-full p-1 border text-[9px]" value="${rpd}"></td>
-                            <td class="p-1 border"><select class="ed-bulan w-full p-1 border text-[9px]">${["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"].map(b=>`<option ${data.bulan===b?'selected':''}>${b}</option>`)}</select></td>
-                            <td class="p-1 border text-center"><div class="flex gap-1 justify-center"><button onclick="saveEdit('${data.id}')" class="text-green-600">✓</button><button onclick="cancelEdit()" class="text-slate-400">X</button></div></td>
-                        </tr>`;
+                if ((fTim === "" || tim === fTim) && (fKeg === "" || data.kegiatan === fKeg) && (fBulan === "" || data.bulan === fBulan)) {
+                    if (editId === data.id) {
+                        htmlRPD += `<tr class="bg-orange-50" data-id="${data.id}"><td class="p-1 border"><input type="text" class="ed-tim w-full p-1 border text-[9px]" value="${tim}"></td><td class="p-1 border"><input type="text" class="ed-keg w-full p-1 border text-[9px]" value="${data.kegiatan || ''}"></td><td class="p-1 border"><input type="text" class="ed-kro w-full p-1 border text-[9px]" value="${data.kro || ''}"></td><td class="p-1 border"><input type="text" class="ed-ro w-full p-1 border text-[9px]" value="${data.ro || ''}"></td><td class="p-1 border"><input type="text" class="ed-komp w-full p-1 border text-[9px]" value="${data.komponen || ''}"></td><td class="p-1 border"><input type="text" class="ed-akun w-full p-1 border text-[9px]" value="${data.akun || ''}"></td><td class="p-1 border"><input type="text" class="ed-detil w-full p-1 border text-[9px]" value="${data.detail_pok || ''}"></td><td class="p-1 border"><input type="text" class="ed-rincian w-full p-1 border text-[9px]" value="${data.rincian || ''}"></td><td class="p-1 border"><input type="number" class="ed-anggaran w-full p-1 border text-[9px]" value="${rpd}"></td><td class="p-1 border"><select class="ed-bulan w-full p-1 border text-[9px]">${["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"].map(b=>`<option ${data.bulan===b?'selected':''}>${b}</option>`)}</select></td><td class="p-1 border text-center no-print"><div class="flex gap-1 justify-center"><button onclick="saveEdit('${data.id}')" class="text-green-600 font-bold">✓</button><button onclick="cancelEdit()" class="text-slate-400 font-bold">X</button></div></td></tr>`;
                     } else {
-                        htmlRPD += `<tr class="border-b hover:bg-slate-50 transition">
-                            <td class="p-2 border text-center uppercase">${tim}</td><td class="p-2 border text-center font-bold">${keg}</td>
-                            <td class="p-2 border text-center">${data.kro||'-'}</td><td class="p-2 border text-center">${data.ro||'-'}</td>
-                            <td class="p-2 border text-center">${data.komponen||'-'}</td><td class="p-2 border text-center font-bold text-blue-600">${data.akun||'-'}</td>
-                            <td class="p-2 border italic text-slate-400 text-[9px]">${data.detail_pok||'-'}</td><td class="p-2 border">${data.rincian||'-'}</td>
-                            <td class="p-2 border text-right font-bold text-indigo-700">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-center">${data.bulan}</td>
-                            <td class="p-2 border text-center no-print"><div class="flex gap-2 justify-center"><button onclick="setEdit('${data.id}')" title="Edit">✏️</button><button onclick="hapusData('${data.id}')" title="Hapus">🗑️</button></div></td>
-                        </tr>`;
+                        htmlRPD += `<tr class="border-b hover:bg-slate-50 transition"><td class="p-2 border text-center uppercase">${tim}</td><td class="p-2 border text-center font-bold">${data.kegiatan||'-'}</td><td class="p-2 border text-center">${data.kro||'-'}</td><td class="p-2 border text-center">${data.ro||'-'}</td><td class="p-2 border text-center">${data.komponen||'-'}</td><td class="p-2 border text-center font-bold text-blue-600">${data.akun||'-'}</td><td class="p-2 border italic text-slate-400 text-[9px]">${data.detail_pok||'-'}</td><td class="p-2 border">${data.rincian||'-'}</td><td class="p-2 border text-right font-bold text-indigo-700">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-center">${data.bulan}</td><td class="p-2 border text-center no-print"><div class="flex gap-2 justify-center"><button onclick="setEdit('${data.id}')">✏️</button><button onclick="hapusData('${data.id}')">🗑️</button></div></td></tr>`;
                     }
                     sumRPD += rpd; sumReal += real;
                     htmlReal += `<tr class="border-b"><td class="p-2 border uppercase">${tim}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-right bg-orange-50 font-bold text-orange-800">Rp ${real.toLocaleString('id-ID')}</td><td class="p-2 border text-right font-bold">Rp ${(rpd-real).toLocaleString('id-ID')}</td><td class="p-1 border text-center no-print"><input type="number" onchange="updateReal('${data.id}', this.value)" class="w-16 p-1 border rounded text-right text-[10px]" value="${real}"></td></tr>`;
                 }
             });
-
-            bodyRPD.innerHTML = htmlRPD || '<tr><td colspan="11" class="p-5 text-center text-slate-400 font-bold uppercase">Data tidak ditemukan</td></tr>';
-            bodyReal.innerHTML = htmlReal;
+            bodyRPD.innerHTML = htmlRPD; bodyReal.innerHTML = htmlReal;
             document.getElementById('tot-rpd').innerText = "Rp " + sumRPD.toLocaleString('id-ID');
             document.getElementById('tot-real').innerText = "Rp " + sumReal.toLocaleString('id-ID');
             document.getElementById('tot-sisa').innerText = "Rp " + (sumRPD - sumReal).toLocaleString('id-ID');
         };
 
         window.updateReal = async (id, val) => { await updateDoc(doc(db, "rpd_entries", id), { realisasi: Number(val) }); };
-        
         window.simpanKeFirebase = async () => {
             const data = {
                 tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value,
@@ -236,77 +226,29 @@
                 bulan: document.getElementById('in-bulan').value, rincian: document.getElementById('in-rincian').value,
                 anggaran: Number(document.getElementById('in-anggaran').value), realisasi: 0, createdAt: new Date()
             };
-            if(!data.rincian || !data.anggaran) return alert("Waduh, isi Rincian dan Anggaran dulu ya Kak!");
+            if(!data.rincian || !data.anggaran) return alert("Isi Rincian & Anggaran!");
             await addDoc(collection(db, "rpd_entries"), data);
-            alert("Sip! Rencana RPD Berhasil Disimpan.");
-            document.getElementById('in-rincian').value = ""; document.getElementById('in-anggaran').value = "";
+            alert("Rencana Disimpan!");
         };
+        window.hapusData = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
 
-        window.hapusData = async (id) => { if(confirm("Yakin mau hapus data ini, Kak?")) await deleteDoc(doc(db, "rpd_entries", id)); };
-
-        // --- FUNGSI CETAK ---
+        // FUNGSI CETAK
         window.cetakLaporan = function() {
             const tglDefault = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-            const inputTgl = prompt("Masukkan Kota & Tanggal (Contoh: Langgur, 21 Februari 2026):", "Langgur, " + tglDefault);
-            const inputNama = prompt("Masukkan Nama Penandatangan:", "NAMA PENANDATANGAN, M.Si");
+            const inputTgl = prompt("Tanggal Cetak:", "Langgur, " + tglDefault);
+            const inputNama = prompt("Penandatangan:", "NAMA PENANDATANGAN, M.Si");
             if (inputTgl === null || inputNama === null) return;
-
             const tw = document.getElementById('sel-tw').value, thn = document.getElementById('sel-tahun').value;
             const urutanBulan = { "Januari": 1, "Februari": 2, "Maret": 3, "April": 4, "Mei": 5, "Juni": 6, "Juli": 7, "Agustus": 8, "September": 9, "Oktober": 10, "November": 11, "Desember": 12 };
-            
-            // Urutkan data berdasarkan urutan bulan
             let filteredCetak = dataLokal.sort((a, b) => (urutanBulan[a.bulan] || 0) - (urutanBulan[b.bulan] || 0));
-            
             let barisTabel = "", totalAnggaran = 0;
             filteredCetak.forEach(data => {
                 const nominal = Number(data.anggaran || 0); totalAnggaran += nominal;
                 barisTabel += `<tr><td class="text-center uppercase">${data.tim||data.subbag||"-"}</td><td class="text-center font-bold">${data.kegiatan||"-"}</td><td class="text-center">${data.kro||"-"}</td><td class="text-center">${data.ro||"-"}</td><td class="text-center">${data.komponen||"-"}</td><td class="text-center font-bold">${data.akun||"-"}</td><td class="italic">${data.detail_pok||"-"}</td><td>${data.rincian}</td><td class="text-right font-bold">Rp ${nominal.toLocaleString('id-ID')}</td><td class="text-center">${data.bulan}</td></tr>`;
             });
-
             const printWin = window.open('', '_blank');
-            printWin.document.write(`
-                <html>
-                <head>
-                    <title>LAPORAN RPD ${tw.toUpperCase()} ${thn}</title>
-                    <style>
-                        @page { size: landscape; margin: 0.8cm; }
-                        body { font-family: Arial, sans-serif; line-height: 1.1; color: #000; padding: 0; margin: 0; }
-                        .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
-                        .kop-logo { width: 75px; height: auto; margin-right: 25px; }
-                        .nama-instansi { font-size: 22px; font-weight: bold; margin: 0; }
-                        .alamat { font-size: 10px; margin-top: 4px; }
-                        h1 { text-align: center; font-size: 18px; text-decoration: underline; margin: 15px 0 20px 0; text-transform: uppercase; }
-                        table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 20px; }
-                        th { background: #f2f2f2; text-transform: uppercase; font-size: 9px; padding: 7px; border: 1px solid #000; font-weight: bold; }
-                        td { border: 1px solid #000; padding: 4px; font-size: 7.5px; word-wrap: break-word; vertical-align: middle; }
-                        .text-right { text-align: right; } .text-center { text-align: center; } .italic { font-style: italic; color: #444; }
-                        .footer-container { width: 100%; margin-top: 30px; display: flex; flex-direction: column; align-items: flex-end; }
-                        .footer-box { text-align: center; width: 300px; font-size: 11px; }
-                        .page-footer { position: fixed; bottom: 0; left: 0; width: 100%; font-size: 9px; font-weight: bold; color: #555; text-align: left; }
-                    </style>
-                </head>
-                <body>
-                    <div class="kop-wrapper">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" class="kop-logo">
-                        <div class="kop-text">
-                            <p class="nama-instansi">BADAN PUSAT STATISTIK</p>
-                            <p class="nama-instansi">KABUPATEN MALUKU TENGGARA</p>
-                            <p class="alamat">Jl. Soekarno - Hatta, Ohoijang Watdek, Kei Kecil, Maluku Tenggara | Tlp. (0916) 23484</p>
-                        </div>
-                    </div>
-                    <h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1>
-                    <table>
-                        <thead><tr><th style="width:7%">TIM</th><th style="width:5%">KEG.</th><th style="width:5%">KRO</th><th style="width:5%">RO</th><th style="width:5%">KOMP.</th><th style="width:7%">AKUN</th><th style="width:14%">DETIL POK</th><th style="width:23%">RINCIAN</th><th style="width:15%">ANGGARAN</th><th style="width:8%">BULAN</th></tr></thead>
-                        <tbody>${barisTabel}</tbody>
-                        <tfoot><tr style="font-weight:bold; background:#f2f2f2"><td colspan="8" class="text-right">TOTAL</td><td class="text-right">Rp ${totalAnggaran.toLocaleString('id-ID')}</td><td></td></tr></tfoot>
-                    </table>
-                    <div class="footer-container"><div class="footer-box">${inputTgl}<br>Pembuat Laporan,<br><br><br><br><br><b>${inputNama.toUpperCase()}</b></div></div>
-                    <div class="page-footer">LAPORAN RPD ${tw.toUpperCase()} TAHUN ${thn}</div>
-                </body>
-                </html>
-            `);
-            printWin.document.close();
-            setTimeout(() => { printWin.print(); }, 1000);
+            printWin.document.write(`<html><head><style>@page { size: landscape; margin: 0.8cm; } body { font-family: Arial, sans-serif; line-height: 1.1; } .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 8px; margin-bottom: 12px; } .kop-logo { width: 70px; margin-right: 25px; } .nama-instansi { font-size: 22px; font-weight: bold; margin: 0; } h1 { text-align: center; font-size: 18px; text-decoration: underline; margin: 15px 0 20px 0; text-transform: uppercase; } table { width: 100%; border-collapse: collapse; table-layout: fixed; } th { background: #f2f2f2; font-size: 9px; padding: 7px; border: 1px solid #000; font-weight: bold; } td { border: 1px solid #000; padding: 4px; font-size: 7.5px; word-wrap: break-word; vertical-align: middle; } .text-right { text-align: right; } .text-center { text-align: center; } .footer-box { float: right; text-align: center; width: 300px; margin-top: 30px; font-size: 11px; } .page-footer { position: fixed; bottom: 0; left: 0; width: 100%; font-size: 9px; font-weight: bold; color: #555; }</style></head><body><div class="kop-wrapper"><img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" class="kop-logo"><div class="kop-text"><p class="nama-instansi">BADAN PUSAT STATISTIK</p><p class="nama-instansi">KABUPATEN MALUKU TENGGARA</p><p class="alamat">Jl. Soekarno - Hatta, Ohoijang Watdek, Kei Kecil, Maluku Tenggara</p></div></div><h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1><table><thead><tr><th>TIM</th><th>KEG.</th><th>KRO</th><th>RO</th><th>KOMP.</th><th>AKUN</th><th>DETIL POK</th><th>RINCIAN</th><th>ANGGARAN</th><th>BULAN</th></tr></thead><tbody>${barisTabel}</tbody><tfoot><tr style="font-weight:bold; background:#f2f2f2"><td colspan="8" class="text-right">TOTAL</td><td class="text-right">Rp ${totalAnggaran.toLocaleString('id-ID')}</td><td></td></tr></tfoot></table><div class="footer-box">${inputTgl}<br>Pembuat Laporan,<br><br><br><br><br><b>${inputNama.toUpperCase()}</b></div><div class="page-footer">LAPORAN RPD ${tw.toUpperCase()} TAHUN ${thn}</div></body></html>`);
+            printWin.document.close(); setTimeout(() => { printWin.print(); }, 1000);
         };
     </script>
 </body>
