@@ -232,19 +232,27 @@
         };
         window.hapusData = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
 
-        // --- FUNGSI CETAK PERBAIKAN (ALAMAT RAPAT) ---
+      // --- FUNGSI CETAK VERSI FINAL (JUDUL BERTINGKAT & INPUT JABATAN) ---
 window.cetakLaporan = function() {
     const tglDefault = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-    const inputTgl = prompt("Tanggal Cetak:", "Langgur, " + tglDefault);
-    const inputNama = prompt("Penandatangan:", "NAMA PENANDATANGAN, M.Si");
-    if (inputTgl === null || inputNama === null) return;
+    
+    // 1. Ambil input dari user melalui pop-up
+    const inputTgl = prompt("Masukkan Kota & Tanggal:", "Langgur, " + tglDefault);
+    const inputJabatan = prompt("Masukkan Jabatan Penandatangan (Misal: Bendahara Pengeluaran):", "Pembuat Laporan");
+    const inputNama = prompt("Masukkan Nama Penandatangan:", "NAMA PENANDATANGAN, M.Si");
 
-    const tw = document.getElementById('sel-tw').value, thn = document.getElementById('sel-tahun').value;
+    if (inputTgl === null || inputNama === null || inputJabatan === null) return;
+
+    // 2. Ambil nilai Triwulan dan Tahun dari pilihan di dashboard
+    const tw = document.getElementById('sel-tw').value;
+    const thn = document.getElementById('sel-tahun').value;
+
     const urutanBulan = { "Januari": 1, "Februari": 2, "Maret": 3, "April": 4, "Mei": 5, "Juni": 6, "Juli": 7, "Agustus": 8, "September": 9, "Oktober": 10, "November": 11, "Desember": 12 };
     
+    // Urutkan data berdasarkan urutan bulan
     let filteredCetak = dataLokal.sort((a, b) => (urutanBulan[a.bulan] || 0) - (urutanBulan[b.bulan] || 0));
+    
     let barisTabel = "", totalAnggaran = 0;
-
     filteredCetak.forEach(data => {
         const nominal = Number(data.anggaran || 0); totalAnggaran += nominal;
         barisTabel += `<tr>
@@ -270,21 +278,24 @@ window.cetakLaporan = function() {
                 @page { size: landscape; margin: 0.8cm; }
                 body { font-family: Arial, sans-serif; line-height: 1.1; color: #000; padding: 0; margin: 0; }
                 
-                /* KOP SURAT */
+                /* KOP SURAT RAPAT */
                 .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 5px; margin-bottom: 12px; }
                 .kop-logo { width: 70px; margin-right: 20px; }
-                .kop-text { line-height: 1; } /* Merapatkan seluruh teks di Kop */
+                .kop-text { line-height: 1; }
                 .nama-instansi { font-size: 20px; font-weight: bold; margin: 0; padding: 0; }
-                .alamat { font-size: 10px; margin-top: 2px; padding: 0; line-height: 1.2; } /* Khusus alamat dirapatkan lagi */
+                .alamat { font-size: 10px; margin-top: 2px; padding: 0; line-height: 1.1; }
                 
-                h1 { text-align: center; font-size: 17px; text-decoration: underline; margin: 15px 0 20px 0; text-transform: uppercase; }
+                /* JUDUL BERTINGKAT */
+                .judul-laporan { text-align: center; margin: 15px 0 25px 0; text-transform: uppercase; }
+                .judul-laporan h1 { font-size: 17px; text-decoration: underline; margin-bottom: 2px; }
+                .judul-laporan h2 { font-size: 15px; margin-top: 0; font-weight: bold; }
                 
                 table { width: 100%; border-collapse: collapse; table-layout: fixed; }
                 th { background: #f2f2f2; text-transform: uppercase; font-size: 9px; padding: 7px; border: 1px solid #000; font-weight: bold; }
                 td { border: 1px solid #000; padding: 4px; font-size: 7.5px; word-wrap: break-word; vertical-align: middle; }
                 
                 .text-right { text-align: right; } .text-center { text-align: center; } .italic { font-style: italic; color: #444; }
-                .footer-box { float: right; text-align: center; width: 300px; margin-top: 30px; font-size: 11px; }
+                .footer-box { float: right; text-align: center; width: 350px; margin-top: 30px; font-size: 11px; }
                 .page-footer { position: fixed; bottom: 0; left: 0; width: 100%; font-size: 9px; font-weight: bold; color: #555; }
             </style>
         </head>
@@ -297,7 +308,12 @@ window.cetakLaporan = function() {
                     <p class="alamat">Jl. Soekarno - Hatta, Ohoijang Watdek, Kei Kecil, Maluku Tenggara | Tlp. (0916) 23484</p>
                 </div>
             </div>
-            <h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1>
+
+            <div class="judul-laporan">
+                <h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1>
+                <h2>${tw.toUpperCase()} TAHUN ${thn}</h2>
+            </div>
+
             <table>
                 <thead>
                     <tr><th style="width:7%">TIM</th><th style="width:5%">KEG.</th><th style="width:5%">KRO</th><th style="width:5%">RO</th><th style="width:5%">KOMP.</th><th style="width:7%">AKUN</th><th style="width:14%">DETIL POK</th><th style="width:23%">RINCIAN</th><th style="width:15%">ANGGARAN</th><th style="width:8%">BULAN</th></tr>
@@ -307,7 +323,13 @@ window.cetakLaporan = function() {
                     <tr style="font-weight:bold; background:#f2f2f2"><td colspan="8" class="text-right">TOTAL</td><td class="text-right">Rp ${totalAnggaran.toLocaleString('id-ID')}</td><td></td></tr>
                 </tfoot>
             </table>
-            <div class="footer-box">${inputTgl}<br>Pembuat Laporan,<br><br><br><br><br><b>${inputNama.toUpperCase()}</b></div>
+
+            <div class="footer-box">
+                ${inputTgl}<br>
+                ${inputJabatan},<br><br><br><br><br>
+                <b>${inputNama.toUpperCase()}</b>
+            </div>
+
             <div class="page-footer">LAPORAN RPD ${tw.toUpperCase()} TAHUN ${thn}</div>
         </body>
         </html>
