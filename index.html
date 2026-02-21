@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print { .no-print { display: none !important; } .main-content { padding: 0 !important; } }
-        /* Transisi smooth untuk tab */
         .tab-content { transition: opacity 0.3s ease-in-out; }
     </style>
 </head>
@@ -162,27 +161,11 @@
                 const keg = data.kegiatan || "-";
 
                 if ((fTim === "" || tim === fTim) && (fKeg === "" || keg === fKeg) && (fBulan === "" || data.bulan === fBulan)) {
-                    htmlRPD += `<tr class="border-b hover:bg-slate-50 transition">
-                        <td class="p-2 border">${tim}</td>
-                        <td class="p-2 border text-center">${keg}</td>
-                        <td class="p-2 border text-center font-bold text-blue-600">${data.akun || '-'}</td>
-                        <td class="p-2 border text-slate-500 italic">${data.detail_pok || '-'}</td>
-                        <td class="p-2 border">${data.rincian}</td>
-                        <td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border text-center">${data.bulan}</td>
-                        <td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500 hover:font-bold">Hapus</button></td>
-                    </tr>`;
+                    htmlRPD += `<tr class="border-b hover:bg-slate-50 transition"><td class="p-2 border">${tim}</td><td class="p-2 border text-center">${keg}</td><td class="p-2 border text-center font-bold text-blue-600">${data.akun || '-'}</td><td class="p-2 border text-slate-500 italic">${data.detail_pok || '-'}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-center">${data.bulan}</td><td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500 hover:font-bold">Hapus</button></td></tr>`;
                 }
 
                 sumRPD += rpd; sumReal += real;
-                htmlReal += `<tr class="border-b">
-                    <td class="p-2 border">${tim}</td>
-                    <td class="p-2 border">${data.rincian}</td>
-                    <td class="p-2 border text-right font-semibold">Rp ${rpd.toLocaleString('id-ID')}</td>
-                    <td class="p-2 border text-right bg-orange-50 font-bold text-orange-800">Rp ${real.toLocaleString('id-ID')}</td>
-                    <td class="p-2 border text-right font-bold ${sisa < 0 ? 'text-red-600' : 'text-green-600'}">Rp ${sisa.toLocaleString('id-ID')}</td>
-                    <td class="p-1 border text-center no-print"><input type="number" onchange="updateReal('${data.id}', this.value)" class="w-20 p-1 border rounded text-right text-[10px]" value="${real}"></td>
-                </tr>`;
+                htmlReal += `<tr class="border-b"><td class="p-2 border">${tim}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-semibold">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-right bg-orange-50 font-bold text-orange-800">Rp ${real.toLocaleString('id-ID')}</td><td class="p-2 border text-right font-bold ${sisa < 0 ? 'text-red-600' : 'text-green-600'}">Rp ${sisa.toLocaleString('id-ID')}</td><td class="p-1 border text-center no-print"><input type="number" onchange="updateReal('${data.id}', this.value)" class="w-20 p-1 border rounded text-right text-[10px]" value="${real}"></td></tr>`;
             });
 
             bodyRPD.innerHTML = htmlRPD || '<tr><td colspan="8" class="p-5 text-center">Data tidak ditemukan.</td></tr>';
@@ -222,103 +205,109 @@
 
         window.hapusData = async (id) => { if(confirm("Yakin hapus data ini Kak?")) await deleteDoc(doc(db, "rpd_entries", id)); };
 
-        // --- FUNGSI CETAK PERBAIKAN TOTAL (UKURAN LOGO TETAP) ---
-window.cetakLaporan = function() {
-    const tableContent = document.getElementById('body-rpd-only').innerHTML;
-    const total = document.getElementById('tot-rpd').innerText;
-    const fTim = document.getElementById('f-tim-rpd').value || 'Semua';
-    const fBulan = document.getElementById('f-bulan-rpd').value || 'Semua';
-    const tgl = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+        // --- FUNGSI CETAK FIX (LOGIKA LEBAR LOGO ABSOLUT) ---
+        window.cetakLaporan = function() {
+            const tableContent = document.getElementById('body-rpd-only').innerHTML;
+            const total = document.getElementById('tot-rpd').innerText;
+            const fTim = document.getElementById('f-tim-rpd').value || 'Semua';
+            const fBulan = document.getElementById('f-bulan-rpd').value || 'Semua';
+            const tgl = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
 
-    const printWin = window.open('', '', 'height=800,width=1000');
-    printWin.document.write(`
-        <html>
-        <head>
-            <title>Laporan RPD BPS Maluku Tenggara</title>
-            <style>
-                body { font-family: Arial, sans-serif; padding: 0.5cm; color: #000; line-height: 1.2; }
-                
-                /* KONTROL LOGO KOP SURAT */
-                .kop-header { 
-                    width: 100%; 
-                    max-width: 700px; /* Batas maksimal lebar kop agar tidak raksasa */
-                    margin: 0 auto 10px auto; 
-                    display: block;
-                    border-bottom: 3px solid #000;
-                    padding-bottom: 5px;
-                }
-                .kop-header img { 
-                    width: 100%; 
-                    height: auto; 
-                }
-                
-                h1 { text-align: center; font-size: 14px; text-decoration: underline; margin: 15px 0 5px 0; }
-                .sub-judul { text-align: center; font-size: 10px; margin-bottom: 15px; font-weight: bold; }
-                .meta-info { font-size: 10px; margin-bottom: 10px; }
-                
-                table { width: 100%; border-collapse: collapse; font-size: 8.5px; table-layout: fixed; }
-                th, td { border: 1px solid #000; padding: 4px; text-align: left; word-wrap: break-word; }
-                th { background: #f2f2f2; font-weight: bold; text-transform: uppercase; text-align: center; }
-                
-                /* Pengaturan Lebar Kolom */
-                .w-tim { width: 11%; } .w-keg { width: 7%; } .w-akun { width: 8%; }
-                .w-detil { width: 18%; } .w-rincian { width: 30%; }
-                .w-anggaran { width: 18%; } .w-bulan { width: 8%; }
+            const printWin = window.open('', '', 'height=800,width=1000');
+            printWin.document.write(`
+                <html>
+                <head>
+                    <title>Laporan RPD BPS Maluku Tenggara</title>
+                    <style>
+                        @page { size: landscape; margin: 1cm; }
+                        body { font-family: Arial, sans-serif; padding: 0; color: #000; line-height: 1.2; }
+                        
+                        /* KONTROL KETAT LOGO KOP SURAT */
+                        .kop-container { 
+                            width: 100%; 
+                            border-bottom: 3px solid #000; 
+                            padding-bottom: 10px;
+                            margin-bottom: 15px;
+                            text-align: center;
+                        }
+                        .kop-container img { 
+                            width: 650px !important; /* Lebar absolut diatur di sini */
+                            max-width: 650px !important;
+                            height: auto; 
+                            display: inline-block;
+                        }
+                        
+                        h1 { text-align: center; font-size: 14px; text-decoration: underline; margin: 10px 0 5px 0; }
+                        .sub-judul { text-align: center; font-size: 10px; margin-bottom: 15px; font-weight: bold; }
+                        .meta-info { font-size: 10px; margin-bottom: 10px; }
+                        
+                        table { width: 100%; border-collapse: collapse; font-size: 9px; table-layout: fixed; }
+                        th, td { border: 1px solid #000; padding: 5px; text-align: left; word-wrap: break-word; }
+                        th { background: #f2f2f2; font-weight: bold; text-transform: uppercase; text-align: center; }
+                        
+                        /* Pengaturan Lebar Kolom */
+                        .w-tim { width: 12%; } .w-keg { width: 8%; } .w-akun { width: 10%; }
+                        .w-detil { width: 18%; } .w-rincian { width: 28%; }
+                        .w-anggaran { width: 16%; } .w-bulan { width: 8%; }
 
-                .text-right { text-align: right; }
-                .nowrap { white-space: nowrap; }
-                
-                .footer { margin-top: 30px; float: right; text-align: center; width: 220px; font-size: 10px; }
-            </style>
-        </head>
-        <body>
-            <div class="kop-header">
-                <img src="https://raw.githubusercontent.com/ArielAnas/bps-assets/main/kop-bps-malteng.png" alt="Badan Pusat Statistik Kabupaten Maluku Tenggara">
-            </div>
+                        .text-right { text-align: right; }
+                        .text-center { text-align: center; }
+                        .nowrap { white-space: nowrap; }
+                        
+                        .footer { margin-top: 30px; float: right; text-align: center; width: 250px; font-size: 10px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="kop-container">
+                        <img src="https://raw.githubusercontent.com/ArielAnas/bps-assets/main/kop-bps-malteng.png" alt="Kop Surat BPS">
+                    </div>
 
-            <h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1>
-            <div class="sub-judul">Sistem Monitoring Belanja - EMBAL</div>
+                    <h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1>
+                    <div class="sub-judul">Sistem Monitoring Belanja - EMBAL</div>
 
-            <div class="meta-info">
-                Tim: <b>${fTim}</b> | Bulan: <b>${fBulan}</b>
-            </div>
+                    <div class="meta-info">
+                        Tim: <b>${fTim}</b> | Bulan: <b>${fBulan}</b>
+                    </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th class="w-tim">Tim</th>
-                        <th class="w-keg">Keg.</th>
-                        <th class="w-akun">Akun</th>
-                        <th class="w-detil">Detil POK</th>
-                        <th class="w-rincian">Rincian</th>
-                        <th class="w-anggaran">Anggaran (Rp)</th>
-                        <th class="w-bulan">Bulan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${tableContent.replace(/<button.*?button>/g, '')}
-                </tbody>
-                <tfoot>
-                    <tr style="font-weight:bold; background:#f2f2f2">
-                        <td colspan="5" class="text-right">TOTAL TERFILTER</td>
-                        <td class="text-right nowrap">${total}</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:12%">Tim</th>
+                                <th style="width:8%">Keg.</th>
+                                <th style="width:10%">Akun</th>
+                                <th style="width:18%">Detil POK</th>
+                                <th style="width:28%">Rincian</th>
+                                <th style="width:16%">Anggaran</th>
+                                <th style="width:8%">Bulan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableContent.replace(/<button.*?button>/g, '')}
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-weight:bold; background:#f2f2f2">
+                                <td colspan="5" class="text-right uppercase">Total Terfilter</td>
+                                <td class="text-right nowrap">${total}</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
 
-            <div class="footer">
-                Langgur, ${tgl}<br>
-                Pembuat Laporan,<br><br><br><br><br>
-                ( ............................................ )
-            </div>
-        </body>
-        </html>
-    `);
-    printWin.document.close();
-    
-    // Trik khusus: Tunggu gambar selesai dimuat 1 detik baru munculkan print
-    setTimeout(() => { 
-        printWin.print(); 
-    }, 1000);
-};
+                    <div class="footer">
+                        Langgur, ${tgl}<br>
+                        Pembuat Laporan,<br><br><br><br><br><br>
+                        ( ............................................ )
+                    </div>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+            
+            // Jeda 1 detik agar browser sempat memproses gambar sebelum jendela print muncul
+            setTimeout(() => { 
+                printWin.print(); 
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
