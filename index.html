@@ -232,24 +232,89 @@
         };
         window.hapusData = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
 
-        // FUNGSI CETAK
-        window.cetakLaporan = function() {
-            const tglDefault = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-            const inputTgl = prompt("Tanggal Cetak:", "Langgur, " + tglDefault);
-            const inputNama = prompt("Penandatangan:", "NAMA PENANDATANGAN, M.Si");
-            if (inputTgl === null || inputNama === null) return;
-            const tw = document.getElementById('sel-tw').value, thn = document.getElementById('sel-tahun').value;
-            const urutanBulan = { "Januari": 1, "Februari": 2, "Maret": 3, "April": 4, "Mei": 5, "Juni": 6, "Juli": 7, "Agustus": 8, "September": 9, "Oktober": 10, "November": 11, "Desember": 12 };
-            let filteredCetak = dataLokal.sort((a, b) => (urutanBulan[a.bulan] || 0) - (urutanBulan[b.bulan] || 0));
-            let barisTabel = "", totalAnggaran = 0;
-            filteredCetak.forEach(data => {
-                const nominal = Number(data.anggaran || 0); totalAnggaran += nominal;
-                barisTabel += `<tr><td class="text-center uppercase">${data.tim||data.subbag||"-"}</td><td class="text-center font-bold">${data.kegiatan||"-"}</td><td class="text-center">${data.kro||"-"}</td><td class="text-center">${data.ro||"-"}</td><td class="text-center">${data.komponen||"-"}</td><td class="text-center font-bold">${data.akun||"-"}</td><td class="italic">${data.detail_pok||"-"}</td><td>${data.rincian}</td><td class="text-right font-bold">Rp ${nominal.toLocaleString('id-ID')}</td><td class="text-center">${data.bulan}</td></tr>`;
-            });
-            const printWin = window.open('', '_blank');
-            printWin.document.write(`<html><head><style>@page { size: landscape; margin: 0.8cm; } body { font-family: Arial, sans-serif; line-height: 1.1; } .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 8px; margin-bottom: 12px; } .kop-logo { width: 70px; margin-right: 25px; } .nama-instansi { font-size: 22px; font-weight: bold; margin: 0; } h1 { text-align: center; font-size: 18px; text-decoration: underline; margin: 15px 0 20px 0; text-transform: uppercase; } table { width: 100%; border-collapse: collapse; table-layout: fixed; } th { background: #f2f2f2; font-size: 9px; padding: 7px; border: 1px solid #000; font-weight: bold; } td { border: 1px solid #000; padding: 4px; font-size: 7.5px; word-wrap: break-word; vertical-align: middle; } .text-right { text-align: right; } .text-center { text-align: center; } .footer-box { float: right; text-align: center; width: 300px; margin-top: 30px; font-size: 11px; } .page-footer { position: fixed; bottom: 0; left: 0; width: 100%; font-size: 9px; font-weight: bold; color: #555; }</style></head><body><div class="kop-wrapper"><img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" class="kop-logo"><div class="kop-text"><p class="nama-instansi">BADAN PUSAT STATISTIK</p><p class="nama-instansi">KABUPATEN MALUKU TENGGARA</p><p class="alamat">Jl. Soekarno - Hatta, Ohoijang Watdek, Kei Kecil, Maluku Tenggara</p></div></div><h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1><table><thead><tr><th>TIM</th><th>KEG.</th><th>KRO</th><th>RO</th><th>KOMP.</th><th>AKUN</th><th>DETIL POK</th><th>RINCIAN</th><th>ANGGARAN</th><th>BULAN</th></tr></thead><tbody>${barisTabel}</tbody><tfoot><tr style="font-weight:bold; background:#f2f2f2"><td colspan="8" class="text-right">TOTAL</td><td class="text-right">Rp ${totalAnggaran.toLocaleString('id-ID')}</td><td></td></tr></tfoot></table><div class="footer-box">${inputTgl}<br>Pembuat Laporan,<br><br><br><br><br><b>${inputNama.toUpperCase()}</b></div><div class="page-footer">LAPORAN RPD ${tw.toUpperCase()} TAHUN ${thn}</div></body></html>`);
-            printWin.document.close(); setTimeout(() => { printWin.print(); }, 1000);
-        };
+        // --- FUNGSI CETAK PERBAIKAN (ALAMAT RAPAT) ---
+window.cetakLaporan = function() {
+    const tglDefault = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+    const inputTgl = prompt("Tanggal Cetak:", "Langgur, " + tglDefault);
+    const inputNama = prompt("Penandatangan:", "NAMA PENANDATANGAN, M.Si");
+    if (inputTgl === null || inputNama === null) return;
+
+    const tw = document.getElementById('sel-tw').value, thn = document.getElementById('sel-tahun').value;
+    const urutanBulan = { "Januari": 1, "Februari": 2, "Maret": 3, "April": 4, "Mei": 5, "Juni": 6, "Juli": 7, "Agustus": 8, "September": 9, "Oktober": 10, "November": 11, "Desember": 12 };
+    
+    let filteredCetak = dataLokal.sort((a, b) => (urutanBulan[a.bulan] || 0) - (urutanBulan[b.bulan] || 0));
+    let barisTabel = "", totalAnggaran = 0;
+
+    filteredCetak.forEach(data => {
+        const nominal = Number(data.anggaran || 0); totalAnggaran += nominal;
+        barisTabel += `<tr>
+            <td class="text-center uppercase">${data.tim||data.subbag||"-"}</td>
+            <td class="text-center font-bold">${data.kegiatan||"-"}</td>
+            <td class="text-center">${data.kro||"-"}</td>
+            <td class="text-center">${data.ro||"-"}</td>
+            <td class="text-center">${data.komponen||"-"}</td>
+            <td class="text-center font-bold">${data.akun||"-"}</td>
+            <td class="italic">${data.detail_pok||"-"}</td>
+            <td>${data.rincian}</td>
+            <td class="text-right font-bold">Rp ${nominal.toLocaleString('id-ID')}</td>
+            <td class="text-center">${data.bulan}</td>
+        </tr>`;
+    });
+
+    const printWin = window.open('', '_blank');
+    printWin.document.write(`
+        <html>
+        <head>
+            <title>LAPORAN RPD ${tw.toUpperCase()} ${thn}</title>
+            <style>
+                @page { size: landscape; margin: 0.8cm; }
+                body { font-family: Arial, sans-serif; line-height: 1.1; color: #000; padding: 0; margin: 0; }
+                
+                /* KOP SURAT */
+                .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 5px; margin-bottom: 12px; }
+                .kop-logo { width: 70px; margin-right: 20px; }
+                .kop-text { line-height: 1; } /* Merapatkan seluruh teks di Kop */
+                .nama-instansi { font-size: 20px; font-weight: bold; margin: 0; padding: 0; }
+                .alamat { font-size: 10px; margin-top: 2px; padding: 0; line-height: 1.2; } /* Khusus alamat dirapatkan lagi */
+                
+                h1 { text-align: center; font-size: 17px; text-decoration: underline; margin: 15px 0 20px 0; text-transform: uppercase; }
+                
+                table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+                th { background: #f2f2f2; text-transform: uppercase; font-size: 9px; padding: 7px; border: 1px solid #000; font-weight: bold; }
+                td { border: 1px solid #000; padding: 4px; font-size: 7.5px; word-wrap: break-word; vertical-align: middle; }
+                
+                .text-right { text-align: right; } .text-center { text-align: center; } .italic { font-style: italic; color: #444; }
+                .footer-box { float: right; text-align: center; width: 300px; margin-top: 30px; font-size: 11px; }
+                .page-footer { position: fixed; bottom: 0; left: 0; width: 100%; font-size: 9px; font-weight: bold; color: #555; }
+            </style>
+        </head>
+        <body>
+            <div class="kop-wrapper">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" class="kop-logo">
+                <div class="kop-text">
+                    <p class="nama-instansi">BADAN PUSAT STATISTIK</p>
+                    <p class="nama-instansi">KABUPATEN MALUKU TENGGARA</p>
+                    <p class="alamat">Jl. Soekarno - Hatta, Ohoijang Watdek, Kei Kecil, Maluku Tenggara | Tlp. (0916) 23484</p>
+                </div>
+            </div>
+            <h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1>
+            <table>
+                <thead>
+                    <tr><th style="width:7%">TIM</th><th style="width:5%">KEG.</th><th style="width:5%">KRO</th><th style="width:5%">RO</th><th style="width:5%">KOMP.</th><th style="width:7%">AKUN</th><th style="width:14%">DETIL POK</th><th style="width:23%">RINCIAN</th><th style="width:15%">ANGGARAN</th><th style="width:8%">BULAN</th></tr>
+                </thead>
+                <tbody>${barisTabel}</tbody>
+                <tfoot>
+                    <tr style="font-weight:bold; background:#f2f2f2"><td colspan="8" class="text-right">TOTAL</td><td class="text-right">Rp ${totalAnggaran.toLocaleString('id-ID')}</td><td></td></tr>
+                </tfoot>
+            </table>
+            <div class="footer-box">${inputTgl}<br>Pembuat Laporan,<br><br><br><br><br><b>${inputNama.toUpperCase()}</b></div>
+            <div class="page-footer">LAPORAN RPD ${tw.toUpperCase()} TAHUN ${thn}</div>
+        </body>
+        </html>
+    `);
+    printWin.document.close();
+    setTimeout(() => { printWin.print(); }, 1000);
+};
     </script>
 </body>
 </html>
