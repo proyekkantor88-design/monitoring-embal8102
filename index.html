@@ -17,7 +17,7 @@
             <img src="https://raw.githubusercontent.com/ArielAnas/bps-assets/main/logo-bps-white.png" alt="Logo BPS" class="w-10 h-10" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg'">
             <div>
                 <h1 class="text-3xl font-extrabold tracking-tight italic leading-none">EMBAL</h1>
-                <p class="text-[10px] text-indigo-300 font-semibold uppercase tracking-wider mt-1">BPS Kab. Maluku Tenggara</p>
+                <p class="text-[11px] text-indigo-300 font-semibold uppercase tracking-wider mt-1">BPS Kab. Maluku Tenggara</p>
             </div>
         </div>
         
@@ -213,94 +213,98 @@
 
         window.hapusData = async (id) => { if(confirm("Yakin hapus data ini Kak?")) await deleteDoc(doc(db, "rpd_entries", id)); };
 
-       // --- FUNGSI CETAK DENGAN JUDUL & KOP LEBIH BESAR ---
-window.cetakLaporan = function() {
-    const tw = document.getElementById('sel-tw').value;
-    const thn = document.getElementById('sel-tahun').value;
-    const tgl = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-    
-    const urutanBulan = { "Januari": 1, "Februari": 2, "Maret": 3, "April": 4, "Mei": 5, "Juni": 6, "Juli": 7, "Agustus": 8, "September": 9, "Oktober": 10, "November": 11, "Desember": 12 };
+        // --- FUNGSI CETAK PERBAIKAN FINAL (KOP & JUDUL LEBIH BESAR) ---
+        window.cetakLaporan = function() {
+            const tw = document.getElementById('sel-tw').value;
+            const thn = document.getElementById('sel-tahun').value;
+            const tgl = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+            
+            const urutanBulan = { "Januari": 1, "Februari": 2, "Maret": 3, "April": 4, "Mei": 5, "Juni": 6, "Juli": 7, "Agustus": 8, "September": 9, "Oktober": 10, "November": 11, "Desember": 12 };
 
-    let filteredCetak = dataLokal.sort((a, b) => (urutanBulan[a.bulan] || 0) - (urutanBulan[b.bulan] || 0));
-    let barisTabel = "";
-    let totalAnggaran = 0;
+            // Sorting Otomatis Berdasarkan Bulan
+            let filteredCetak = dataLokal.sort((a, b) => (urutanBulan[a.bulan] || 0) - (urutanBulan[b.bulan] || 0));
+            let barisTabel = "";
+            let totalAnggaran = 0;
 
-    filteredCetak.forEach(data => {
-        const nominal = Number(data.anggaran || 0);
-        totalAnggaran += nominal;
-        barisTabel += `<tr>
-            <td class="text-center">${data.tim || data.subbag || "-"}</td>
-            <td class="text-center">${data.kegiatan || "-"}</td>
-            <td class="text-center">${data.kro || "-"}</td>
-            <td class="text-center">${data.ro || "-"}</td>
-            <td class="text-center">${data.komponen || "-"}</td>
-            <td class="text-center">${data.akun || "-"}</td>
-            <td class="italic">${data.detail_pok || "-"}</td>
-            <td>${data.rincian}</td>
-            <td class="text-right">Rp ${nominal.toLocaleString('id-ID')}</td>
-            <td class="text-center">${data.bulan}</td>
-        </tr>`;
-    });
+            filteredCetak.forEach(data => {
+                const nominal = Number(data.anggaran || 0);
+                totalAnggaran += nominal;
+                barisTabel += `<tr>
+                    <td class="text-center">${data.tim || data.subbag || "-"}</td>
+                    <td class="text-center">${data.kegiatan || "-"}</td>
+                    <td class="text-center">${data.kro || "-"}</td>
+                    <td class="text-center">${data.ro || "-"}</td>
+                    <td class="text-center">${data.komponen || "-"}</td>
+                    <td class="text-center">${data.akun || "-"}</td>
+                    <td class="italic">${data.detail_pok || "-"}</td>
+                    <td>${data.rincian}</td>
+                    <td class="text-right">Rp ${nominal.toLocaleString('id-ID')}</td>
+                    <td class="text-center">${data.bulan}</td>
+                </tr>`;
+            });
 
-    const printWin = window.open('', '', 'height=800,width=1200');
-    printWin.document.write(`
-        <html>
-        <head>
-            <title>Laporan RPD</title>
-            <style>
-                @page { size: landscape; margin: 1cm; }
-                body { font-family: Arial, sans-serif; font-size: 8px; line-height: 1.1; color: #000; }
-                
-                /* KOP SURAT DIPERBESAR */
-                .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
-                .kop-logo { width: 75px; height: auto; margin-right: 25px; }
-                .kop-text p { margin: 0; font-weight: bold; }
-                .nama-instansi { font-size: 22px; letter-spacing: 0.5px; } /* Diperbesar dari 16px */
-                .alamat { font-size: 10px; font-weight: normal !important; margin-top: 4px !important; }
-                
-                /* JUDUL LAPORAN DIPERBESAR */
-                h1 { text-align: center; font-size: 18px; text-decoration: underline; margin: 15px 0 3px 0; text-transform: uppercase; } /* Diperbesar dari 13px */
-                .sub-judul { text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
-                
-                table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-                th, td { border: 1px solid #000; padding: 4px; word-wrap: break-word; vertical-align: middle; }
-                th { background: #f2f2f2; text-transform: uppercase; font-size: 8px; }
-                .text-right { text-align: right; } .text-center { text-align: center; } .italic { font-style: italic; }
-                .footer { margin-top: 30px; float: right; text-align: center; width: 250px; font-size: 11px; }
-            </style>
-        </head>
-        <body>
-            <div class="kop-wrapper">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" class="kop-logo">
-                <div class="kop-text">
-                    <p class="nama-instansi">BADAN PUSAT STATISTIK</p>
-                    <p class="nama-instansi">KABUPATEN MALUKU TENGGARA</p>
-                    <p class="alamat">Jl. Soekarno - Hatta, Ohoijang Watdek, Kei Kecil, Maluku Tenggara | Tlp. (0916) 23484</p>
-                </div>
-            </div>
-            <h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1>
-            <div class="sub-judul">${tw.toUpperCase()} TAHUN ${thn}</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width:7%">TIM</th><th style="width:5%">KEG.</th><th style="width:5%">KRO</th>
-                        <th style="width:5%">RO</th><th style="width:5%">KOMP.</th><th style="width:7%">AKUN</th>
-                        <th style="width:14%">DETIL POK</th><th style="width:23%">RINCIAN</th><th style="width:15%">ANGGARAN</th><th style="width:8%">BULAN</th>
-                    </tr>
-                </thead>
-                <tbody>${barisTabel}</tbody>
-                <tfoot>
-                    <tr style="font-weight:bold; background:#f2f2f2">
-                        <td colspan="8" class="text-right">TOTAL TERFILTER</td>
-                        <td class="text-right">Rp ${totalAnggaran.toLocaleString('id-ID')}</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
-            <div class="footer">Langgur, ${tgl}<br>Pembuat Laporan,<br><br><br><br><br>( ............................................ )</div>
-        </body>
-        </html>
-    `);
-    printWin.document.close();
-    setTimeout(() => { printWin.print(); }, 1000);
-};
+            const printWin = window.open('', '', 'height=800,width=1200');
+            printWin.document.write(`
+                <html>
+                <head>
+                    <title>Laporan RPD</title>
+                    <style>
+                        @page { size: landscape; margin: 1cm; }
+                        body { font-family: Arial, sans-serif; font-size: 8px; line-height: 1.1; color: #000; }
+                        
+                        /* KOP SURAT DIPERBESAR */
+                        .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
+                        .kop-logo { width: 75px; height: auto; margin-right: 25px; }
+                        .kop-text p { margin: 0; font-weight: bold; }
+                        .nama-instansi { font-size: 22px; letter-spacing: 0.5px; }
+                        .alamat { font-size: 10px; font-weight: normal !important; margin-top: 4px !important; }
+                        
+                        /* JUDUL LAPORAN DIPERBESAR */
+                        h1 { text-align: center; font-size: 18px; text-decoration: underline; margin: 15px 0 3px 0; text-transform: uppercase; }
+                        .sub-judul { text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
+                        
+                        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+                        th, td { border: 1px solid #000; padding: 4px; word-wrap: break-word; vertical-align: middle; }
+                        th { background: #f2f2f2; text-transform: uppercase; font-size: 8px; }
+                        .text-right { text-align: right; } .text-center { text-align: center; } .italic { font-style: italic; }
+                        .footer { margin-top: 30px; float: right; text-align: center; width: 250px; font-size: 11px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="kop-wrapper">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" class="kop-logo">
+                        <div class="kop-text">
+                            <p class="nama-instansi">BADAN PUSAT STATISTIK</p>
+                            <p class="nama-instansi">KABUPATEN MALUKU TENGGARA</p>
+                            <p class="alamat">Jl. Soekarno - Hatta, Ohoijang Watdek, Kei Kecil, Maluku Tenggara | Tlp. (0916) 23484</p>
+                        </div>
+                    </div>
+                    <h1>LAPORAN RENCANA PENARIKAN DANA (RPD)</h1>
+                    <div class="sub-judul">${tw.toUpperCase()} TAHUN ${thn}</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:7%">TIM</th><th style="width:5%">KEG.</th><th style="width:5%">KRO</th>
+                                <th style="width:5%">RO</th><th style="width:5%">KOMP.</th><th style="width:7%">AKUN</th>
+                                <th style="width:14%">DETIL POK</th><th style="width:23%">RINCIAN</th><th style="width:15%">ANGGARAN</th><th style="width:8%">BULAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>${barisTabel}</tbody>
+                        <tfoot>
+                            <tr style="font-weight:bold; background:#f2f2f2">
+                                <td colspan="8" class="text-right">TOTAL TERFILTER</td>
+                                <td class="text-right">Rp ${totalAnggaran.toLocaleString('id-ID')}</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="footer">Langgur, ${tgl}<br>Pembuat Laporan,<br><br><br><br><br>( ............................................ )</div>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+            setTimeout(() => { printWin.print(); }, 1000);
+        };
+    </script>
+</body>
+</html>
