@@ -38,7 +38,7 @@
     <main class="flex-1 p-8 main-content">
         <header class="flex justify-between items-start mb-8 no-print">
             <div class="flex flex-wrap items-center gap-3">
-                <h2 class="text-2xl font-bold text-indigo-900">Input Perencanaan RPD</h2>
+                <h2 class="text-2xl font-bold text-indigo-900">Input Perencanaan RPD Triwulanan</h2>
                 <select id="sel-tw" class="p-1.5 border rounded-md text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-indigo-500">
                     <option>Triwulanan I</option><option>Triwulanan II</option><option>Triwulanan III</option><option>Triwulanan IV</option>
                 </select>
@@ -87,7 +87,7 @@
                     <table class="w-full text-[10px] text-left border">
                         <thead class="bg-slate-50 uppercase font-bold text-slate-600 text-center">
                             <tr>
-                                <th class="p-2 border">Tim</th><th class="p-2 border">Keg.</th><th class="p-2 border">Akun</th><th class="p-2 border">Detil POK</th><th class="p-2 border">Rincian</th><th class="p-2 border">Anggaran</th><th class="p-2 border">Bulan</th><th class="p-2 border no-print">Aksi</th>
+                                <th class="p-2 border">Tim</th><th class="p-2 border">Keg.</th><th class="p-2 border">KRO</th><th class="p-2 border">RO</th><th class="p-2 border">Komp.</th><th class="p-2 border">Akun</th><th class="p-2 border">Rincian</th><th class="p-2 border">Anggaran</th><th class="p-2 border">Bulan</th><th class="p-2 border no-print">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="body-rpd-only"></tbody>
@@ -153,18 +153,29 @@
                 const rpd = Number(data.anggaran || 0);
                 const real = Number(data.realisasi || 0);
                 const sisa = rpd - real;
-                const tim = data.tim || "-";
+                const tim = data.tim || data.subbag || "-"; // Solusi Tim yang hilang
                 const keg = data.kegiatan || "-";
 
                 if ((fTim === "" || tim === fTim) && (fKeg === "" || keg === fKeg) && (fBulan === "" || data.bulan === fBulan)) {
-                    htmlRPD += `<tr class="border-b hover:bg-slate-50"><td class="p-2 border">${tim}</td><td class="p-2 border text-center">${keg}</td><td class="p-2 border text-center font-bold text-blue-600">${data.akun || '-'}</td><td class="p-2 border text-slate-500 italic">${data.detail_pok || '-'}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-center">${data.bulan}</td><td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500 font-bold hover:underline">Hapus</button></td></tr>`;
+                    htmlRPD += `<tr class="border-b hover:bg-slate-50">
+                        <td class="p-2 border">${tim}</td>
+                        <td class="p-2 border text-center">${keg}</td>
+                        <td class="p-2 border text-center">${data.kro || '-'}</td>
+                        <td class="p-2 border text-center">${data.ro || '-'}</td>
+                        <td class="p-2 border text-center">${data.komponen || '-'}</td>
+                        <td class="p-2 border text-center font-bold text-blue-600">${data.akun || '-'}</td>
+                        <td class="p-2 border">${data.rincian}</td>
+                        <td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border text-center">${data.bulan}</td>
+                        <td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500 font-bold hover:underline">Hapus</button></td>
+                    </tr>`;
                 }
 
                 sumRPD += rpd; sumReal += real;
                 htmlReal += `<tr class="border-b"><td class="p-2 border">${tim}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-right bg-orange-50 font-bold text-orange-800">Rp ${real.toLocaleString('id-ID')}</td><td class="p-2 border text-right font-bold ${sisa < 0 ? 'text-red-600' : 'text-green-600'}">Rp ${sisa.toLocaleString('id-ID')}</td><td class="p-1 border text-center no-print"><input type="number" onchange="updateReal('${data.id}', this.value)" class="w-20 p-1 border rounded text-right text-[10px]" value="${real}"></td></tr>`;
             });
 
-            bodyRPD.innerHTML = htmlRPD || '<tr><td colspan="8" class="p-5 text-center">Data tidak ditemukan.</td></tr>';
+            bodyRPD.innerHTML = htmlRPD || '<tr><td colspan="10" class="p-5 text-center">Data tidak ditemukan.</td></tr>';
             bodyReal.innerHTML = htmlReal;
             document.getElementById('tot-rpd').innerText = "Rp " + sumRPD.toLocaleString('id-ID');
             document.getElementById('tot-real').innerText = "Rp " + sumReal.toLocaleString('id-ID');
@@ -191,39 +202,62 @@
             if(!data.rincian || !data.anggaran) return alert("Waduh, isi Rincian dan Anggaran dulu ya Kak!");
             await addDoc(collection(db, "rpd_entries"), data);
             document.getElementById('in-rincian').value = ""; document.getElementById('in-anggaran').value = "";
+            document.getElementById('in-kro').value = ""; document.getElementById('in-ro').value = ""; document.getElementById('in-komponen').value = "";
             alert("Sip! Rencana RPD Berhasil Disimpan.");
         };
 
         window.hapusData = async (id) => { if(confirm("Yakin hapus data ini Kak?")) await deleteDoc(doc(db, "rpd_entries", id)); };
 
-        // --- FUNGSI CETAK PERBAIKAN TOTAL ---
+        // --- FUNGSI CETAK DENGAN KOLOM KRO, RO, KOMPONEN ---
         window.cetakLaporan = function() {
-            const tableContent = document.getElementById('body-rpd-only').innerHTML;
-            const total = document.getElementById('tot-rpd').innerText;
             const tw = document.getElementById('sel-tw').value;
             const thn = document.getElementById('sel-tahun').value;
             const tgl = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+            
+            let barisTabel = "";
+            const fTim = document.getElementById('f-tim-rpd').value;
+            const fKeg = document.getElementById('f-keg-rpd').value;
+            const fBulan = document.getElementById('f-bulan-rpd').value;
 
-            const printWin = window.open('', '', 'height=800,width=1000');
+            let filteredCetak = dataLokal.filter(data => {
+                const tim = data.tim || data.subbag || "-";
+                return (fTim === "" || tim === fTim) && (fKeg === "" || data.kegiatan === fKeg) && (fBulan === "" || data.bulan === fBulan);
+            });
+
+            filteredCetak.forEach(data => {
+                barisTabel += `<tr>
+                    <td class="text-center">${data.tim || data.subbag || "-"}</td>
+                    <td class="text-center">${data.kegiatan || "-"}</td>
+                    <td class="text-center">${data.kro || "-"}</td>
+                    <td class="text-center">${data.ro || "-"}</td>
+                    <td class="text-center">${data.komponen || "-"}</td>
+                    <td class="text-center">${data.akun || "-"}</td>
+                    <td>${data.rincian}</td>
+                    <td class="text-right">Rp ${(data.anggaran || 0).toLocaleString('id-ID')}</td>
+                    <td class="text-center">${data.bulan}</td>
+                </tr>`;
+            });
+
+            const printWin = window.open('', '', 'height=800,width=1200');
             printWin.document.write(`
                 <html>
                 <head>
                     <title>Laporan RPD</title>
                     <style>
                         @page { size: landscape; margin: 1cm; }
-                        body { font-family: Arial, sans-serif; padding: 0; line-height: 1.1; color: #000; }
+                        body { font-family: Arial, sans-serif; font-size: 8px; line-height: 1.1; }
                         .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 5px; margin-bottom: 10px; }
-                        .kop-logo { width: 65px; margin-right: 15px; }
+                        .kop-logo { width: 60px; margin-right: 15px; }
                         .kop-text p { margin: 0; font-weight: bold; }
-                        .nama-instansi { font-size: 18px; }
+                        .nama-instansi { font-size: 16px; }
                         .alamat { font-size: 8px; font-weight: normal !important; margin-top: 2px !important; }
-                        h1 { text-align: center; font-size: 13px; text-decoration: underline; margin: 10px 0 2px 0; }
+                        h1 { text-align: center; font-size: 12px; text-decoration: underline; margin: 10px 0 2px 0; }
                         .sub-judul { text-align: center; font-size: 10px; font-weight: bold; margin-bottom: 10px; }
-                        table { width: 100%; border-collapse: collapse; font-size: 8px; table-layout: fixed; }
-                        th, td { border: 1px solid #000; padding: 4px; word-wrap: break-word; }
-                        th { background: #f2f2f2; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+                        th, td { border: 1px solid #000; padding: 3px; word-wrap: break-word; }
+                        th { background: #f2f2f2; text-transform: uppercase; }
                         .text-right { text-align: right; } .text-center { text-align: center; }
-                        .footer { margin-top: 25px; float: right; text-align: center; width: 220px; font-size: 10px; }
+                        .footer { margin-top: 20px; float: right; text-align: center; width: 220px; font-size: 10px; }
                     </style>
                 </head>
                 <body>
@@ -240,11 +274,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th style="width:10%">TIM</th><th style="width:7%">KEG.</th><th style="width:9%">AKUN</th><th style="width:18%">DETIL POK</th><th style="width:28%">RINCIAN</th><th style="width:15%">ANGGARAN</th><th style="width:8%">BULAN</th>
+                                <th style="width:8%">TIM</th><th style="width:6%">KEG.</th><th style="width:6%">KRO</th>
+                                <th style="width:6%">RO</th><th style="width:6%">KOMP.</th><th style="width:8%">AKUN</th>
+                                <th style="width:34%">RINCIAN</th><th style="width:18%">ANGGARAN</th><th style="width:8%">BULAN</th>
                             </tr>
                         </thead>
-                        <tbody>${tableContent.replace(/<button.*?button>/g, '')}</tbody>
-                        <tfoot><tr style="font-weight:bold; background:#f2f2f2"><td colspan="5" class="text-right">TOTAL TERFILTER</td><td class="text-right">${total}</td><td></td></tr></tfoot>
+                        <tbody>${barisTabel}</tbody>
+                        <tfoot><tr style="font-weight:bold; background:#f2f2f2"><td colspan="7" class="text-right">TOTAL TERFILTER</td><td class="text-right">${document.getElementById('tot-rpd').innerText}</td><td></td></tr></tfoot>
                     </table>
                     <div class="footer">Langgur, ${tgl}<br>Pembuat Laporan,<br><br><br><br>( ............................................ )</div>
                 </body>
