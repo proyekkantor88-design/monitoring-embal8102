@@ -12,25 +12,26 @@
 </head>
 <body class="bg-slate-100 flex font-sans text-slate-900">
 
-    <aside class="w-72 h-screen bg-indigo-900 text-white p-5 sticky top-0 no-print flex flex-col shadow-xl">
-        <div class="mb-8 border-b border-indigo-700 pb-5 flex items-center gap-3">
-            <img src="https://raw.githubusercontent.com/ArielAnas/bps-assets/main/logo-bps-white.png" alt="Logo BPS" class="w-10 h-10" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg'">
-            <div>
+    <aside class="w-80 h-screen bg-indigo-900 text-white p-6 sticky top-0 no-print flex flex-col shadow-xl">
+        <div class="mb-8 border-b border-indigo-700 pb-5">
+            <div class="flex items-center gap-3 mb-2">
+                <img src="https://raw.githubusercontent.com/ArielAnas/bps-assets/main/logo-bps-white.png" alt="Logo BPS" class="w-10 h-10" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg'">
                 <h1 class="text-3xl font-extrabold tracking-tight italic leading-none">EMBAL</h1>
-                <p class="text-[11px] text-indigo-300 font-semibold uppercase tracking-wider mt-1">BPS Kab. Maluku Tenggara</p>
             </div>
+            <p class="text-[12px] text-orange-400 font-bold leading-tight mb-1">Evaluasi Monitoring Belanja</p>
+            <p class="text-[10px] text-indigo-300 font-medium uppercase tracking-wider">BPS Kab. Maluku Tenggara</p>
         </div>
         
         <nav class="flex-1 text-sm">
             <ul class="space-y-4">
                 <li><a href="#" class="block hover:text-orange-400 p-2 rounded transition font-medium">Dashboard</a></li>
-                <li class="font-semibold text-orange-400 p-2 uppercase text-[10px] tracking-widest">Menu RPD
+                <li class="font-semibold text-orange-400 p-2 uppercase text-[10px] tracking-widest border-t border-indigo-800 mt-4 pt-4">Menu RPD
                     <ul class="pl-4 mt-3 space-y-3 font-normal text-slate-300">
                         <li><button onclick="switchTab('input-rpd')" class="hover:text-white flex items-center gap-2 transition w-full text-left">
-                            <span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span> Input RPD
+                            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span> Input RPD
                         </button></li>
                         <li><button onclick="switchTab('realisasi-rpd')" class="hover:text-white flex items-center gap-2 transition w-full text-left">
-                            <span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span> Input Realisasi
+                            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span> Input Realisasi
                         </button></li>
                     </ul>
                 </li>
@@ -42,10 +43,10 @@
         <header class="flex justify-between items-start mb-8 no-print">
             <div class="flex flex-wrap items-center gap-3">
                 <h2 class="text-2xl font-bold text-indigo-900">Input Perencanaan RPD Triwulanan</h2>
-                <select id="sel-tw" class="p-1.5 border rounded-md text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm">
+                <select id="sel-tw" class="p-1.5 border rounded-md text-sm font-bold bg-white shadow-sm outline-none focus:ring-2 focus:ring-indigo-500">
                     <option>Triwulanan I</option><option>Triwulanan II</option><option>Triwulanan III</option><option>Triwulanan IV</option>
                 </select>
-                <select id="sel-tahun" class="p-1.5 border rounded-md text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm">
+                <select id="sel-tahun" class="p-1.5 border rounded-md text-sm font-bold bg-white shadow-sm outline-none focus:ring-2 focus:ring-indigo-500">
                     <option>2026</option><option>2027</option><option>2028</option>
                 </select>
             </div>
@@ -60,32 +61,24 @@
                 <div class="grid grid-cols-5 gap-4 mb-6">
                     <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Tim</label><select id="in-tim" class="w-full p-2 border rounded-md text-xs bg-slate-50"><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
                     <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Kegiatan</label><select id="in-kegiatan" class="w-full p-2 border rounded-md text-xs bg-slate-50"><option>2905</option><option>2906</option></select></div>
-                    <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">KRO</label><input type="text" id="in-kro" class="w-full p-2 border rounded-md text-xs" placeholder="BMA/BCA"></div>
-                    <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">RO</label><input type="text" id="in-ro" class="w-full p-2 border rounded-md text-xs" placeholder="004/994"></div>
-                    <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Komponen</label><input type="text" id="in-komponen" class="w-full p-2 border rounded-md text-xs" placeholder="051/052"></div>
+                    <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">KRO</label><input type="text" id="in-kro" class="w-full p-2 border rounded-md text-xs" placeholder="..."></div>
+                    <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">RO</label><input type="text" id="in-ro" class="w-full p-2 border rounded-md text-xs" placeholder="..."></div>
+                    <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Komponen</label><input type="text" id="in-komponen" class="w-full p-2 border rounded-md text-xs" placeholder="..."></div>
                 </div>
-
                 <div class="grid grid-cols-4 gap-4 mb-6">
                     <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Akun</label><select id="in-akun" class="w-full p-2 border rounded-md text-xs bg-slate-50"><option>521211</option><option>521213</option><option>524111</option></select></div>
-                    <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Detil POK</label><input type="text" id="in-detil" class="w-full p-2 border rounded-md text-xs" placeholder="Input detil uraian POK..."></div>
+                    <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Detil POK</label><input type="text" id="in-detil" class="w-full p-2 border rounded-md text-xs" placeholder="..."></div>
                     <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Bulan</label><select id="in-bulan" class="w-full p-2 border rounded-md text-xs bg-slate-50"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
                     <div><label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Anggaran (Rp)</label><input type="number" id="in-anggaran" class="w-full p-2 border rounded-md text-xs font-bold text-indigo-700" placeholder="0"></div>
                 </div>
-
                 <div class="mb-6">
                     <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Rincian Uraian</label>
-                    <input type="text" id="in-rincian" class="w-full p-3 border rounded-md text-xs" placeholder="Masukkan rincian kegiatan secara lengkap...">
+                    <input type="text" id="in-rincian" class="w-full p-3 border rounded-md text-xs" placeholder="Masukkan rincian kegiatan...">
                 </div>
-
-                <button onclick="simpanKeFirebase()" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg transform active:scale-[0.98]">SIMPAN RENCANA</button>
+                <button onclick="simpanKeFirebase()" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg">SIMPAN RENCANA</button>
             </div>
 
             <div class="bg-white rounded-xl shadow-lg border overflow-hidden">
-                <div class="bg-slate-50 p-4 border-b no-print flex gap-6 items-end text-[10px] font-bold uppercase text-slate-400">
-                    <div class="flex-1"><label>Filter Tim</label><select id="f-tim-rpd" onchange="renderTables()" class="w-full p-2 text-xs border rounded bg-white mt-1"><option value="">Semua</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
-                    <div class="flex-1"><label>Filter Kegiatan</label><select id="f-keg-rpd" onchange="renderTables()" class="w-full p-2 text-xs border rounded bg-white mt-1"><option value="">Semua</option><option>2905</option><option>2906</option></select></div>
-                    <div class="flex-1"><label>Filter Bulan</label><select id="f-bulan-rpd" onchange="renderTables()" class="w-full p-2 text-xs border rounded bg-white mt-1"><option value="">Semua</option><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
-                </div>
                 <div class="p-6 overflow-x-auto">
                     <table class="w-full text-[10px] text-left border">
                         <thead class="bg-slate-50 uppercase font-bold text-slate-600 text-center">
@@ -145,10 +138,6 @@
         window.renderTables = () => {
             const bodyRPD = document.getElementById('body-rpd-only');
             const bodyReal = document.getElementById('body-realisasi-only');
-            const fTim = document.getElementById('f-tim-rpd').value;
-            const fKeg = document.getElementById('f-keg-rpd').value;
-            const fBulan = document.getElementById('f-bulan-rpd').value;
-
             let htmlRPD = "", htmlReal = "";
             let sumRPD = 0, sumReal = 0;
 
@@ -157,29 +146,21 @@
                 const real = Number(data.realisasi || 0);
                 const sisa = rpd - real;
                 const tim = data.tim || data.subbag || "-";
-                const keg = data.kegiatan || "-";
 
-                if ((fTim === "" || tim === fTim) && (fKeg === "" || keg === fKeg) && (fBulan === "" || data.bulan === fBulan)) {
-                    htmlRPD += `<tr class="border-b hover:bg-slate-50 transition">
-                        <td class="p-2 border">${tim}</td>
-                        <td class="p-2 border text-center">${keg}</td>
-                        <td class="p-2 border text-center">${data.kro || '-'}</td>
-                        <td class="p-2 border text-center">${data.ro || '-'}</td>
-                        <td class="p-2 border text-center">${data.komponen || '-'}</td>
-                        <td class="p-2 border text-center font-bold text-blue-600">${data.akun || '-'}</td>
-                        <td class="p-2 border italic text-slate-500">${data.detail_pok || '-'}</td>
-                        <td class="p-2 border">${data.rincian}</td>
-                        <td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString('id-ID')}</td>
-                        <td class="p-2 border text-center">${data.bulan}</td>
-                        <td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500 font-bold hover:underline">Hapus</button></td>
-                    </tr>`;
-                }
+                htmlRPD += `<tr class="border-b hover:bg-slate-50 transition">
+                    <td class="p-2 border">${tim}</td><td class="p-2 border text-center">${data.kegiatan || '-'}</td>
+                    <td class="p-2 border text-center">${data.kro || '-'}</td><td class="p-2 border text-center">${data.ro || '-'}</td>
+                    <td class="p-2 border text-center">${data.komponen || '-'}</td><td class="p-2 border text-center font-bold text-blue-600">${data.akun || '-'}</td>
+                    <td class="p-2 border italic text-slate-500 text-[9px]">${data.detail_pok || '-'}</td><td class="p-2 border">${data.rincian}</td>
+                    <td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-center">${data.bulan}</td>
+                    <td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500 font-bold hover:underline">Hapus</button></td>
+                </tr>`;
 
                 sumRPD += rpd; sumReal += real;
-                htmlReal += `<tr class="border-b"><td class="p-2 border">${tim}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-semibold">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-right bg-orange-50 font-bold text-orange-800">Rp ${real.toLocaleString('id-ID')}</td><td class="p-2 border text-right font-bold ${sisa < 0 ? 'text-red-600' : 'text-green-600'}">Rp ${sisa.toLocaleString('id-ID')}</td><td class="p-1 border text-center no-print"><input type="number" onchange="updateReal('${data.id}', this.value)" class="w-20 p-1 border rounded text-right text-[10px]" value="${real}"></td></tr>`;
+                htmlReal += `<tr class="border-b"><td class="p-2 border">${tim}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-right bg-orange-50 font-bold text-orange-800">Rp ${real.toLocaleString('id-ID')}</td><td class="p-2 border text-right font-bold ${sisa < 0 ? 'text-red-600' : 'text-green-600'}">Rp ${sisa.toLocaleString('id-ID')}</td><td class="p-1 border text-center no-print"><input type="number" onchange="updateReal('${data.id}', this.value)" class="w-20 p-1 border rounded text-right text-[10px]" value="${real}"></td></tr>`;
             });
 
-            bodyRPD.innerHTML = htmlRPD || '<tr><td colspan="11" class="p-5 text-center">Data tidak ditemukan.</td></tr>';
+            bodyRPD.innerHTML = htmlRPD || '<tr><td colspan="11" class="p-5 text-center">Data kosong</td></tr>';
             bodyReal.innerHTML = htmlReal;
             document.getElementById('tot-rpd').innerText = "Rp " + sumRPD.toLocaleString('id-ID');
             document.getElementById('tot-real').innerText = "Rp " + sumReal.toLocaleString('id-ID');
@@ -203,25 +184,21 @@
                 realisasi: 0,
                 createdAt: new Date()
             };
-            if(!data.rincian || !data.anggaran) return alert("Lengkapi Rincian dan Anggaran!");
+            if(!data.rincian || !data.anggaran) return alert("Isi Rincian & Anggaran!");
             await addDoc(collection(db, "rpd_entries"), data);
             document.getElementById('in-rincian').value = ""; document.getElementById('in-anggaran').value = "";
-            document.getElementById('in-detil').value = ""; document.getElementById('in-kro').value = ""; 
-            document.getElementById('in-ro').value = ""; document.getElementById('in-komponen').value = "";
-            alert("Sip! Rencana RPD Berhasil Disimpan.");
+            alert("Rencana Disimpan!");
         };
 
-        window.hapusData = async (id) => { if(confirm("Yakin hapus data ini Kak?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.hapusData = async (id) => { if(confirm("Hapus data?")) await deleteDoc(doc(db, "rpd_entries", id)); };
 
-        // --- FUNGSI CETAK PERBAIKAN FINAL (KOP & JUDUL LEBIH BESAR) ---
+        // --- FUNGSI CETAK PERBAIKAN TIPOGRAFI ---
         window.cetakLaporan = function() {
             const tw = document.getElementById('sel-tw').value;
             const thn = document.getElementById('sel-tahun').value;
             const tgl = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-            
             const urutanBulan = { "Januari": 1, "Februari": 2, "Maret": 3, "April": 4, "Mei": 5, "Juni": 6, "Juli": 7, "Agustus": 8, "September": 9, "Oktober": 10, "November": 11, "Desember": 12 };
 
-            // Sorting Otomatis Berdasarkan Bulan
             let filteredCetak = dataLokal.sort((a, b) => (urutanBulan[a.bulan] || 0) - (urutanBulan[b.bulan] || 0));
             let barisTabel = "";
             let totalAnggaran = 0;
@@ -230,7 +207,7 @@
                 const nominal = Number(data.anggaran || 0);
                 totalAnggaran += nominal;
                 barisTabel += `<tr>
-                    <td class="text-center">${data.tim || data.subbag || "-"}</td>
+                    <td class="text-center">${data.tim || "-"}</td>
                     <td class="text-center">${data.kegiatan || "-"}</td>
                     <td class="text-center">${data.kro || "-"}</td>
                     <td class="text-center">${data.ro || "-"}</td>
@@ -250,23 +227,20 @@
                     <title>Laporan RPD</title>
                     <style>
                         @page { size: landscape; margin: 1cm; }
-                        body { font-family: Arial, sans-serif; font-size: 8px; line-height: 1.1; color: #000; }
-                        
-                        /* KOP SURAT DIPERBESAR */
+                        body { font-family: Arial, sans-serif; line-height: 1.1; color: #000; }
                         .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
                         .kop-logo { width: 75px; height: auto; margin-right: 25px; }
-                        .kop-text p { margin: 0; font-weight: bold; }
-                        .nama-instansi { font-size: 22px; letter-spacing: 0.5px; }
-                        .alamat { font-size: 10px; font-weight: normal !important; margin-top: 4px !important; }
-                        
-                        /* JUDUL LAPORAN DIPERBESAR */
+                        .nama-instansi { font-size: 22px; font-weight: bold; margin: 0; }
+                        .alamat { font-size: 10px; margin-top: 4px; }
                         h1 { text-align: center; font-size: 18px; text-decoration: underline; margin: 15px 0 3px 0; text-transform: uppercase; }
                         .sub-judul { text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
                         
+                        /* PERBAIKAN TABEL: Header besar, Isi Kecil */
                         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-                        th, td { border: 1px solid #000; padding: 4px; word-wrap: break-word; vertical-align: middle; }
-                        th { background: #f2f2f2; text-transform: uppercase; font-size: 8px; }
-                        .text-right { text-align: right; } .text-center { text-align: center; } .italic { font-style: italic; }
+                        th { background: #f2f2f2; text-transform: uppercase; font-size: 9px; padding: 6px; border: 1px solid #000; }
+                        td { border: 1px solid #000; padding: 4px; font-size: 7.5px; word-wrap: break-word; vertical-align: middle; }
+                        
+                        .text-right { text-align: right; } .text-center { text-align: center; } .italic { font-style: italic; color: #444; }
                         .footer { margin-top: 30px; float: right; text-align: center; width: 250px; font-size: 11px; }
                     </style>
                 </head>
@@ -292,7 +266,7 @@
                         <tbody>${barisTabel}</tbody>
                         <tfoot>
                             <tr style="font-weight:bold; background:#f2f2f2">
-                                <td colspan="8" class="text-right">TOTAL TERFILTER</td>
+                                <td colspan="8" class="text-right">TOTAL</td>
                                 <td class="text-right">Rp ${totalAnggaran.toLocaleString('id-ID')}</td>
                                 <td></td>
                             </tr>
