@@ -8,14 +8,11 @@
     <style>
         @media print { .no-print { display: none !important; } .main-content { padding: 0 !important; } }
         .tab-content { transition: opacity 0.3s ease-in-out; }
-        /* Custom slim scrollbar for sidebar */
-        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: #4338ca; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-slate-100 flex font-sans text-slate-900">
 
-    <aside class="w-64 h-screen bg-indigo-900 text-white p-5 sticky top-0 no-print flex flex-col shadow-xl transition-all duration-300">
+    <aside class="w-64 h-screen bg-indigo-900 text-white p-5 sticky top-0 no-print flex flex-col shadow-xl">
         <div class="mb-6 border-b border-indigo-700 pb-4">
             <div class="flex items-center gap-2 mb-2">
                 <img src="https://raw.githubusercontent.com/ArielAnas/bps-assets/main/logo-bps-white.png" alt="Logo" class="w-8 h-8" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg'">
@@ -25,46 +22,33 @@
             <p class="text-[9px] text-indigo-300 font-medium uppercase mt-1">BPS Kab. Maluku Tenggara</p>
         </div>
         
-        <nav class="flex-1 sidebar-scroll overflow-y-auto">
+        <nav class="flex-1 overflow-y-auto">
             <ul class="space-y-2">
-                <li>
-                    <a href="#" class="flex items-center gap-3 p-2 rounded-lg hover:bg-indigo-800 transition text-sm group">
-                        <svg class="w-4 h-4 text-indigo-400 group-hover:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                        Dashboard
-                    </a>
-                </li>
+                <li><a href="#" class="block hover:bg-indigo-800 p-2 rounded-lg transition text-sm">Dashboard</a></li>
                 <li class="mt-6">
                     <span class="px-2 text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Menu RPD</span>
                     <ul class="mt-2 space-y-1">
-                        <li>
-                            <button onclick="switchTab('input-rpd')" class="flex items-center gap-3 w-full p-2 text-sm text-slate-300 hover:text-white hover:bg-indigo-800 rounded-lg transition">
-                                <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span> Input RPD
-                            </button>
-                        </li>
-                        <li>
-                            <button onclick="switchTab('realisasi-rpd')" class="flex items-center gap-3 w-full p-2 text-sm text-slate-300 hover:text-white hover:bg-indigo-800 rounded-lg transition">
-                                <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span> Realisasi
-                            </button>
-                        </li>
+                        <li><button onclick="switchTab('input-rpd')" class="flex items-center gap-3 w-full p-2 text-sm text-slate-300 hover:text-white hover:bg-indigo-800 rounded-lg transition">
+                            <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span> Input RPD
+                        </button></li>
+                        <li><button onclick="switchTab('realisasi-rpd')" class="flex items-center gap-3 w-full p-2 text-sm text-slate-300 hover:text-white hover:bg-indigo-800 rounded-lg transition">
+                            <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span> Realisasi
+                        </button></li>
                     </ul>
                 </li>
             </ul>
         </nav>
-        
-        <div class="mt-auto pt-4 border-t border-indigo-800">
-            <p class="text-[8px] text-indigo-400 text-center uppercase tracking-tighter">© 2026 BPS Maluku Tenggara</p>
-        </div>
     </aside>
 
     <main class="flex-1 p-8 main-content">
         <header class="flex justify-between items-center mb-8 no-print border-b pb-4 border-slate-200">
             <div class="flex items-center gap-4">
-                <h2 class="text-xl font-bold text-indigo-900">Input Perencanaan RPD</h2>
+                <h2 class="text-xl font-bold text-indigo-900">Input Perencanaan RPD Triwulanan</h2>
                 <div class="flex gap-2">
-                    <select id="sel-tw" class="p-1 border rounded bg-white text-xs font-bold outline-none ring-indigo-500 focus:ring-1">
+                    <select id="sel-tw" class="p-1 border rounded bg-white text-xs font-bold outline-none ring-indigo-500 focus:ring-1 shadow-sm">
                         <option>Triwulanan I</option><option>Triwulanan II</option><option>Triwulanan III</option><option>Triwulanan IV</option>
                     </select>
-                    <select id="sel-tahun" class="p-1 border rounded bg-white text-xs font-bold outline-none ring-indigo-500 focus:ring-1">
+                    <select id="sel-tahun" class="p-1 border rounded bg-white text-xs font-bold outline-none ring-indigo-500 focus:ring-1 shadow-sm">
                         <option>2026</option><option>2027</option><option>2028</option>
                     </select>
                 </div>
@@ -98,6 +82,11 @@
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+                <div class="bg-slate-50 p-4 border-b no-print flex gap-6 items-end text-[10px] font-bold uppercase text-slate-400">
+                    <div class="flex-1"><label>Filter Tim</label><select id="f-tim-rpd" onchange="renderTables()" class="w-full p-2 text-xs border rounded bg-white mt-1"><option value="">Semua</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
+                    <div class="flex-1"><label>Filter Kegiatan</label><select id="f-keg-rpd" onchange="renderTables()" class="w-full p-2 text-xs border rounded bg-white mt-1"><option value="">Semua</option><option>2905</option><option>2906</option></select></div>
+                    <div class="flex-1"><label>Filter Bulan</label><select id="f-bulan-rpd" onchange="renderTables()" class="w-full p-2 text-xs border rounded bg-white mt-1"><option value="">Semua</option><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
+                </div>
                 <div class="p-4 overflow-x-auto">
                     <table class="w-full text-[10px] text-left border">
                         <thead class="bg-slate-50 uppercase font-bold text-slate-600 text-center">
@@ -115,11 +104,11 @@
             <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
                 <table class="w-full text-[10px] text-left border">
                     <thead class="bg-slate-50 font-bold uppercase text-slate-600 text-center">
-                        <tr><th class="p-3 border">Tim</th><th class="p-3 border">Rincian</th><th class="p-3 border text-right">Rencana (A)</th><th class="p-3 border text-right bg-orange-50 text-orange-800">Realisasi (B)</th><th class="p-3 border text-right">Sisa (A-B)</th><th class="p-3 border no-print">Aksi</th></tr>
+                        <tr><th class="p-3 border">Tim</th><th class="p-3 border">Rincian</th><th class="p-3 border text-right">Rencana (A)</th><th class="p-3 border text-right bg-orange-50 text-orange-800">Realisasi (B)</th><th class="p-3 border text-right">Sisa (A-B)</th><th class="p-3 border no-print">Update Realisasi</th></tr>
                     </thead>
                     <tbody id="body-realisasi-only"></tbody>
                     <tfoot class="bg-slate-800 text-white font-bold">
-                        <tr><td colspan="2" class="p-4 text-right">TOTAL:</td><td id="tot-rpd" class="p-4 text-right">Rp 0</td><td id="tot-real" class="p-4 text-right bg-orange-600">Rp 0</td><td id="tot-sisa" class="p-4 text-right">Rp 0</td><td class="no-print"></td></tr>
+                        <tr><td colspan="2" class="p-4 text-right">TOTAL TERFILTER:</td><td id="tot-rpd" class="p-4 text-right">Rp 0</td><td id="tot-real" class="p-4 text-right bg-orange-600">Rp 0</td><td id="tot-sisa" class="p-4 text-right">Rp 0</td><td class="no-print"></td></tr>
                     </tfoot>
                 </table>
             </div>
@@ -157,6 +146,12 @@
         window.renderTables = () => {
             const bodyRPD = document.getElementById('body-rpd-only');
             const bodyReal = document.getElementById('body-realisasi-only');
+            
+            // Perbaikan: Ambil nilai filter
+            const fTim = document.getElementById('f-tim-rpd')?.value || "";
+            const fKeg = document.getElementById('f-keg-rpd')?.value || "";
+            const fBulan = document.getElementById('f-bulan-rpd')?.value || "";
+
             let htmlRPD = "", htmlReal = "";
             let sumRPD = 0, sumReal = 0;
 
@@ -164,22 +159,27 @@
                 const rpd = Number(data.anggaran || 0);
                 const real = Number(data.realisasi || 0);
                 const sisa = rpd - real;
-                const tim = data.tim || data.subbag || "-";
+                const tim = data.tim || data.subbag || "-"; // Solusi Tim yang hilang
+                const keg = data.kegiatan || "-";
 
-                htmlRPD += `<tr class="border-b hover:bg-slate-50 transition">
-                    <td class="p-2 border">${tim}</td><td class="p-2 border text-center">${data.kegiatan || '-'}</td>
-                    <td class="p-2 border text-center">${data.kro || '-'}</td><td class="p-2 border text-center">${data.ro || '-'}</td>
-                    <td class="p-2 border text-center">${data.komponen || '-'}</td><td class="p-2 border text-center font-bold text-blue-600">${data.akun || '-'}</td>
-                    <td class="p-2 border italic text-slate-500 text-[9px]">${data.detail_pok || '-'}</td><td class="p-2 border">${data.rincian}</td>
-                    <td class="p-2 border text-right font-bold text-indigo-700">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-center">${data.bulan}</td>
-                    <td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500 font-bold hover:underline">X</button></td>
-                </tr>`;
-
-                sumRPD += rpd; sumReal += real;
-                htmlReal += `<tr class="border-b"><td class="p-2 border">${tim}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-right bg-orange-50 font-bold text-orange-800">Rp ${real.toLocaleString('id-ID')}</td><td class="p-2 border text-right font-bold ${sisa < 0 ? 'text-red-600' : 'text-green-600'}">Rp ${sisa.toLocaleString('id-ID')}</td><td class="p-1 border text-center no-print"><input type="number" onchange="updateReal('${data.id}', this.value)" class="w-16 p-1 border rounded text-right text-[10px]" value="${real}"></td></tr>`;
+                // Terapkan Filter
+                if ((fTim === "" || tim === fTim) && (fKeg === "" || keg === fKeg) && (fBulan === "" || data.bulan === fBulan)) {
+                    htmlRPD += `<tr class="border-b hover:bg-slate-50 transition">
+                        <td class="p-2 border text-center">${tim}</td><td class="p-2 border text-center">${keg}</td>
+                        <td class="p-2 border text-center">${data.kro || '-'}</td><td class="p-2 border text-center">${data.ro || '-'}</td>
+                        <td class="p-2 border text-center">${data.komponen || '-'}</td><td class="p-2 border text-center font-bold text-blue-600">${data.akun || '-'}</td>
+                        <td class="p-2 border italic text-slate-500 text-[9px]">${data.detail_pok || '-'}</td><td class="p-2 border">${data.rincian}</td>
+                        <td class="p-2 border text-right font-bold text-indigo-700">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-center">${data.bulan}</td>
+                        <td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500 font-bold hover:underline">X</button></td>
+                    </tr>`;
+                    
+                    htmlReal += `<tr class="border-b"><td class="p-2 border">${tim}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString('id-ID')}</td><td class="p-2 border text-right bg-orange-50 font-bold text-orange-800">Rp ${real.toLocaleString('id-ID')}</td><td class="p-2 border text-right font-bold ${sisa < 0 ? 'text-red-600' : 'text-green-600'}">Rp ${sisa.toLocaleString('id-ID')}</td><td class="p-1 border text-center no-print"><input type="number" onchange="updateReal('${data.id}', this.value)" class="w-16 p-1 border rounded text-right text-[10px]" value="${real}"></td></tr>`;
+                    
+                    sumRPD += rpd; sumReal += real;
+                }
             });
 
-            bodyRPD.innerHTML = htmlRPD || '<tr><td colspan="11" class="p-5 text-center">Data kosong</td></tr>';
+            bodyRPD.innerHTML = htmlRPD || '<tr><td colspan="11" class="p-5 text-center text-slate-400">Data tidak ditemukan</td></tr>';
             bodyReal.innerHTML = htmlReal;
             document.getElementById('tot-rpd').innerText = "Rp " + sumRPD.toLocaleString('id-ID');
             document.getElementById('tot-real').innerText = "Rp " + sumReal.toLocaleString('id-ID');
@@ -203,7 +203,7 @@
                 realisasi: 0,
                 createdAt: new Date()
             };
-            if(!data.rincian || !data.anggaran) return alert("Isi Rincian & Anggaran!");
+            if(!data.rincian || !data.anggaran) return alert("Lengkapi Rincian & Anggaran!");
             await addDoc(collection(db, "rpd_entries"), data);
             document.getElementById('in-rincian').value = ""; document.getElementById('in-anggaran').value = "";
             document.getElementById('in-detil').value = ""; document.getElementById('in-kro').value = ""; 
@@ -213,14 +213,23 @@
 
         window.hapusData = async (id) => { if(confirm("Hapus data?")) await deleteDoc(doc(db, "rpd_entries", id)); };
 
-        // --- FUNGSI CETAK (Optimasi Tipografi Sesuai Permintaan) ---
+        // --- FUNGSI CETAK (Header Besar & Isi Kecil) ---
         window.cetakLaporan = function() {
             const tw = document.getElementById('sel-tw').value;
             const thn = document.getElementById('sel-tahun').value;
             const tgl = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+            
+            const fTim = document.getElementById('f-tim-rpd').value;
+            const fKeg = document.getElementById('f-keg-rpd').value;
+            const fBulan = document.getElementById('f-bulan-rpd').value;
+            
             const urutanBulan = { "Januari": 1, "Februari": 2, "Maret": 3, "April": 4, "Mei": 5, "Juni": 6, "Juli": 7, "Agustus": 8, "September": 9, "Oktober": 10, "November": 11, "Desember": 12 };
 
-            let filteredCetak = dataLokal.sort((a, b) => (urutanBulan[a.bulan] || 0) - (urutanBulan[b.bulan] || 0));
+            let filteredCetak = dataLokal.filter(data => {
+                const tim = data.tim || data.subbag || "-";
+                return (fTim === "" || tim === fTim) && (fKeg === "" || data.kegiatan === fKeg) && (fBulan === "" || data.bulan === fBulan);
+            }).sort((a, b) => (urutanBulan[a.bulan] || 0) - (urutanBulan[b.bulan] || 0));
+
             let barisTabel = "";
             let totalAnggaran = 0;
 
@@ -228,7 +237,7 @@
                 const nominal = Number(data.anggaran || 0);
                 totalAnggaran += nominal;
                 barisTabel += `<tr>
-                    <td class="text-center uppercase">${data.tim || "-"}</td>
+                    <td class="text-center uppercase">${data.tim || data.subbag || "-"}</td>
                     <td class="text-center font-bold">${data.kegiatan || "-"}</td>
                     <td class="text-center">${data.kro || "-"}</td>
                     <td class="text-center">${data.ro || "-"}</td>
@@ -250,16 +259,14 @@
                         @page { size: landscape; margin: 1cm; }
                         body { font-family: Arial, sans-serif; line-height: 1.1; color: #000; }
                         .kop-wrapper { display: flex; align-items: center; border-bottom: 3px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
-                        .kop-logo { width: 70px; height: auto; margin-right: 25px; }
+                        .kop-logo { width: 75px; height: auto; margin-right: 25px; }
                         .nama-instansi { font-size: 22px; font-weight: bold; margin: 0; }
                         .alamat { font-size: 10px; margin-top: 4px; }
                         h1 { text-align: center; font-size: 18px; text-decoration: underline; margin: 15px 0 3px 0; text-transform: uppercase; }
                         .sub-judul { text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
-                        
                         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-                        th { background: #f2f2f2; text-transform: uppercase; font-size: 9px; padding: 7px; border: 1px solid #000; font-weight: 800; }
+                        th { background: #f2f2f2; text-transform: uppercase; font-size: 9px; padding: 7px; border: 1px solid #000; font-weight: bold; }
                         td { border: 1px solid #000; padding: 4px; font-size: 7.5px; word-wrap: break-word; vertical-align: middle; }
-                        
                         .text-right { text-align: right; } .text-center { text-align: center; } .italic { font-style: italic; color: #444; }
                         .footer { margin-top: 30px; float: right; text-align: center; width: 250px; font-size: 11px; }
                     </style>
@@ -286,7 +293,7 @@
                         <tbody>${barisTabel}</tbody>
                         <tfoot>
                             <tr style="font-weight:bold; background:#f2f2f2">
-                                <td colspan="8" class="text-right">TOTAL KESELURUHAN</td>
+                                <td colspan="8" class="text-right uppercase">Total Terfilter</td>
                                 <td class="text-right">Rp ${totalAnggaran.toLocaleString('id-ID')}</td>
                                 <td></td>
                             </tr>
