@@ -13,10 +13,9 @@
         <nav>
             <ul class="space-y-4">
                 <li><a href="#" class="block hover:text-orange-400">Dashboard</a></li>
-                <li class="font-semibold text-orange-400">RPD
+                <li class="font-semibold text-orange-400 cursor-default">RPD
                     <ul class="pl-4 mt-2 space-y-2 font-normal text-slate-300">
-                        <li><a href="#" class="hover:text-white">→ Entri RPD</a></li>
-                        <li><a href="#" class="hover:text-white">→ Realisasi RPD</a></li>
+                        <li><a href="#" class="hover:text-white">→ Entri & Realisasi</a></li>
                     </ul>
                 </li>
             </ul>
@@ -25,12 +24,12 @@
 
     <main class="flex-1 p-8">
         <header class="flex justify-between items-center mb-8 no-print">
-            <h2 class="text-2xl font-bold text-slate-800">Entri Rencana Penarikan Dana</h2>
+            <h2 class="text-2xl font-bold text-slate-800">Monitoring RPD & Realisasi</h2>
             <span class="bg-white px-4 py-2 rounded shadow text-sm">Satker: BPS Kab. Maluku Tenggara</span>
         </header>
 
         <div class="bg-white p-6 rounded-lg shadow-md mb-10 no-print">
-            <h4 class="text-lg font-semibold text-gray-700 mb-4 text-center border-b pb-2">Form Input RPD</h4>
+            <h4 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Form Input Rencana (RPD)</h4>
             <div class="overflow-x-auto">
                 <table class="w-full text-xs text-left">
                     <thead class="bg-slate-50 text-slate-600 uppercase border">
@@ -38,7 +37,6 @@
                             <th class="p-2 border">Tim</th>
                             <th class="p-2 border">Kegiatan</th>
                             <th class="p-2 border">Akun</th>
-                            <th class="p-2 border">Detil POK</th>
                             <th class="p-2 border">Rincian</th>
                             <th class="p-2 border text-right">Anggaran</th>
                             <th class="p-2 border text-center">Bulan</th>
@@ -50,8 +48,7 @@
                             <td class="p-1 border"><select id="in-tim" class="w-full p-1"><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></td>
                             <td class="p-1 border"><select id="in-kegiatan" class="w-full p-1"><option>2905</option><option>2906</option></select></td>
                             <td class="p-1 border"><select id="in-akun" class="w-full p-1 font-bold text-blue-700"><option>521211</option><option>521213</option><option>524111</option></select></td>
-                            <td class="p-1 border"><input type="text" id="in-detail-pok" class="w-full p-1 border rounded" placeholder="..."></td>
-                            <td class="p-1 border"><input type="text" id="in-rincian" class="w-full p-1 border rounded" placeholder="..."></td>
+                            <td class="p-1 border"><input type="text" id="in-rincian" class="w-full p-1 border rounded" placeholder="Contoh: Honor Petugas..."></td>
                             <td class="p-1 border"><input type="number" id="in-anggaran" class="w-full p-1 border rounded text-right" placeholder="0"></td>
                             <td class="p-1 border">
                                 <select id="in-bulan" class="w-full p-1">
@@ -59,7 +56,7 @@
                                 </select>
                             </td>
                             <td class="p-1 border text-center">
-                                <button id="btn-simpan" onclick="simpanKeFirebase()" class="bg-indigo-600 text-white px-4 py-1 rounded font-bold hover:bg-indigo-800 transition text-xs">SIMPAN</button>
+                                <button id="btn-simpan" onclick="simpanKeFirebase()" class="bg-indigo-600 text-white px-4 py-1 rounded font-bold hover:bg-indigo-800 transition text-xs">SIMPAN RENCANA</button>
                             </td>
                         </tr>
                     </tbody>
@@ -69,51 +66,41 @@
 
         <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-600">
             <div class="flex justify-between items-center mb-6 no-print">
-                <h4 class="text-xl font-bold text-slate-800">Monitoring RPD Terinput</h4>
-                <button onclick="cetakLaporan()" class="flex items-center bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition text-sm font-bold">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                    CETAK LAPORAN
-                </button>
+                <h4 class="text-xl font-bold text-slate-800">Tabel Komparasi RPD vs Realisasi</h4>
+                <button onclick="cetakLaporan()" class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition text-sm font-bold">CETAK LAPORAN</button>
             </div>
 
-            <div class="grid grid-cols-4 gap-4 mb-6 bg-indigo-50 p-4 rounded-lg border border-indigo-100 no-print">
+            <div class="grid grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded border no-print">
                 <div>
-                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Cari Tim</label>
-                    <select id="f-tim" onchange="applyFilter()" class="w-full p-1 text-xs border rounded outline-none"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase">Tim</label>
+                    <select id="f-tim" onchange="applyFilter()" class="w-full p-1 text-xs border rounded"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Cari Kegiatan</label>
-                    <select id="f-kegiatan" onchange="applyFilter()" class="w-full p-1 text-xs border rounded outline-none"><option value="">Semua Kegiatan</option><option>2905</option><option>2906</option></select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Cari Akun</label>
-                    <select id="f-akun" onchange="applyFilter()" class="w-full p-1 text-xs border rounded outline-none"><option value="">Semua Akun</option><option>521211</option><option>521213</option><option>524111</option></select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Cari Bulan</label>
-                    <select id="f-bulan" onchange="applyFilter()" class="w-full p-1 text-xs border rounded outline-none"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option></select>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase">Bulan</label>
+                    <select id="f-bulan" onchange="applyFilter()" class="w-full p-1 text-xs border rounded"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option></select>
                 </div>
             </div>
 
             <div class="overflow-x-auto">
-                <table id="table-rpd" class="w-full text-xs text-left border-collapse">
-                    <thead class="bg-slate-50 text-slate-600 uppercase font-bold border-b-2">
+                <table class="w-full text-[11px] text-left border-collapse">
+                    <thead class="bg-slate-100 text-slate-700 uppercase font-bold border-b-2">
                         <tr>
-                            <th class="p-3">Tim</th>
-                            <th class="p-3">Kegiatan</th>
-                            <th class="p-3 text-center">Akun</th>
-                            <th class="p-3 text-center">Detil POK</th>
-                            <th class="p-3">Rincian</th>
-                            <th class="p-3 text-right">Anggaran (Rp)</th>
-                            <th class="p-3 text-center">Bulan</th>
-                            <th class="p-3 text-center no-print">Aksi</th>
+                            <th class="p-3 border">Tim</th>
+                            <th class="p-3 border">Rincian</th>
+                            <th class="p-3 text-right border">Rencana (A)</th>
+                            <th class="p-3 text-right border bg-orange-50">Realisasi (B)</th>
+                            <th class="p-3 text-right border">Sisa (A-B)</th>
+                            <th class="p-3 text-center border no-print">Update Realisasi</th>
+                            <th class="p-3 text-center border no-print">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="table-body-view"></tbody>
-                    <tfoot class="bg-indigo-50 font-bold border-t-2 border-indigo-200">
+                    <tfoot class="bg-slate-800 text-white font-bold">
                         <tr>
-                            <td colspan="5" class="p-3 text-right text-indigo-900 uppercase">Total Terfilter:</td>
-                            <td id="total-display" class="p-3 text-right text-indigo-700 text-sm whitespace-nowrap">Rp 0</td>
+                            <td colspan="2" class="p-3 text-right uppercase">Total Seluruhnya:</td>
+                            <td id="total-rpd" class="p-3 text-right">Rp 0</td>
+                            <td id="total-realisasi" class="p-3 text-right bg-indigo-700">Rp 0</td>
+                            <td id="total-sisa" class="p-3 text-right">Rp 0</td>
                             <td colspan="2" class="no-print"></td>
                         </tr>
                     </tfoot>
@@ -124,7 +111,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC_PnAtxsdajd0Hltq9X1e0eYcsiASFPxE",
@@ -138,10 +125,8 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
         let dataLokal = [];
 
-        // --- 1. MONITORING LIVE ---
         const q = query(collection(db, "rpd_entries"), orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
             dataLokal = [];
@@ -151,157 +136,86 @@
             window.applyFilter();
         });
 
-        // --- 2. LOGIKA FILTER ---
         window.applyFilter = function() {
             const tableBody = document.getElementById('table-body-view');
-            const totalDisplay = document.getElementById('total-display');
-            
             const selTim = document.getElementById('f-tim').value;
-            const selKegiatan = document.getElementById('f-kegiatan').value;
-            const selAkun = document.getElementById('f-akun').value;
             const selBulan = document.getElementById('f-bulan').value;
 
             let html = "";
-            let totalFiltered = 0;
+            let sumRPD = 0, sumReal = 0;
 
             const filtered = dataLokal.filter(item => {
-                // Kak, di sini logikanya kita buat fleksibel: cek 'tim' ATAU 'subbag'
                 const nilaiTim = item.tim || item.subbag || "-";
-                
-                return (selTim === "" || nilaiTim === selTim) &&
-                       (selKegiatan === "" || item.kegiatan === selKegiatan) &&
-                       (selAkun === "" || item.akun === selAkun) &&
-                       (selBulan === "" || item.bulan === selBulan);
+                return (selTim === "" || nilaiTim === selTim) && (selBulan === "" || item.bulan === selBulan);
             });
 
             filtered.forEach((data) => {
-                const nominal = Number(data.anggaran || 0);
-                totalFiltered += nominal;
-                
-                // Pastikan tampilan Tim mengambil dari salah satu field yang ada
-                const labelTim = data.tim || data.subbag || "-";
+                const rpd = Number(data.anggaran || 0);
+                const realisasi = Number(data.realisasi || 0);
+                const sisa = rpd - realisasi;
+
+                sumRPD += rpd; sumReal += realisasi;
 
                 html += `
                     <tr class="border-b hover:bg-slate-50 transition">
-                        <td class="p-3">${labelTim}</td>
-                        <td class="p-3">${data.kegiatan}</td>
-                        <td class="p-3 text-center font-bold text-blue-600">${data.akun}</td>
-                        <td class="p-3 text-center text-gray-500">${data.detail_pok || '-'}</td>
-                        <td class="p-3">${data.rincian}</td>
-                        <td class="p-3 text-right font-bold whitespace-nowrap">Rp ${nominal.toLocaleString('id-ID')}</td>
-                        <td class="p-3 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded">${data.bulan}</span></td>
-                        <td class="p-3 text-center no-print">
-                            <button onclick="hapusData('${data.id}')" class="text-red-500 hover:underline text-[10px]">Hapus</button>
+                        <td class="p-3 border">${data.tim || data.subbag || "-"}</td>
+                        <td class="p-3 border font-medium">${data.rincian}</td>
+                        <td class="p-3 border text-right">Rp ${rpd.toLocaleString('id-ID')}</td>
+                        <td class="p-3 border text-right bg-orange-50 font-bold">Rp ${realisasi.toLocaleString('id-ID')}</td>
+                        <td class="p-3 border text-right ${sisa < 0 ? 'text-red-600' : 'text-green-600'} font-bold">Rp ${sisa.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border text-center no-print">
+                            <input type="number" onchange="updateRealisasi('${data.id}', this.value)" 
+                                class="w-24 p-1 border rounded text-right text-[10px]" placeholder="Input Real...">
+                        </td>
+                        <td class="p-3 border text-center no-print">
+                            <button onclick="hapusData('${data.id}')" class="text-red-500 hover:underline">Hapus</button>
                         </td>
                     </tr>
                 `;
             });
 
-            tableBody.innerHTML = html || '<tr><td colspan="8" class="p-5 text-center text-gray-400">Data tidak ditemukan.</td></tr>';
-            totalDisplay.innerText = "Rp " + totalFiltered.toLocaleString('id-ID');
-        }
+            tableBody.innerHTML = html || '<tr><td colspan="7" class="p-5 text-center">Data kosong.</td></tr>';
+            document.getElementById('total-rpd').innerText = "Rp " + sumRPD.toLocaleString('id-ID');
+            document.getElementById('total-realisasi').innerText = "Rp " + sumReal.toLocaleString('id-ID');
+            document.getElementById('total-sisa').innerText = "Rp " + (sumRPD - sumReal).toLocaleString('id-ID');
+        };
 
-        // --- 3. FUNGSI SIMPAN ---
+        // FUNGSI UPDATE REALISASI
+        window.updateRealisasi = async function(id, value) {
+            try {
+                const docRef = doc(db, "rpd_entries", id);
+                await updateDoc(docRef, { realisasi: Number(value) });
+                // Tampilan otomatis update karena onSnapshot
+            } catch (e) { alert("Gagal update realisasi: " + e.message); }
+        };
+
         window.simpanKeFirebase = async function() {
             const btn = document.getElementById('btn-simpan');
-            const tim = document.getElementById('in-tim').value;
-            const kegiatan = document.getElementById('in-kegiatan').value;
-            const akun = document.getElementById('in-akun').value;
-            const detail_pok = document.getElementById('in-detail-pok').value;
-            const rincian = document.getElementById('in-rincian').value;
-            const anggaranValue = document.getElementById('in-anggaran').value;
-            const bulan = document.getElementById('in-bulan').value;
+            const data = {
+                tim: document.getElementById('in-tim').value,
+                kegiatan: document.getElementById('in-kegiatan').value,
+                akun: document.getElementById('in-akun').value,
+                rincian: document.getElementById('in-rincian').value,
+                anggaran: Number(document.getElementById('in-anggaran').value),
+                bulan: document.getElementById('in-bulan').value,
+                realisasi: 0, // Default realisasi 0 saat baru buat rencana
+                createdAt: new Date()
+            };
 
-            if (!anggaranValue || anggaranValue <= 0) {
-                alert("Masukkan jumlah anggaran!"); return;
-            }
+            if (!data.anggaran || !data.rincian) { alert("Isi rincian dan anggaran!"); return; }
 
             try {
-                btn.disabled = true; btn.innerText = "...";
-                await addDoc(collection(db, "rpd_entries"), {
-                    tim, // Data baru akan disimpan dengan field 'tim'
-                    kegiatan, akun, detail_pok, rincian,
-                    anggaran: Number(anggaranValue), bulan, createdAt: new Date()
-                });
-                alert("Data Berhasil Disimpan!");
+                btn.disabled = true;
+                await addDoc(collection(db, "rpd_entries"), data);
+                alert("Rencana Disimpan!");
                 document.getElementById('in-rincian').value = "";
                 document.getElementById('in-anggaran').value = "";
-                document.getElementById('in-detail-pok').value = "";
-            } catch (e) {
-                alert("Error: " + e.message);
-            } finally {
-                btn.disabled = false; btn.innerText = "SIMPAN";
-            }
+            } catch (e) { alert("Gagal: " + e.message); }
+            finally { btn.disabled = false; }
         };
 
-        // Sisanya sama (Hapus & Cetak) ...
         window.hapusData = async function(id) {
-            if(confirm("Hapus data ini?")) {
-                try { await deleteDoc(doc(db, "rpd_entries", id)); } 
-                catch (e) { alert("Gagal: " + e.message); }
-            }
-        };
-
-        window.cetakLaporan = function() {
-            const tableContent = document.getElementById('table-body-view').innerHTML;
-            const total = document.getElementById('total-display').innerText;
-            const fTim = document.getElementById('f-tim').value || 'Semua';
-            const fBulan = document.getElementById('f-bulan').value || 'Semua';
-            const tgl = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-
-            const printWin = window.open('', '', 'height=700,width=1000');
-            printWin.document.write(`
-                <html>
-                <head>
-                    <title>Laporan RPD BPS Maluku Tenggara</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; padding: 30px; }
-                        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
-                        table { width: 100%; border-collapse: collapse; font-size: 10px; table-layout: fixed; }
-                        th, td { border: 1px solid #333; padding: 6px; text-align: left; word-wrap: break-word; }
-                        th { background: #f2f2f2; font-weight: bold; text-transform: uppercase; }
-                        .w-tim { width: 10%; } .w-keg { width: 8%; } .w-akun { width: 8%; }
-                        .w-detil { width: 15%; } .w-rincian { width: 32%; }
-                        .w-anggaran { width: 18%; } .w-bulan { width: 9%; }
-                        .text-right { text-align: right; } .text-center { text-align: center; }
-                        .nowrap { white-space: nowrap; }
-                        .footer { margin-top: 40px; display: flex; justify-content: flex-end; }
-                        .ttd { text-align: center; width: 250px; font-size: 12px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <h3 style="margin:0">BADAN PUSAT STATISTIK KABUPATEN MALUKU TENGGARA</h3>
-                        <h2 style="margin:5px 0">LAPORAN RENCANA PENARIKAN DANA (RPD)</h2>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="w-tim">Tim</th>
-                                <th class="w-keg text-center">Keg.</th>
-                                <th class="w-akun text-center">Akun</th>
-                                <th class="w-detil">Detil POK</th>
-                                <th class="w-rincian">Rincian</th>
-                                <th class="w-anggaran text-right">Anggaran (Rp)</th>
-                                <th class="w-bulan text-center">Bulan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tableContent.replace(/<button.*?button>/g, '').replace(/class="p-3 text-right font-bold whitespace-nowrap"/g, 'class="text-right nowrap"')}
-                        </tbody>
-                        <tfoot>
-                            <tr style="font-weight:bold; background:#f2f2f2">
-                                <td colspan="5" class="text-right">TOTAL TERFILTER</td>
-                                <td class="text-right nowrap">${total}</td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </body>
-                </html>
-            `);
-            printWin.document.close();
-            printWin.print();
+            if(confirm("Hapus data ini?")) await deleteDoc(doc(db, "rpd_entries", id));
         };
     </script>
 </body>
