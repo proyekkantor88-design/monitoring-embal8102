@@ -7,17 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @media print { 
-            .no-print { display: none !important; } 
-            .main-content { padding: 0 !important; margin-left: 0 !important; }
-            table { font-size: 8pt !important; width: 100% !important; border-collapse: collapse !important; }
-            th, td { border: 1px solid black !important; padding: 4px !important; }
-            @page { size: landscape; margin: 1cm; }
-        }
+        @media print { .no-print { display: none !important; } .main-content { padding: 0 !important; margin-left: 0 !important; } table { font-size: 8pt !important; width: 100% !important; border-collapse: collapse !important; } th, td { border: 1px solid black !important; padding: 4px !important; } @page { size: landscape; margin: 1cm; } }
         .tab-content { transition: opacity 0.3s ease-in-out; }
         #sidebar { transition: all 0.3s ease-in-out; width: 18rem; }
         #sidebar.hidden-sidebar { margin-left: -18rem; }
-        .main-container { transition: all 0.3s ease-in-out; }
         th { font-size: 8px !important; text-transform: uppercase; background-color: #f8fafc; border: 1px solid #e2e8f0; text-align: center; }
         td { font-size: 9px !important; border: 1px solid #e2e8f0; padding: 4px; }
         .foot-total { background-color: #f1f5f9; font-weight: bold; }
@@ -74,12 +67,12 @@
                 <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-indigo-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Rencana</p><h3 id="dash-total-rpd" class="text-base font-black">Rp 0</h3></div>
                 <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-orange-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Realisasi</p><h3 id="dash-total-real" class="text-base font-black text-orange-600">Rp 0</h3></div>
                 <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-red-500"><p class="text-[9px] font-bold text-slate-400 uppercase">GAP</p><h3 id="dash-total-gap" class="text-base font-black text-red-600">Rp 0</h3></div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-emerald-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Sisa</p><h3 id="dash-total-sisa" class="text-base font-black">Rp 0</h3></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-emerald-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Sisa Dana</p><h3 id="dash-total-sisa" class="text-base font-black">Rp 0</h3></div>
                 <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-blue-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Serapan</p><h3 id="dash-total-persen" class="text-base font-black">0%</h3></div>
             </div>
 
             <div class="bg-white p-4 rounded-xl shadow-sm border">
-                <h4 class="text-xs font-bold uppercase mb-3 text-indigo-900 tracking-wider">Monitoring Permintaan Belanja Terfilter</h4>
+                <h4 class="text-xs font-bold uppercase mb-3 text-indigo-900 tracking-wider">Tabel Monitoring Permintaan Belanja</h4>
                 <div class="overflow-x-auto">
                     <table class="w-full text-center">
                         <thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>RPD/Non</th><th>Nilai</th><th>Status</th></tr></thead>
@@ -105,7 +98,7 @@
                     <div><label class="text-[9px] font-bold uppercase">Detil POK</label><input type="text" id="in-rincian" class="w-full p-2 border rounded text-xs mt-1"></div>
                     <div><label class="text-[9px] font-bold uppercase">Anggaran (Rp)</label><input type="number" id="in-anggaran" class="w-full p-2 border rounded text-xs font-bold mt-1 text-indigo-700"></div>
                 </div>
-                <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold">SIMPAN RPD</button>
+                <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold">SIMPAN PERENCANAAN</button>
             </div>
             
             <div class="bg-white rounded-xl shadow-sm border p-4">
@@ -154,7 +147,6 @@
                     <tbody id="body-realisasi"></tbody>
                     <tfoot id="foot-realisasi" class="foot-total"></tfoot>
                 </table>
-                <div class="mt-4 no-print flex justify-end"><button onclick="window.print()" class="bg-orange-600 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Laporan Realisasi & GAP</button></div>
             </div>
         </section>
     </main>
@@ -196,11 +188,11 @@
                 }
             });
             body.innerHTML = html;
-            foot.innerHTML = `<tr><td colspan="7" class="text-right p-2 uppercase">Total Anggaran:</td><td class="text-right p-2">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            foot.innerHTML = `<tr><td colspan="7" class="text-right p-2 uppercase">Total:</td><td class="text-right p-2">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
             
             const drop = document.getElementById('req-rpd-id');
             if(drop) {
-                let opt = '<option value="">-- Pilih Rincian RPD --</option>';
+                let opt = '<option value="">-- Pilih Sumber RPD --</option>';
                 dataRPD.forEach(d => { opt += `<option value="${d.id}">${d.tim} - ${d.rincian}</option>`; });
                 drop.innerHTML = opt;
             }
@@ -214,7 +206,7 @@
                 total += Number(d.nilai);
             });
             body.innerHTML = html;
-            foot.innerHTML = `<tr><td colspan="4" class="p-2 text-right uppercase font-bold text-slate-500">Total Nilai:</td><td class="p-2 text-right text-green-700 font-black">Rp ${total.toLocaleString()}</td><td colspan="3"></td></tr>`;
+            foot.innerHTML = `<tr><td colspan="4" class="p-2 text-right uppercase">Total:</td><td class="p-2 text-right">Rp ${total.toLocaleString()}</td><td colspan="3"></td></tr>`;
         };
 
         window.renderRealisasi = () => {
@@ -233,7 +225,7 @@
                 sB += v;
             });
             body.innerHTML = html;
-            foot.innerHTML = `<tr><td colspan="2" class="p-2 text-right font-black uppercase">Total Seluruh Belanja:</td><td class="p-2 text-right">Rp ${sR.toLocaleString()}</td><td class="p-2 text-right text-orange-700">Rp ${sB.toLocaleString()}</td><td class="p-2 text-right">Rp ${(sR-sB).toLocaleString()}</td><td></td></tr>`;
+            foot.innerHTML = `<tr><td colspan="2" class="p-2 text-right font-black uppercase">Total Seluruh:</td><td class="p-2 text-right">Rp ${sR.toLocaleString()}</td><td class="p-2 text-right text-orange-700">Rp ${sB.toLocaleString()}</td><td class="p-2 text-right">Rp ${(sR-sB).toLocaleString()}</td><td></td></tr>`;
         };
 
         window.renderDashboard = () => {
@@ -268,8 +260,25 @@
              if(f==='status_realisasi' && v==='Selesai Bayar') u.tglReal = new Date().toISOString().split('T')[0];
              await updateDoc(doc(db, "permintaan_belanja", id), u);
         };
-        window.simpanRPD = async () => { const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, rincian: document.getElementById('in-rincian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() }; await addDoc(collection(db, "rpd_entries"), d); alert("OK"); };
-        window.simpanPermintaan = async () => { const rpdId = document.getElementById('req-rpd-id').value; const type = document.getElementById('req-type').value; const selRPD = dataRPD.find(x => x.id === rpdId); const d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), app_bos: "BELUM", status_realisasi: "Pemeriksaan Dokumen", createdAt: serverTimestamp() }; await addDoc(collection(db, "permintaan_belanja"), d); alert("OK"); };
+        window.simpanRPD = async () => { const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, rincian: document.getElementById('in-rincian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() }; await addDoc(collection(db, "rpd_entries"), d); alert("Data RPD Disimpan!"); };
+        window.simpanPermintaan = async () => { 
+            const rpdId = document.getElementById('req-rpd-id').value; 
+            const type = document.getElementById('req-type').value; 
+            const selRPD = dataRPD.find(x => x.id === rpdId); 
+            const d = { 
+                noForm: document.getElementById('req-no').value, 
+                tglFPB: document.getElementById('req-tgl').value, 
+                typeRPD: type, 
+                rpdId: rpdId || "NON", 
+                tim: type==='RPD' ? (selRPD ? selRPD.tim : '-') : 'NON-TIM', // INI KUNCINYA
+                uraian: document.getElementById('req-uraian').value, 
+                nilai: Number(document.getElementById('req-nilai').value), 
+                status_realisasi: "Pemeriksaan Dokumen", 
+                createdAt: serverTimestamp() 
+            }; 
+            await addDoc(collection(db, "permintaan_belanja"), d); 
+            alert("Permintaan Berhasil!"); 
+        };
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
         window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
