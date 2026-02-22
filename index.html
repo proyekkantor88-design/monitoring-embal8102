@@ -239,3 +239,10 @@
             await addDoc(collection(db, "rpd_entries"), data);
             alert("Rencana Disimpan!");
         };
+
+        window.hapusPermintaan = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+        window.hapusData = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.cetakLaporan = () => { /* Logic cetak tetap */ };
+    </script>
+</body>
+</html>
