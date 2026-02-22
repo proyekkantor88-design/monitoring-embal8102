@@ -199,4 +199,125 @@
             dataLokalPermintaan.filter(p => p.typeRPD === 'Non RPD' && p.status_realisasi === 'Selesai Bayar').forEach(non => {
                 const realNon = Number(non.jumlah || 0);
                 htmlReal += `<tr class="border-b bg-red-50 italic">
-                    <td class="p-2 border uppercase
+                    <td class="p-2 border uppercase font-bold text-red-700">NON-RPD</td>
+                    <td class="p-2 border font-medium">${non.uraian}</td>
+                    <td class="p-2 border text-right font-bold text-slate-400">Rp 0</td>
+                    <td class="p-2 border text-right bg-orange-100 font-bold text-red-700">Rp ${realNon.toLocaleString()}</td>
+                    <td class="p-2 border text-right font-bold text-red-600">Rp -${realNon.toLocaleString()}</td>
+                    <td class="p-2 border text-center text-red-600 font-bold">INF%</td>
+                </tr>`;
+                sumReal += realNon;
+            });
+
+            if(bodyRPD) bodyRPD.innerHTML = htmlRPD; 
+            if(bodyReal) bodyReal.innerHTML = htmlReal;
+            
+            document.getElementById('tot-rpd').innerText = "Rp " + sumRPD.toLocaleString();
+            document.getElementById('tot-real').innerText = "Rp " + sumReal.toLocaleString();
+            document.getElementById('tot-sisa').innerText = "Rp " + (sumRPD - sumReal).toLocaleString();
+            document.getElementById('tot-persen').innerText = (sumRPD > 0 ? Math.round((sumReal / sumRPD) * 100) : 0) + "%";
+            updateDropdownRPD();
+        };
+
+        window.toggleRPDDropdown = (val) => {
+            document.getElementById('wrapper-source-rpd').style.display = val === 'Non RPD' ? 'none' : 'block';
+        };
+
+        const updateDropdownRPD = () => {
+            const select = document.getElementById('req-rpd-id');
+            if(!select) return;
+            let options = '<option value="">-- Pilih Rincian RPD --</option>';
+            dataLokalRPD.forEach(d => { options += `<option value="${d.id}">${d.tim} - ${d.rincian}</option>`; });
+            select.innerHTML = options;
+        };
+
+        window.simpanPermintaan = async () => {
+            const noForm = document.getElementById('req-no').value;
+            const typeRPD = document.getElementById('req-type').value;
+            const rpdId = document.getElementById('req-rpd-id').value;
+            const jumlah = Number(document.getElementById('req-jumlah').value);
+            const catatan = document.getElementById('req-catatan').value;
+
+            if(!noForm || !jumlah || (typeRPD === 'RPD' && !rpdId)) return alert("Lengkapi data!");
+
+            const sel = dataLokalRPD.find(d => d.id === rpdId);
+            await addDoc(collection(db, "permintaan_belanja"), { 
+                noForm, typeRPD, rpdId: rpdId || "NON", 
+                tim: typeRPD==='RPD'?sel.tim:'NON-TIM', 
+                uraian: catatan, jumlah,
+                app_pj: "BELUM", app_ppk: "BELUM", tgl_approval: "-",
+                status_realisasi: "Pemeriksaan Dokumen", tgl_realisasi: "-",
+                paid: false, createdAt: serverTimestamp() 
+            });
+            alert("Berhasil!");
+        };
+
+        const renderPermintaan = (data) => {
+            const body = document.getElementById('body-permintaan');
+            if(!body) return;
+            let html = "";
+            data.forEach(d => {
+                const tglForm = d.createdAt ? d.createdAt.toDate().toLocaleDateString('id-ID') : '-';
+                html += `<tr class="border-b">
+                    <td class="p-2 border font-bold text-slate-700">${d.noForm}</td>
+                    <td class="p-2 border text-center text-[8px]">${tglForm}</td>
+                    <td class="p-2 border">${d.uraian}</td>
+                    <td class="p-2 border text-right font-bold text-green-700">Rp ${d.jumlah.toLocaleString()}</td>
+                    <td class="p-2 border text-center space-y-1">
+                        <select onchange="updateMultiStatus('${d.id}', 'app_pj', this.value)" class="status-select bg-blue-50">
+                            <option ${d.app_pj==='BELUM'?'selected':''}>BELUM</option><option ${d.app_pj==='APP'?'selected':''}>APP PJ</option>
+                        </select>
+                        <select onchange="updateMultiStatus('${d.id}', 'app_ppk', this.value)" class="status-select bg-blue-50">
+                            <option ${d.app_ppk==='BELUM'?'selected':''}>BELUM</option><option ${d.app_ppk==='APP'?'selected':''}>APP PPK</option>
+                        </select>
+                    </td>
+                    <td class="p-2 border text-center font-bold text-slate-500">${d.tgl_approval}</td>
+                    <td class="p-2 border">
+                        <select onchange="handleRealUpdate('${d.id}', '${d.rpdId}', ${d.jumlah}, this.value, ${d.paid})" class="status-select bg-orange-50 font-bold">
+                            <option ${d.status_realisasi==='Pemeriksaan Dokumen'?'selected':''}>Pemeriksaan Dokumen</option>
+                            <option ${d.status_realisasi==='Pemeriksaan Bendahara'?'selected':''}>Pemeriksaan Bendahara</option>
+                            <option ${d.status_realisasi==='Permintaan KPPN'?'selected':''}>Permintaan KPPN</option>
+                            <option ${d.status_realisasi==='Siap Bayar'?'selected':''}>Siap Bayar</option>
+                            <option ${d.status_realisasi==='Selesai Bayar'?'selected':''}>Selesai Bayar</option>
+                        </select>
+                    </td>
+                    <td class="p-2 border text-center font-bold text-slate-500">${d.tgl_realisasi}</td>
+                    <td class="p-2 border text-center font-bold italic ${d.typeRPD==='Non RPD'?'text-red-500':'text-indigo-600'}">${d.typeRPD}</td>
+                    <td class="p-2 border text-center no-print"><button onclick="hapusPermintaan('${d.id}')">🗑️</button></td>
+                </tr>`;
+            });
+            body.innerHTML = html;
+        };
+
+        window.updateMultiStatus = async (id, field, val) => {
+            const tgl = new Date().toLocaleDateString('id-ID');
+            const update = {}; update[field] = val;
+            if(val.includes("APP")) update.tgl_approval = tgl;
+            await updateDoc(doc(db, "permintaan_belanja", id), update);
+        };
+
+        window.handleRealUpdate = async (reqId, rpdId, jumlah, val, isPaid) => {
+            const tgl = new Date().toLocaleDateString('id-ID');
+            if (val === "Selesai Bayar" && !isPaid) {
+                if(confirm("Selesaikan pembayaran? Realisasi akan tercatat.")) {
+                    const rpdDoc = dataLokalRPD.find(d => d.id === rpdId);
+                    if(rpdDoc && rpdId !== "NON") {
+                        await updateDoc(doc(db, "rpd_entries", rpdId), { realisasi: (Number(rpdDoc.realisasi)||0) + jumlah });
+                    }
+                    await updateDoc(doc(db, "permintaan_belanja", reqId), { status_realisasi: val, tgl_realisasi: tgl, paid: true });
+                }
+            } else {
+                await updateDoc(doc(db, "permintaan_belanja", reqId), { status_realisasi: val });
+            }
+        };
+
+        window.simpanKeFirebase = async () => {
+            const data = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, rincian: document.getElementById('in-rincian').value, anggaran: Number(document.getElementById('in-anggaran').value), realisasi: 0, createdAt: serverTimestamp() };
+            await addDoc(collection(db, "rpd_entries"), data);
+        };
+
+        window.hapusPermintaan = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+        window.hapusData = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+    </script>
+</body>
+</html>
