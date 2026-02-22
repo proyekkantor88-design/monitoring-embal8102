@@ -79,7 +79,7 @@
                 </div>
                 <div class="bg-white p-4 rounded-xl border-t-4 border-red-500 card-stat">
                     <p class="text-[10px] font-bold text-slate-400 uppercase">Nilai GAP (Selisih)</p>
-                    <h3 id="dash-total-gap" class="text-lg font-black text-red-600 mt-1">Rp 0</h3>
+                    <h3 id="dash-total-gap" class="text-lg font-black text-red-600 mt-1 italic tracking-tight">Rp 0 (0%)</h3>
                 </div>
                 <div class="bg-white p-4 rounded-xl border-t-4 border-emerald-500 card-stat">
                     <p class="text-[10px] font-bold text-slate-400 uppercase">Sisa Anggaran</p>
@@ -117,11 +117,9 @@
                 </div>
                 <button onclick="simpanKeFirebase()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-bold shadow transition text-sm">SIMPAN RENCANA</button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4">
+            <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
                 <table class="w-full text-[10px] text-left border">
-                    <thead class="bg-slate-50 uppercase font-bold text-center">
-                        <tr><th class="p-2 border">Tim</th><th class="p-2 border">Keg.</th><th class="p-2 border">Akun</th><th class="p-2 border">Rincian</th><th class="p-2 border">Anggaran</th><th class="p-2 border">Bulan</th><th class="p-2 border no-print">Aksi</th></tr>
-                    </thead>
+                    <thead class="bg-slate-50 font-bold uppercase"><tr><th class="p-2 border text-center">Tim</th><th class="p-2 border text-center">Keg</th><th class="p-2 border text-center">Akun</th><th class="p-2 border">Rincian</th><th class="p-2 border text-right">Anggaran</th><th class="p-2 border text-center">Bulan</th><th class="p-2 border no-print text-center">Aksi</th></tr></thead>
                     <tbody id="body-rpd-only"></tbody>
                 </table>
             </div>
@@ -139,7 +137,7 @@
                 <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-sm shadow transition">AJUKAN PERMINTAAN</button>
             </div>
             <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
-                <table class="w-full text-[9px] border">
+                <table class="w-full text-[9px] border text-left">
                     <thead class="bg-slate-100 font-bold uppercase text-center">
                         <tr><th class="p-2 border">No. Form</th><th class="p-2 border">Tgl Form</th><th class="p-2 border">Uraian</th><th class="p-2 border">Nilai</th><th class="p-2 border">App BOS (PJ/PPK)</th><th class="p-2 border">Status Realisasi</th><th class="p-2 border">RPD/Non</th><th class="p-2 border no-print">Aksi</th></tr>
                     </thead>
@@ -242,15 +240,18 @@
             });
 
             const gap = sumRPD - sumReal;
+            const gapPersen = sumRPD > 0 ? Math.round((gap / sumRPD) * 100) : 0;
             const persen = sumRPD > 0 ? Math.round((sumReal / sumRPD) * 100) : 0;
 
             document.getElementById('dash-total-rpd').innerText = "Rp " + sumRPD.toLocaleString();
             document.getElementById('dash-total-real').innerText = "Rp " + sumReal.toLocaleString();
-            document.getElementById('dash-total-gap').innerText = "Rp " + gap.toLocaleString();
+            
+            // MENAMPILKAN RUPIAH DAN PERSENTASE GAP
+            document.getElementById('dash-total-gap').innerText = "Rp " + gap.toLocaleString() + " (" + gapPersen + "%)";
+            
             document.getElementById('dash-total-sisa').innerText = "Rp " + (gap > 0 ? gap.toLocaleString() : "0");
             document.getElementById('dash-total-persen').innerText = persen + "%";
 
-            // Update Grafik Bar
             const labels = Object.keys(timData);
             if(barChart) barChart.destroy();
             barChart = new Chart(document.getElementById('chartBar'), {
@@ -259,7 +260,6 @@
                 options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
             });
 
-            // Update Grafik Pie
             if(pieChart) pieChart.destroy();
             pieChart = new Chart(document.getElementById('chartPie'), {
                 type: 'doughnut',
