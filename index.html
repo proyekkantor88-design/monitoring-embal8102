@@ -34,7 +34,7 @@
                 <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" alt="Logo BPS" class="w-8 h-8">
                 <h1 class="text-3xl font-black italic tracking-tighter text-white">EMBAL</h1>
             </div>
-            <p class="text-[10px] text-orange-400 font-bold uppercase tracking-widest leading-tight">Evaluasi Monitoring Belanja<br>BPS Kab. Maluku Tenggara</p>
+            <p class="text-[10px] text-orange-400 font-bold uppercase tracking-widest leading-tight text-left">Evaluasi Monitoring Belanja<br>BPS Kab. Maluku Tenggara</p>
         </div>
         <nav class="flex-1 space-y-2 text-sm">
             <button onclick="switchTab('dashboard')" class="w-full text-left hover:bg-indigo-900 p-2 rounded-lg">Dashboard Utama</button>
@@ -65,7 +65,7 @@
             </div>
             <div class="bg-white p-4 rounded-xl shadow-sm border">
                 <h4 class="text-xs font-bold uppercase mb-3 text-indigo-900 tracking-wider">Permintaan Terakhir</h4>
-                <table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>RPD/Non</th><th>Nilai</th><th>Status</th></tr></thead><tbody id="dash-body-permintaan"></tbody></table>
+                <table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Nilai</th><th>Status</th></tr></thead><tbody id="dash-body-permintaan"></tbody></table>
             </div>
         </section>
 
@@ -81,35 +81,35 @@
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">Keg.</label>
-                        <input list="list-keg" id="in-kegiatan" class="searchable-input" placeholder="Cari Keg...">
+                        <input list="list-keg" id="in-kegiatan" class="searchable-input" placeholder="Kegiatan">
                         <datalist id="list-keg">
                             <option value="2886"><option value="2896"><option value="2897"><option value="2898"><option value="2899"><option value="2900"><option value="2901"><option value="2902"><option value="2903"><option value="2904"><option value="2905"><option value="2906"><option value="2907"><option value="2908"><option value="2909"><option value="2910">
                         </datalist>
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">KRO</label>
-                        <input list="list-kro" id="in-kro" class="searchable-input" placeholder="Cari KRO...">
+                        <input list="list-kro" id="in-kro" class="searchable-input" placeholder="KRO">
                         <datalist id="list-kro">
                             <option value="BMA"><option value="QBD"><option value="CAN"><option value="EBA"><option value="EBB"><option value="EBD">
                         </datalist>
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">RO</label>
-                        <input list="list-ro" id="in-ro" class="searchable-input" placeholder="Cari RO...">
+                        <input list="list-ro" id="in-ro" class="searchable-input" placeholder="RO">
                         <datalist id="list-ro">
                             <option value="003"><option value="004"><option value="005"><option value="006"><option value="007"><option value="008"><option value="009"><option value="056"><option value="951"><option value="955"><option value="962"><option value="994">
                         </datalist>
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">Komponen</label>
-                        <input list="list-komp" id="in-komp" class="searchable-input" placeholder="Cari Komp...">
+                        <input list="list-komp" id="in-komp" class="searchable-input" placeholder="Komp">
                         <datalist id="list-komp">
                             <option value="001"><option value="002"><option value="005"><option value="051"><option value="052"><option value="053"><option value="054"><option value="056"><option value="506"><option value="519"><option value="530">
                         </datalist>
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">Akun</label>
-                        <input list="list-akun" id="in-akun" class="searchable-input" placeholder="Cari Akun...">
+                        <input list="list-akun" id="in-akun" class="searchable-input" placeholder="Akun">
                         <datalist id="list-akun">
                             <option value="511111"><option value="511119"><option value="511121"><option value="511122"><option value="511123"><option value="511124"><option value="511125"><option value="511126"><option value="511129"><option value="511151"><option value="512211"><option value="512411"><option value="521111"><option value="521115"><option value="521211"><option value="521213"><option value="521219"><option value="521252"><option value="521811"><option value="522111"><option value="522112"><option value="522113"><option value="522119"><option value="522141"><option value="522151"><option value="522191"><option value="523111"><option value="523121"><option value="523123"><option value="524111"><option value="524113"><option value="524114"><option value="532111">
                         </datalist>
@@ -124,20 +124,23 @@
                     </div>
                     <div class="col-span-2">
                         <label class="text-[9px] font-bold uppercase">Uraian / Detil POK</label>
-                        <input type="text" id="in-rincian" class="w-full p-2 border rounded text-xs mt-1" placeholder="Contoh: Honor petugas lapangan...">
+                        <input type="text" id="in-rincian" class="w-full p-2 border rounded text-xs mt-1" placeholder="Masukkan rincian...">
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">Anggaran (Rp)</label>
                         <input type="number" id="in-anggaran" class="w-full p-2 border rounded text-xs font-bold mt-1 text-indigo-700">
                     </div>
                 </div>
-                <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold hover:bg-indigo-700 transition">SIMPAN DATA RPD</button>
+                <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold">SIMPAN RPD</button>
             </div>
             
             <div class="bg-white rounded-xl shadow-sm border p-4">
-                <div class="flex justify-between items-center mb-4 no-print">
-                    <h3 class="text-xs font-bold uppercase">Rincian Perencanaan RPD</h3>
-                    <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-1 rounded text-xs font-bold shadow">CETAK LAPORAN RPD</button>
+                <div class="grid grid-cols-5 gap-2 mb-4 no-print items-end">
+                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Tim</label><select id="f-tim" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
+                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Keg.</label><input type="text" id="f-keg" onkeyup="renderRPD()" placeholder="Cari Keg" class="w-full p-1 border rounded text-[10px]"></div>
+                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Akun</label><input type="text" id="f-akun" onkeyup="renderRPD()" placeholder="Cari Akun" class="w-full p-1 border rounded text-[10px]"></div>
+                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Bulan</label><select id="f-bulan" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
+                    <div><button onclick="window.print()" class="w-full bg-blue-600 text-white py-1 rounded text-[10px] font-bold">CETAK RPD</button></div>
                 </div>
                 <table class="w-full text-center">
                     <thead><tr><th>Tim</th><th>Keg</th><th>KRO</th><th>RO</th><th>Komp</th><th>Akun</th><th>Uraian/POK</th><th>Anggaran</th><th>Bulan</th><th class="no-print">Aksi</th></tr></thead>
@@ -159,21 +162,18 @@
                     <div><label class="text-[9px] font-bold uppercase">Uraian Pembayaran</label><input type="text" id="req-uraian" class="w-full p-2 border rounded text-xs mt-1"></div>
                     <div><label class="text-[9px] font-bold uppercase">Nilai (Rp)</label><input type="number" id="req-nilai" class="w-full p-2 border rounded text-xs font-bold mt-1 text-green-700"></div>
                 </div>
-                <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-xs shadow">AJUKAN PERMINTAAN</button>
+                <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-xs">AJUKAN PERMINTAAN</button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4">
-                <div class="flex justify-end mb-4 no-print"><button onclick="window.print()" class="bg-green-700 text-white px-4 py-1 rounded text-xs font-bold shadow">CETAK MONITORING</button></div>
-                <table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Jenis</th><th>Uraian</th><th>Nilai</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="body-permintaan"></tbody></table>
+            <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
+                <div class="mb-4 flex justify-end no-print"><button onclick="window.print()" class="bg-green-700 text-white px-4 py-1 rounded text-xs font-bold">CETAK MONITORING</button></div>
+                <table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Jenis</th><th>Uraian</th><th>Nilai</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="body-permintaan"></tbody><tfoot id="foot-permintaan" class="foot-total"></tfoot></table>
             </div>
         </section>
 
         <section id="section-realisasi-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
-                <div class="flex justify-between items-center mb-4 no-print">
-                    <h3 class="text-xs font-bold uppercase">Laporan Realisasi & GAP</h3>
-                    <button onclick="window.print()" class="bg-orange-600 text-white px-4 py-1 rounded text-xs font-bold shadow">CETAK LAPORAN GAP</button>
-                </div>
-                <table class="w-full border"><thead class="bg-slate-50 font-bold"><tr><th>Tim</th><th>Rincian/POK</th><th class="text-right">Rencana</th><th class="text-right">Realisasi</th><th class="text-right">GAP</th><th class="text-center">%</th></tr></thead><tbody id="body-realisasi"></tbody><tfoot id="foot-realisasi" class="foot-total"></tfoot></table>
+                <div class="mb-4 flex justify-end no-print"><button onclick="window.print()" class="bg-orange-600 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Laporan GAP</button></div>
+                <table class="w-full border"><thead class="bg-slate-50 font-bold"><tr><th>Tim</th><th>Uraian/POK</th><th class="text-right">Rencana</th><th class="text-right">Realisasi</th><th class="text-right">GAP</th><th class="text-center">%</th></tr></thead><tbody id="body-realisasi"></tbody><tfoot id="foot-realisasi" class="foot-total"></tfoot></table>
             </div>
         </section>
     </main>
@@ -204,24 +204,27 @@
 
         window.renderRPD = () => {
             const body = document.getElementById('body-rpd'), foot = document.getElementById('foot-rpd');
+            const fT = document.getElementById('f-tim').value, fK = document.getElementById('f-keg').value.toLowerCase(), fA = document.getElementById('f-akun').value.toLowerCase(), fB = document.getElementById('f-bulan').value;
             let html = "", total = 0;
             dataRPD.forEach(d => {
-                html += `<tr><td class="font-bold uppercase">${d.tim}</td><td>${d.kegiatan}</td><td>${d.kro}</td><td>${d.ro}</td><td>${d.komp}</td><td>${d.akun}</td><td>${d.rincian}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print"><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
-                total += Number(d.anggaran);
+                if((!fT || d.tim === fT) && (!fK || d.kegiatan.includes(fK)) && (!fA || d.akun.includes(fA)) && (!fB || d.bulan === fB)) {
+                    html += `<tr><td class="font-bold uppercase">${d.tim}</td><td>${d.kegiatan}</td><td>${d.kro}</td><td>${d.ro}</td><td>${d.komp}</td><td>${d.akun}</td><td>${d.rincian}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print"><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
+                    total += Number(d.anggaran);
+                }
             });
-            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="7" class="text-right p-2 uppercase font-bold">Total:</td><td class="text-right p-2">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
-            
+            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="7" class="text-right p-2 uppercase font-bold">Total:</td><td class="text-right p-2 font-bold text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
             const drop = document.getElementById('req-rpd-id');
             if(drop) { let opt = '<option value="">-- Pilih RPD --</option>'; dataRPD.forEach(d => { opt += `<option value="${d.id}">${d.tim} - ${d.rincian}</option>`; }); drop.innerHTML = opt; }
         };
 
         window.renderPermintaan = () => {
-            const body = document.getElementById('body-permintaan');
-            let html = "";
+            const body = document.getElementById('body-permintaan'), foot = document.getElementById('foot-permintaan');
+            let html = "", total = 0;
             dataPerm.forEach(d => {
-                html += `<tr><td class="font-bold">${d.noForm}</td><td class="font-bold uppercase">${d.tim}</td><td class="italic font-bold">${d.typeRPD}</td><td>${d.uraian}</td><td class="text-right font-bold text-green-700">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upField('${d.id}','status_realisasi',this.value)" class="p-1 border text-[8px] bg-orange-50"><option ${d.status_realisasi==='Pemeriksaan Dokumen'?'selected':''}>Pemeriksaan Dokumen</option><option ${d.status_realisasi==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td class="no-print"><button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
+                html += `<tr><td>${d.noForm}</td><td class="font-bold uppercase">${d.tim}</td><td class="italic font-bold">${d.typeRPD}</td><td>${d.uraian}</td><td class="text-right font-bold text-green-700">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upField('${d.id}','status_realisasi',this.value)" class="p-1 border text-[8px] bg-orange-50"><option ${d.status_realisasi==='Pemeriksaan Dokumen'?'selected':''}>Pemeriksaan Dokumen</option><option ${d.status_realisasi==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td class="no-print"><button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
+                total += Number(d.nilai);
             });
-            body.innerHTML = html;
+            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="4" class="p-2 text-right uppercase font-bold">Total:</td><td class="p-2 text-right text-green-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
         window.renderDashboard = () => {
@@ -233,9 +236,7 @@
             document.getElementById('dash-total-gap').innerText = "Rp " + gap.toLocaleString();
             document.getElementById('dash-total-sisa').innerText = "Rp " + (gap > 0 ? gap.toLocaleString() : "0");
             document.getElementById('dash-total-persen').innerText = (r > 0 ? Math.round((b/r)*100) : 0) + "%";
-            
-            let dashH = "";
-            dataPerm.slice(0,5).forEach(p => { dashH += `<tr><td>${p.noForm}</td><td class="font-bold">${p.tim}</td><td>${p.uraian}</td><td>${p.typeRPD}</td><td class="text-right font-bold">Rp ${Number(p.nilai).toLocaleString()}</td><td>${p.status_realisasi}</td></tr>`; });
+            let dashH = ""; dataPerm.slice(0,5).forEach(p => { dashH += `<tr><td>${p.noForm}</td><td class="font-bold">${p.tim}</td><td>${p.uraian}</td><td class="text-right font-bold">Rp ${Number(p.nilai).toLocaleString()}</td><td>${p.status_realisasi}</td></tr>`; });
             document.getElementById('dash-body-permintaan').innerHTML = dashH;
         };
 
@@ -248,18 +249,15 @@
                 html += `<tr><td class="uppercase font-bold">${d.tim}</td><td>${d.rincian}</td><td class="text-right">Rp ${a.toLocaleString()}</td><td class="text-right font-bold bg-orange-50 text-orange-700">Rp ${b.toLocaleString()}</td><td class="text-right font-bold">Rp ${g.toLocaleString()}</td><td class="text-center">${p}%</td></tr>`;
                 sR += a; sB += b;
             });
-            body.innerHTML = html;
-            foot.innerHTML = `<tr><td colspan="2" class="p-2 text-right font-bold uppercase">Total:</td><td class="p-2 text-right">Rp ${sR.toLocaleString()}</td><td class="p-2 text-right">Rp ${sB.toLocaleString()}</td><td class="p-2 text-right">Rp ${(sR-sB).toLocaleString()}</td><td></td></tr>`;
+            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="2" class="p-2 text-right font-bold uppercase">Total Gabungan:</td><td class="p-2 text-right">Rp ${sR.toLocaleString()}</td><td class="p-2 text-right">Rp ${sB.toLocaleString()}</td><td class="p-2 text-right">Rp ${(sR-sB).toLocaleString()}</td><td></td></tr>`;
         };
 
         window.upField = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
         window.simpanRPD = async () => { const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, rincian: document.getElementById('in-rincian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() }; await addDoc(collection(db, "rpd_entries"), d); alert("Tersimpan!"); };
         window.simpanPermintaan = async () => { 
-            const rpdId = document.getElementById('req-rpd-id').value; 
-            const type = document.getElementById('req-type').value; 
-            const selRPD = dataRPD.find(x => x.id === rpdId); 
+            const rpdId = document.getElementById('req-rpd-id').value; const type = document.getElementById('req-type').value; const selRPD = dataRPD.find(x => x.id === rpdId); 
             const d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), status_realisasi: "Pemeriksaan Dokumen", createdAt: serverTimestamp() }; 
-            await addDoc(collection(db, "permintaan_belanja"), d); alert("Diajukan!"); 
+            await addDoc(collection(db, "permintaan_belanja"), d); alert("OK!"); 
         };
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
         window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
