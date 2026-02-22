@@ -80,14 +80,14 @@
                 <button onclick="simpanKeFirebase()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold">SIMPAN RENCANA</button>
             </div>
             <div id="table-rpd-container" class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
-                <table class="w-full text-[10px] text-left border"><thead class="bg-slate-50 font-bold uppercase"><tr><th class="p-2 border">Tim</th><th class="p-2 border">Keg.</th><th class="p-2 border">KRO</th><th class="p-2 border">RO</th><th class="p-2 border">Komp.</th><th class="p-2 border">Akun</th><th class="p-2 border">Rincian</th><th class="p-2 border">Anggaran</th><th class="p-2 border">Bulan</th><th class="p-2 border no-print">Aksi</th></tr></thead><tbody id="body-rpd-only"></tbody></table>
+                <table class="w-full text-[10px] text-left border"><thead class="bg-slate-50 font-bold uppercase"><tr><th class="p-2 border">Tim</th><th class="p-2 border">Keg.</th><th class="p-2 border">Rincian</th><th class="p-2 border">Anggaran</th><th class="p-2 border">Bulan</th><th class="p-2 border no-print">Aksi</th></tr></thead><tbody id="body-rpd-only"></tbody></table>
             </div>
         </section>
 
         <section id="section-permintaan-belanja" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm mb-8 border-l-4 border-green-600 no-print">
                 <div class="grid grid-cols-3 gap-3 mb-4">
-                    <div><label class="text-[10px] font-bold text-slate-500 uppercase">Sumber RPD (Bulan ini)</label><select id="req-rpd-id" class="w-full p-2 border rounded-md text-xs mt-1"><option value="">-- Pilih Rincian --</option></select></div>
+                    <div><label class="text-[10px] font-bold text-slate-500 uppercase">Pilih Sumber RPD</label><select id="req-rpd-id" class="w-full p-2 border rounded-md text-xs mt-1"><option value="">-- Pilih Rincian --</option></select></div>
                     <div><label class="text-[10px] font-bold text-slate-500 uppercase">Jumlah Diminta (Rp)</label><input type="number" id="req-jumlah" class="w-full p-2 border rounded-md text-xs font-bold text-green-700 mt-1"></div>
                     <div><label class="text-[10px] font-bold text-slate-500 uppercase">Keterangan Belanja</label><input type="text" id="req-catatan" class="w-full p-2 border rounded-md text-xs mt-1"></div>
                 </div>
@@ -132,13 +132,13 @@
             if(tabId === 'permintaan-belanja') updateDropdownRPD();
         };
 
-        // Sync Data RPD
+        // Realtime RPD
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (snapshot) => {
             dataLokal = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
             renderTables();
         });
 
-        // Sync Data Permintaan
+        // Realtime Permintaan
         onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (snapshot) => {
             renderPermintaan(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
         });
@@ -153,14 +153,14 @@
                 const persen = rpd > 0 ? Math.round((real / rpd) * 100) : 0;
                 const tim = data.tim || "-";
 
-                htmlRPD += `<tr class="border-b"><td class="p-2 border uppercase">${tim}</td><td class="p-2 border text-center font-bold">${data.kegiatan}</td><td class="p-2 border text-center">${data.kro}</td><td class="p-2 border text-center">${data.ro}</td><td class="p-2 border text-center">${data.komponen}</td><td class="p-2 border font-bold text-blue-600">${data.akun}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString()}</td><td class="p-2 border text-center">${data.bulan}</td><td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500">🗑️</button></td></tr>`;
-                
+                htmlRPD += `<tr class="border-b"><td class="p-2 border uppercase">${tim}</td><td class="p-2 border text-center font-bold">${data.kegiatan}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString()}</td><td class="p-2 border text-center">${data.bulan}</td><td class="p-2 border text-center no-print"><button onclick="hapusData('${data.id}')" class="text-red-500">🗑️</button></td></tr>`;
                 htmlReal += `<tr class="border-b hover:bg-slate-50"><td class="p-2 border uppercase">${tim}</td><td class="p-2 border">${data.rincian}</td><td class="p-2 border text-right font-bold">Rp ${rpd.toLocaleString()}</td><td class="p-2 border text-right bg-orange-50 font-bold">Rp ${real.toLocaleString()}</td><td class="p-2 border text-right font-bold ${gap < 0 ? 'text-red-600':'text-green-600'}">Rp ${gap.toLocaleString()}</td><td class="p-2 border text-center"><span class="px-2 py-0.5 rounded-full text-[9px] font-bold ${persen>=100?'bg-green-100 text-green-700':'bg-orange-100 text-orange-700'}">${persen}%</span></td></tr>`;
                 
                 sumRPD += rpd; sumReal += real;
             });
 
-            bodyRPD.innerHTML = htmlRPD; bodyReal.innerHTML = htmlReal;
+            if(bodyRPD) bodyRPD.innerHTML = htmlRPD; 
+            if(bodyReal) bodyReal.innerHTML = htmlReal;
             document.getElementById('tot-rpd').innerText = "Rp " + sumRPD.toLocaleString();
             document.getElementById('tot-real').innerText = "Rp " + sumReal.toLocaleString();
             document.getElementById('tot-sisa').innerText = "Rp " + (sumRPD - sumReal).toLocaleString();
@@ -172,7 +172,10 @@
             const select = document.getElementById('req-rpd-id');
             if(!select) return;
             let options = '<option value="">-- Pilih Rincian RPD --</option>';
-            dataLokal.forEach(d => { options += `<option value="${d.id}">${d.tim} - ${d.rincian} (Sisa: Rp ${(d.anggaran - (d.realisasi||0)).toLocaleString()})</option>`; });
+            dataLokal.forEach(d => { 
+                const sisa = Number(d.anggaran || 0) - Number(d.realisasi || 0);
+                options += `<option value="${d.id}">${d.tim} - ${d.rincian} (Sisa: Rp ${sisa.toLocaleString()})</option>`; 
+            });
             select.innerHTML = options;
         };
 
@@ -180,10 +183,24 @@
             const rpdId = document.getElementById('req-rpd-id').value;
             const jumlah = Number(document.getElementById('req-jumlah').value);
             const catatan = document.getElementById('req-catatan').value;
-            if(!rpdId || !jumlah) return alert("Pilih RPD & Jumlah!");
+            
+            if(!rpdId || !jumlah) return alert("Pilih RPD dan isi jumlah permintaan!");
+
             const sel = dataLokal.find(d => d.id === rpdId);
-            await addDoc(collection(db, "permintaan_belanja"), { rpdId, tim: sel.tim, rincianSumber: sel.rincian, jumlah, catatan, status: "PENDING", createdAt: serverTimestamp() });
-            alert("Permintaan Diajukan!");
+            try {
+                await addDoc(collection(db, "permintaan_belanja"), { 
+                    rpdId: rpdId, 
+                    tim: sel.tim, 
+                    rincianSumber: sel.rincian, 
+                    jumlah: jumlah, 
+                    catatan: catatan, 
+                    status: "PENDING", 
+                    createdAt: serverTimestamp() 
+                });
+                alert("Permintaan Berhasil Diajukan!");
+                document.getElementById('req-jumlah').value = "";
+                document.getElementById('req-catatan').value = "";
+            } catch (e) { alert("Gagal mengajukan permintaan."); }
         };
 
         const renderPermintaan = (data) => {
@@ -192,7 +209,8 @@
             let html = "";
             data.forEach(d => {
                 const isPaid = d.status === "DIBAYARKAN";
-                html += `<tr class="border-b"><td class="p-2 border text-center text-[8px]">${d.createdAt?.toDate().toLocaleDateString() || '-'}</td><td class="p-2 border uppercase font-bold text-slate-600">${d.tim}<br><span class="font-normal text-[8px]">${d.rincianSumber}</span></td><td class="p-2 border">${d.catatan}</td><td class="p-2 border text-right font-bold text-green-700">Rp ${d.jumlah.toLocaleString()}</td><td class="p-2 border text-center"><span class="px-2 py-1 rounded-full text-[8px] font-bold ${isPaid ? 'bg-blue-100 text-blue-700':'bg-yellow-100 text-yellow-700'}">${d.status}</span></td><td class="p-2 border text-center no-print">${!isPaid ? `<button onclick="bayarPermintaan('${d.id}', '${d.rpdId}', ${d.jumlah})" class="bg-blue-600 text-white px-2 py-1 rounded text-[9px] font-bold shadow-sm">BAYAR</button>`:'✅'} <button onclick="hapusPermintaan('${d.id}')" class="ml-1 text-red-400">🗑️</button></td></tr>`;
+                const tgl = d.createdAt ? d.createdAt.toDate().toLocaleDateString('id-ID') : '-';
+                html += `<tr class="border-b"><td class="p-2 border text-center text-[8px]">${tgl}</td><td class="p-2 border uppercase font-bold text-slate-600">${d.tim}<br><span class="font-normal text-[8px]">${d.rincianSumber}</span></td><td class="p-2 border">${d.catatan}</td><td class="p-2 border text-right font-bold text-green-700">Rp ${d.jumlah.toLocaleString()}</td><td class="p-2 border text-center"><span class="px-2 py-1 rounded-full text-[8px] font-bold ${isPaid ? 'bg-blue-100 text-blue-700':'bg-yellow-100 text-yellow-700'}">${d.status}</span></td><td class="p-2 border text-center no-print">${!isPaid ? `<button onclick="bayarPermintaan('${d.id}', '${d.rpdId}', ${d.jumlah})" class="bg-blue-600 text-white px-2 py-1 rounded text-[9px] font-bold shadow-sm">BAYAR</button>`:'✅'} <button onclick="hapusPermintaan('${d.id}')" class="ml-1 text-red-400">🗑️</button></td></tr>`;
             });
             body.innerHTML = html;
         };
@@ -201,16 +219,23 @@
             if(!confirm("Proses pembayaran? Realisasi RPD akan otomatis bertambah.")) return;
             const rpdDoc = dataLokal.find(d => d.id === rpdId);
             if(rpdDoc) {
-                await updateDoc(doc(db, "rpd_entries", rpdId), { realisasi: (Number(rpdDoc.realisasi)||0) + jumlah });
-                await updateDoc(doc(db, "permintaan_belanja", reqId), { status: "DIBAYARKAN" });
-                alert("Berhasil Dibayarkan!");
+                try {
+                    await updateDoc(doc(db, "rpd_entries", rpdId), { realisasi: (Number(rpdDoc.realisasi)||0) + jumlah });
+                    await updateDoc(doc(db, "permintaan_belanja", reqId), { status: "DIBAYARKAN" });
+                    alert("Berhasil Dibayarkan!");
+                } catch (e) { alert("Gagal update pembayaran."); }
             }
         };
 
-        window.hapusPermintaan = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
-        window.simpanKeFirebase = async () => { /* Logic simpan RPD sama seperti sebelumnya */ };
-        window.hapusData = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
-        window.cetakLaporan = function() { /* Logic cetak sama seperti sebelumnya */ };
-    </script>
-</body>
-</html>
+        window.simpanKeFirebase = async () => {
+            const data = {
+                tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value,
+                kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komponen: document.getElementById('in-komponen').value,
+                akun: document.getElementById('in-akun').value, detail_pok: document.getElementById('in-detil').value,
+                bulan: document.getElementById('in-bulan').value, rincian: document.getElementById('in-rincian').value,
+                anggaran: Number(document.getElementById('in-anggaran').value), realisasi: 0, createdAt: serverTimestamp()
+            };
+            if(!data.rincian || !data.anggaran) return alert("Isi Rincian & Anggaran!");
+            await addDoc(collection(db, "rpd_entries"), data);
+            alert("Rencana Disimpan!");
+        };
