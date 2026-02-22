@@ -34,7 +34,7 @@
                 <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" alt="Logo BPS" class="w-8 h-8">
                 <h1 class="text-3xl font-black italic tracking-tighter text-white">EMBAL</h1>
             </div>
-            <p class="text-[10px] text-orange-400 font-bold uppercase tracking-widest leading-tight text-left">Evaluasi Monitoring Belanja<br>BPS Kab. Maluku Tenggara</p>
+            <p class="text-[10px] text-orange-400 font-bold uppercase tracking-widest leading-tight">Evaluasi Monitoring Belanja<br>BPS Kab. Maluku Tenggara</p>
         </div>
         <nav class="flex-1 space-y-2 text-sm">
             <button onclick="switchTab('dashboard')" class="w-full text-left hover:bg-indigo-900 p-2 rounded-lg">Dashboard Utama</button>
@@ -56,80 +56,56 @@
         </header>
 
         <section id="section-dashboard" class="tab-content">
+            <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl shadow-sm border">
+                <div class="flex-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label>
+                    <select id="f-dash-tim" onchange="renderDashboard()" class="w-full p-2 border rounded text-xs mt-1">
+                        <option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label>
+                    <select id="f-dash-bulan" onchange="renderDashboard()" class="w-full p-2 border rounded text-xs mt-1">
+                        <option value="">Semua Bulan</option>
+                        <option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="grid grid-cols-5 gap-4 mb-6">
                 <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-indigo-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Rencana</p><h3 id="dash-total-rpd" class="text-base font-black">Rp 0</h3></div>
                 <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-orange-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Realisasi</p><h3 id="dash-total-real" class="text-base font-black text-orange-600">Rp 0</h3></div>
                 <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-red-500"><p class="text-[9px] font-bold text-slate-400 uppercase">GAP</p><h3 id="dash-total-gap" class="text-base font-black text-red-600">Rp 0</h3></div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-emerald-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Sisa</p><h3 id="dash-total-sisa" class="text-base font-black">Rp 0</h3></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-emerald-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Sisa Dana</p><h3 id="dash-total-sisa" class="text-base font-black">Rp 0</h3></div>
                 <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-blue-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Serapan</p><h3 id="dash-total-persen" class="text-base font-black">0%</h3></div>
             </div>
+
             <div class="bg-white p-4 rounded-xl shadow-sm border">
-                <h4 class="text-xs font-bold uppercase mb-3 text-indigo-900 tracking-wider">Permintaan Terakhir</h4>
-                <table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Nilai</th><th>Status</th></tr></thead><tbody id="dash-body-permintaan"></tbody></table>
+                <h4 class="text-xs font-bold uppercase mb-3 text-indigo-900 tracking-wider">Tabel Monitoring Permintaan</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-center">
+                        <thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Jenis</th><th>Nilai</th><th>Status</th></tr></thead>
+                        <tbody id="dash-body-permintaan"></tbody>
+                        <tfoot id="dash-foot-permintaan" class="foot-total"></tfoot>
+                    </table>
+                </div>
             </div>
         </section>
 
         <section id="section-input-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-indigo-600 no-print">
                 <div class="grid grid-cols-6 gap-2 mb-4">
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Tim</label>
-                        <input list="list-tim" id="in-tim" class="searchable-input" placeholder="Pilih Tim">
-                        <datalist id="list-tim">
-                            <option value="Sosial"><option value="Produksi"><option value="Distribusi"><option value="Neraca"><option value="IPDS"><option value="Umum">
-                        </datalist>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Keg.</label>
-                        <input list="list-keg" id="in-kegiatan" class="searchable-input" placeholder="Kegiatan">
-                        <datalist id="list-keg">
-                            <option value="2886"><option value="2896"><option value="2897"><option value="2898"><option value="2899"><option value="2900"><option value="2901"><option value="2902"><option value="2903"><option value="2904"><option value="2905"><option value="2906"><option value="2907"><option value="2908"><option value="2909"><option value="2910">
-                        </datalist>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">KRO</label>
-                        <input list="list-kro" id="in-kro" class="searchable-input" placeholder="KRO">
-                        <datalist id="list-kro">
-                            <option value="BMA"><option value="QBD"><option value="CAN"><option value="EBA"><option value="EBB"><option value="EBD">
-                        </datalist>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">RO</label>
-                        <input list="list-ro" id="in-ro" class="searchable-input" placeholder="RO">
-                        <datalist id="list-ro">
-                            <option value="003"><option value="004"><option value="005"><option value="006"><option value="007"><option value="008"><option value="009"><option value="056"><option value="951"><option value="955"><option value="962"><option value="994">
-                        </datalist>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Komponen</label>
-                        <input list="list-komp" id="in-komp" class="searchable-input" placeholder="Komp">
-                        <datalist id="list-komp">
-                            <option value="001"><option value="002"><option value="005"><option value="051"><option value="052"><option value="053"><option value="054"><option value="056"><option value="506"><option value="519"><option value="530">
-                        </datalist>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Akun</label>
-                        <input list="list-akun" id="in-akun" class="searchable-input" placeholder="Akun">
-                        <datalist id="list-akun">
-                            <option value="511111"><option value="511119"><option value="511121"><option value="511122"><option value="511123"><option value="511124"><option value="511125"><option value="511126"><option value="511129"><option value="511151"><option value="512211"><option value="512411"><option value="521111"><option value="521115"><option value="521211"><option value="521213"><option value="521219"><option value="521252"><option value="521811"><option value="522111"><option value="522112"><option value="522113"><option value="522119"><option value="522141"><option value="522151"><option value="522191"><option value="523111"><option value="523121"><option value="523123"><option value="524111"><option value="524113"><option value="524114"><option value="532111">
-                        </datalist>
-                    </div>
+                    <div><label class="text-[9px] font-bold uppercase">Tim</label><input list="list-tim" id="in-tim" class="searchable-input" placeholder="Tim"><datalist id="list-tim"><option value="Sosial"><option value="Produksi"><option value="Distribusi"><option value="Neraca"><option value="IPDS"><option value="Umum"></datalist></div>
+                    <div><label class="text-[9px] font-bold uppercase">Keg.</label><input list="list-keg" id="in-kegiatan" class="searchable-input" placeholder="Kegiatan"><datalist id="list-keg"><option value="2886"><option value="2896"><option value="2897"><option value="2898"><option value="2899"><option value="2900"><option value="2901"><option value="2902"><option value="2903"><option value="2904"><option value="2905"><option value="2906"><option value="2907"><option value="2908"><option value="2909"><option value="2910"></datalist></div>
+                    <div><label class="text-[9px] font-bold uppercase">KRO</label><input list="list-kro" id="in-kro" class="searchable-input" placeholder="KRO"><datalist id="list-kro"><option value="BMA"><option value="QBD"><option value="CAN"><option value="EBA"><option value="EBB"><option value="EBD"></datalist></div>
+                    <div><label class="text-[9px] font-bold uppercase">RO</label><input list="list-ro" id="in-ro" class="searchable-input" placeholder="RO"><datalist id="list-ro"><option value="003"><option value="004"><option value="005"><option value="006"><option value="007"><option value="008"><option value="009"><option value="056"><option value="951"><option value="955"><option value="962"><option value="994"></datalist></div>
+                    <div><label class="text-[9px] font-bold uppercase">Komponen</label><input list="list-komp" id="in-komp" class="searchable-input" placeholder="Komp"><datalist id="list-komp"><option value="001"><option value="002"><option value="005"><option value="051"><option value="052"><option value="053"><option value="054"><option value="056"><option value="506"><option value="519"><option value="530"></datalist></div>
+                    <div><label class="text-[9px] font-bold uppercase">Akun</label><input list="list-akun" id="in-akun" class="searchable-input" placeholder="Akun"><datalist id="list-akun"><option value="511111"><option value="511119"><option value="511121"><option value="511122"><option value="511123"><option value="511124"><option value="511125"><option value="511126"><option value="511129"><option value="511151"><option value="512211"><option value="512411"><option value="521111"><option value="521115"><option value="521211"><option value="521213"><option value="521219"><option value="521252"><option value="521811"><option value="522111"><option value="522112"><option value="522113"><option value="522119"><option value="522141"><option value="522151"><option value="522191"><option value="523111"><option value="523121"><option value="523123"><option value="524111"><option value="524113"><option value="524114"><option value="532111"></datalist></div>
                 </div>
                 <div class="grid grid-cols-4 gap-3 mb-4">
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Bulan</label>
-                        <select id="in-bulan" class="w-full p-2 border rounded text-xs mt-1">
-                            <option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option>
-                        </select>
-                    </div>
-                    <div class="col-span-2">
-                        <label class="text-[9px] font-bold uppercase">Uraian / Detil POK</label>
-                        <input type="text" id="in-rincian" class="w-full p-2 border rounded text-xs mt-1" placeholder="Masukkan rincian...">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Anggaran (Rp)</label>
-                        <input type="number" id="in-anggaran" class="w-full p-2 border rounded text-xs font-bold mt-1 text-indigo-700">
-                    </div>
+                    <div><label class="text-[9px] font-bold uppercase">Bulan</label><select id="in-bulan" class="w-full p-2 border rounded text-xs mt-1"><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
+                    <div class="col-span-2"><label class="text-[9px] font-bold uppercase">Uraian / Detil POK</label><input type="text" id="in-rincian" class="w-full p-2 border rounded text-xs mt-1"></div>
+                    <div><label class="text-[9px] font-bold uppercase">Anggaran (Rp)</label><input type="number" id="in-anggaran" class="w-full p-2 border rounded text-xs font-bold mt-1 text-indigo-700"></div>
                 </div>
                 <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold">SIMPAN RPD</button>
             </div>
@@ -137,10 +113,10 @@
             <div class="bg-white rounded-xl shadow-sm border p-4">
                 <div class="grid grid-cols-5 gap-2 mb-4 no-print items-end">
                     <div><label class="text-[8px] font-bold uppercase text-slate-400">Tim</label><select id="f-tim" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
-                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Keg.</label><input type="text" id="f-keg" onkeyup="renderRPD()" placeholder="Cari Keg" class="w-full p-1 border rounded text-[10px]"></div>
-                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Akun</label><input type="text" id="f-akun" onkeyup="renderRPD()" placeholder="Cari Akun" class="w-full p-1 border rounded text-[10px]"></div>
+                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Keg.</label><input type="text" id="f-keg" onkeyup="renderRPD()" placeholder="Keg" class="w-full p-1 border rounded text-[10px]"></div>
+                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Akun</label><input type="text" id="f-akun" onkeyup="renderRPD()" placeholder="Akun" class="w-full p-1 border rounded text-[10px]"></div>
                     <div><label class="text-[8px] font-bold uppercase text-slate-400">Bulan</label><select id="f-bulan" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
-                    <div><button onclick="window.print()" class="w-full bg-blue-600 text-white py-1 rounded text-[10px] font-bold">CETAK RPD</button></div>
+                    <div><button onclick="window.print()" class="w-full bg-blue-600 text-white py-1 rounded text-[10px] font-bold uppercase">Cetak RPD</button></div>
                 </div>
                 <table class="w-full text-center">
                     <thead><tr><th>Tim</th><th>Keg</th><th>KRO</th><th>RO</th><th>Komp</th><th>Akun</th><th>Uraian/POK</th><th>Anggaran</th><th>Bulan</th><th class="no-print">Aksi</th></tr></thead>
@@ -162,18 +138,18 @@
                     <div><label class="text-[9px] font-bold uppercase">Uraian Pembayaran</label><input type="text" id="req-uraian" class="w-full p-2 border rounded text-xs mt-1"></div>
                     <div><label class="text-[9px] font-bold uppercase">Nilai (Rp)</label><input type="number" id="req-nilai" class="w-full p-2 border rounded text-xs font-bold mt-1 text-green-700"></div>
                 </div>
-                <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-xs">AJUKAN PERMINTAAN</button>
+                <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-xs shadow">AJUKAN PERMINTAAN</button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
-                <div class="mb-4 flex justify-end no-print"><button onclick="window.print()" class="bg-green-700 text-white px-4 py-1 rounded text-xs font-bold">CETAK MONITORING</button></div>
+            <div class="bg-white rounded-xl shadow-sm border p-4">
+                <div class="flex justify-end mb-4 no-print"><button onclick="window.print()" class="bg-green-700 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Monitoring</button></div>
                 <table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Jenis</th><th>Uraian</th><th>Nilai</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="body-permintaan"></tbody><tfoot id="foot-permintaan" class="foot-total"></tfoot></table>
             </div>
         </section>
 
         <section id="section-realisasi-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
-                <div class="mb-4 flex justify-end no-print"><button onclick="window.print()" class="bg-orange-600 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Laporan GAP</button></div>
-                <table class="w-full border"><thead class="bg-slate-50 font-bold"><tr><th>Tim</th><th>Uraian/POK</th><th class="text-right">Rencana</th><th class="text-right">Realisasi</th><th class="text-right">GAP</th><th class="text-center">%</th></tr></thead><tbody id="body-realisasi"></tbody><tfoot id="foot-realisasi" class="foot-total"></tfoot></table>
+                <div class="flex justify-end mb-4 no-print"><button onclick="window.print()" class="bg-orange-600 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Laporan GAP</button></div>
+                <table class="w-full border"><thead class="bg-slate-50 font-bold"><tr><th>Tim</th><th>Detil POK</th><th class="text-right">Rencana</th><th class="text-right">Realisasi</th><th class="text-right">GAP</th><th class="text-center">%</th></tr></thead><tbody id="body-realisasi"></tbody><tfoot id="foot-realisasi" class="foot-total"></tfoot></table>
             </div>
         </section>
     </main>
@@ -202,6 +178,30 @@
 
         window.renderAll = () => { renderRPD(); renderPermintaan(); renderRealisasi(); renderDashboard(); };
 
+        window.renderDashboard = () => {
+            const fT = document.getElementById('f-dash-tim').value, fB = document.getElementById('f-dash-bulan').value;
+            let sumRPD = 0, sumReal = 0, dashHtml = "", dashTotal = 0;
+
+            dataRPD.forEach(d => { if((!fT || d.tim === fT) && (!fB || d.bulan === fB)) sumRPD += Number(d.anggaran); });
+            dataPerm.forEach(p => {
+                const rpdRef = dataRPD.find(r => r.id === p.rpdId);
+                const pBulan = p.typeRPD === 'RPD' ? (rpdRef ? rpdRef.bulan : '') : '';
+                if((!fT || p.tim === fT) && (!fB || pBulan === fB || (p.typeRPD === 'Non RPD' && !fB))) {
+                    if(p.status_realisasi === 'Selesai Bayar') sumReal += Number(p.nilai);
+                    dashHtml += `<tr><td>${p.noForm}</td><td class="font-bold uppercase">${p.tim}</td><td>${p.uraian}</td><td class="italic">${p.typeRPD}</td><td class="text-right font-bold">Rp ${Number(p.nilai).toLocaleString()}</td><td>${p.status_realisasi}</td></tr>`;
+                    dashTotal += Number(p.nilai);
+                }
+            });
+            document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
+            document.getElementById('dash-foot-permintaan').innerHTML = `<tr><td colspan="4" class="text-right p-2 uppercase font-bold">Total Terfilter:</td><td class="text-right p-2 font-black">Rp ${dashTotal.toLocaleString()}</td><td></td></tr>`;
+            const gap = sumRPD - sumReal;
+            document.getElementById('dash-total-rpd').innerText = "Rp " + sumRPD.toLocaleString();
+            document.getElementById('dash-total-real').innerText = "Rp " + sumReal.toLocaleString();
+            document.getElementById('dash-total-gap').innerText = "Rp " + gap.toLocaleString();
+            document.getElementById('dash-total-sisa').innerText = "Rp " + (gap > 0 ? gap.toLocaleString() : "0");
+            document.getElementById('dash-total-persen').innerText = (sumRPD > 0 ? Math.round((sumReal/sumRPD)*100) : 0) + "%";
+        };
+
         window.renderRPD = () => {
             const body = document.getElementById('body-rpd'), foot = document.getElementById('foot-rpd');
             const fT = document.getElementById('f-tim').value, fK = document.getElementById('f-keg').value.toLowerCase(), fA = document.getElementById('f-akun').value.toLowerCase(), fB = document.getElementById('f-bulan').value;
@@ -212,7 +212,7 @@
                     total += Number(d.anggaran);
                 }
             });
-            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="7" class="text-right p-2 uppercase font-bold">Total:</td><td class="text-right p-2 font-bold text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="7" class="text-right p-2 uppercase font-bold">Total Perencanaan:</td><td class="text-right p-2 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
             const drop = document.getElementById('req-rpd-id');
             if(drop) { let opt = '<option value="">-- Pilih RPD --</option>'; dataRPD.forEach(d => { opt += `<option value="${d.id}">${d.tim} - ${d.rincian}</option>`; }); drop.innerHTML = opt; }
         };
@@ -224,20 +224,7 @@
                 html += `<tr><td>${d.noForm}</td><td class="font-bold uppercase">${d.tim}</td><td class="italic font-bold">${d.typeRPD}</td><td>${d.uraian}</td><td class="text-right font-bold text-green-700">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upField('${d.id}','status_realisasi',this.value)" class="p-1 border text-[8px] bg-orange-50"><option ${d.status_realisasi==='Pemeriksaan Dokumen'?'selected':''}>Pemeriksaan Dokumen</option><option ${d.status_realisasi==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td class="no-print"><button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
                 total += Number(d.nilai);
             });
-            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="4" class="p-2 text-right uppercase font-bold">Total:</td><td class="p-2 text-right text-green-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
-        };
-
-        window.renderDashboard = () => {
-            let r = dataRPD.reduce((a,c) => a + Number(c.anggaran), 0);
-            let b = dataPerm.filter(p => p.status_realisasi === 'Selesai Bayar').reduce((a,c) => a + Number(c.nilai), 0);
-            const gap = r - b;
-            document.getElementById('dash-total-rpd').innerText = "Rp " + r.toLocaleString();
-            document.getElementById('dash-total-real').innerText = "Rp " + b.toLocaleString();
-            document.getElementById('dash-total-gap').innerText = "Rp " + gap.toLocaleString();
-            document.getElementById('dash-total-sisa').innerText = "Rp " + (gap > 0 ? gap.toLocaleString() : "0");
-            document.getElementById('dash-total-persen').innerText = (r > 0 ? Math.round((b/r)*100) : 0) + "%";
-            let dashH = ""; dataPerm.slice(0,5).forEach(p => { dashH += `<tr><td>${p.noForm}</td><td class="font-bold">${p.tim}</td><td>${p.uraian}</td><td class="text-right font-bold">Rp ${Number(p.nilai).toLocaleString()}</td><td>${p.status_realisasi}</td></tr>`; });
-            document.getElementById('dash-body-permintaan').innerHTML = dashH;
+            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="4" class="p-2 text-right uppercase font-bold">Total Pengajuan:</td><td class="p-2 text-right font-black">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
         window.renderRealisasi = () => {
@@ -246,19 +233,15 @@
             dataRPD.forEach(d => {
                 const b = dataPerm.filter(p => p.rpdId === d.id && p.status_realisasi === 'Selesai Bayar').reduce((acc, c) => acc + Number(c.nilai), 0);
                 const a = Number(d.anggaran), g = a - b, p = a > 0 ? Math.round((b/a)*100) : 0;
-                html += `<tr><td class="uppercase font-bold">${d.tim}</td><td>${d.rincian}</td><td class="text-right">Rp ${a.toLocaleString()}</td><td class="text-right font-bold bg-orange-50 text-orange-700">Rp ${b.toLocaleString()}</td><td class="text-right font-bold">Rp ${g.toLocaleString()}</td><td class="text-center">${p}%</td></tr>`;
+                html += `<tr><td class="uppercase font-bold">${d.tim}</td><td>${d.rincian}</td><td class="text-right">Rp ${a.toLocaleString()}</td><td class="text-right font-bold bg-orange-50 text-orange-700">Rp ${b.toLocaleString()}</td><td class="text-right font-bold">Rp ${g.toLocaleString()}</td><td class="text-center font-bold">${p}%</td></tr>`;
                 sR += a; sB += b;
             });
-            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="2" class="p-2 text-right font-bold uppercase">Total Gabungan:</td><td class="p-2 text-right">Rp ${sR.toLocaleString()}</td><td class="p-2 text-right">Rp ${sB.toLocaleString()}</td><td class="p-2 text-right">Rp ${(sR-sB).toLocaleString()}</td><td></td></tr>`;
+            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="2" class="p-2 text-right uppercase font-bold">Total Kumulatif:</td><td class="p-2 text-right">Rp ${sR.toLocaleString()}</td><td class="p-2 text-right font-black">Rp ${sB.toLocaleString()}</td><td class="p-2 text-right font-black">Rp ${(sR-sB).toLocaleString()}</td><td></td></tr>`;
         };
 
-        window.upField = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
+        window.upField = async (id, f, v) => { const u = {}; u[f] = v; if(f==='status_realisasi' && v==='Selesai Bayar') u.tglReal = new Date().toISOString().split('T')[0]; await updateDoc(doc(db, "permintaan_belanja", id), u); };
         window.simpanRPD = async () => { const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, rincian: document.getElementById('in-rincian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() }; await addDoc(collection(db, "rpd_entries"), d); alert("Tersimpan!"); };
-        window.simpanPermintaan = async () => { 
-            const rpdId = document.getElementById('req-rpd-id').value; const type = document.getElementById('req-type').value; const selRPD = dataRPD.find(x => x.id === rpdId); 
-            const d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), status_realisasi: "Pemeriksaan Dokumen", createdAt: serverTimestamp() }; 
-            await addDoc(collection(db, "permintaan_belanja"), d); alert("OK!"); 
-        };
+        window.simpanPermintaan = async () => { const rpdId = document.getElementById('req-rpd-id').value; const type = document.getElementById('req-type').value; const selRPD = dataRPD.find(x => x.id === rpdId); const d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), status_realisasi: "Pemeriksaan Dokumen", createdAt: serverTimestamp() }; await addDoc(collection(db, "permintaan_belanja"), d); alert("OK!"); };
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
         window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
