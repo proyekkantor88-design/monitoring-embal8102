@@ -20,7 +20,6 @@
         th { font-size: 8px !important; text-transform: uppercase; background-color: #f8fafc; border: 1px solid #e2e8f0; text-align: center; }
         td { font-size: 9px !important; border: 1px solid #e2e8f0; padding: 4px; }
         .foot-total { background-color: #f1f5f9; font-weight: bold; }
-        /* Style untuk input agar mirip dropdown tapi bisa diketik */
         .searchable-input { 
             width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; 
             font-size: 0.75rem; background-color: white; outline: none;
@@ -75,20 +74,16 @@
                 <div class="grid grid-cols-6 gap-2 mb-4">
                     <div>
                         <label class="text-[9px] font-bold uppercase">Tim</label>
-                        <input list="list-tim" id="in-tim" class="searchable-input" placeholder="Ketik/Pilih Tim">
+                        <input list="list-tim" id="in-tim" class="searchable-input" placeholder="Pilih Tim">
                         <datalist id="list-tim">
-                            <option value="Sosial"><option value="Produksi"><option value="Distribusi">
-                            <option value="Neraca"><option value="IPDS"><option value="Umum">
+                            <option value="Sosial"><option value="Produksi"><option value="Distribusi"><option value="Neraca"><option value="IPDS"><option value="Umum">
                         </datalist>
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">Keg.</label>
                         <input list="list-keg" id="in-kegiatan" class="searchable-input" placeholder="Cari Keg...">
                         <datalist id="list-keg">
-                            <option value="2886"><option value="2896"><option value="2897"><option value="2898">
-                            <option value="2899"><option value="2900"><option value="2901"><option value="2902">
-                            <option value="2903"><option value="2904"><option value="2905"><option value="2906">
-                            <option value="2907"><option value="2908"><option value="2909"><option value="2910">
+                            <option value="2886"><option value="2896"><option value="2897"><option value="2898"><option value="2899"><option value="2900"><option value="2901"><option value="2902"><option value="2903"><option value="2904"><option value="2905"><option value="2906"><option value="2907"><option value="2908"><option value="2909"><option value="2910">
                         </datalist>
                     </div>
                     <div>
@@ -102,24 +97,21 @@
                         <label class="text-[9px] font-bold uppercase">RO</label>
                         <input list="list-ro" id="in-ro" class="searchable-input" placeholder="Cari RO...">
                         <datalist id="list-ro">
-                            <option value="003"><option value="004"><option value="005"><option value="006"><option value="007">
-                            <option value="008"><option value="009"><option value="056"><option value="951"><option value="955"><option value="962"><option value="994">
+                            <option value="003"><option value="004"><option value="005"><option value="006"><option value="007"><option value="008"><option value="009"><option value="056"><option value="951"><option value="955"><option value="962"><option value="994">
                         </datalist>
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">Komponen</label>
                         <input list="list-komp" id="in-komp" class="searchable-input" placeholder="Cari Komp...">
                         <datalist id="list-komp">
-                            <option value="001"><option value="002"><option value="005"><option value="051"><option value="052"><option value="053">
-                            <option value="054"><option value="056"><option value="506"><option value="519"><option value="530">
+                            <option value="001"><option value="002"><option value="005"><option value="051"><option value="052"><option value="053"><option value="054"><option value="056"><option value="506"><option value="519"><option value="530">
                         </datalist>
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">Akun</label>
                         <input list="list-akun" id="in-akun" class="searchable-input" placeholder="Cari Akun...">
                         <datalist id="list-akun">
-                            <option value="511111"><option value="511119"><option value="511121"><option value="521211">
-                            <option value="521213"><option value="521219"><option value="524111"><option value="524113">
+                            <option value="511111"><option value="511119"><option value="511121"><option value="511122"><option value="511123"><option value="511124"><option value="511125"><option value="511126"><option value="511129"><option value="511151"><option value="512211"><option value="512411"><option value="521111"><option value="521115"><option value="521211"><option value="521213"><option value="521219"><option value="521252"><option value="521811"><option value="522111"><option value="522112"><option value="522113"><option value="522119"><option value="522141"><option value="522151"><option value="522191"><option value="523111"><option value="523121"><option value="523123"><option value="524111"><option value="524113"><option value="524114"><option value="532111">
                         </datalist>
                     </div>
                 </div>
@@ -127,12 +119,12 @@
                     <div>
                         <label class="text-[9px] font-bold uppercase">Bulan</label>
                         <select id="in-bulan" class="w-full p-2 border rounded text-xs mt-1">
-                            <option>Januari</option><option>Februari</option><option>Maret</option>
+                            <option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option>
                         </select>
                     </div>
                     <div class="col-span-2">
                         <label class="text-[9px] font-bold uppercase">Uraian / Detil POK</label>
-                        <input type="text" id="in-rincian" class="w-full p-2 border rounded text-xs mt-1" placeholder="Masukkan rincian kegiatan...">
+                        <input type="text" id="in-rincian" class="w-full p-2 border rounded text-xs mt-1" placeholder="Contoh: Honor petugas lapangan...">
                     </div>
                     <div>
                         <label class="text-[9px] font-bold uppercase">Anggaran (Rp)</label>
@@ -144,7 +136,7 @@
             
             <div class="bg-white rounded-xl shadow-sm border p-4">
                 <div class="flex justify-between items-center mb-4 no-print">
-                    <h3 class="text-xs font-bold uppercase">Daftar Perencanaan RPD</h3>
+                    <h3 class="text-xs font-bold uppercase">Rincian Perencanaan RPD</h3>
                     <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-1 rounded text-xs font-bold shadow">CETAK LAPORAN RPD</button>
                 </div>
                 <table class="w-full text-center">
@@ -170,9 +162,7 @@
                 <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-xs shadow">AJUKAN PERMINTAAN</button>
             </div>
             <div class="bg-white rounded-xl shadow-sm border p-4">
-                <div class="flex justify-end mb-4 no-print">
-                    <button onclick="window.print()" class="bg-green-700 text-white px-4 py-1 rounded text-xs font-bold shadow">CETAK MONITORING</button>
-                </div>
+                <div class="flex justify-end mb-4 no-print"><button onclick="window.print()" class="bg-green-700 text-white px-4 py-1 rounded text-xs font-bold shadow">CETAK MONITORING</button></div>
                 <table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Jenis</th><th>Uraian</th><th>Nilai</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="body-permintaan"></tbody></table>
             </div>
         </section>
@@ -219,7 +209,7 @@
                 html += `<tr><td class="font-bold uppercase">${d.tim}</td><td>${d.kegiatan}</td><td>${d.kro}</td><td>${d.ro}</td><td>${d.komp}</td><td>${d.akun}</td><td>${d.rincian}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print"><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
                 total += Number(d.anggaran);
             });
-            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="7" class="text-right p-2 uppercase font-bold">Total Perencanaan:</td><td class="text-right p-2">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="7" class="text-right p-2 uppercase font-bold">Total:</td><td class="text-right p-2">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
             
             const drop = document.getElementById('req-rpd-id');
             if(drop) { let opt = '<option value="">-- Pilih RPD --</option>'; dataRPD.forEach(d => { opt += `<option value="${d.id}">${d.tim} - ${d.rincian}</option>`; }); drop.innerHTML = opt; }
@@ -263,7 +253,7 @@
         };
 
         window.upField = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
-        window.simpanRPD = async () => { const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, rincian: document.getElementById('in-rincian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() }; await addDoc(collection(db, "rpd_entries"), d); alert("Data Tersimpan!"); };
+        window.simpanRPD = async () => { const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, rincian: document.getElementById('in-rincian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() }; await addDoc(collection(db, "rpd_entries"), d); alert("Tersimpan!"); };
         window.simpanPermintaan = async () => { 
             const rpdId = document.getElementById('req-rpd-id').value; 
             const type = document.getElementById('req-type').value; 
