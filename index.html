@@ -27,7 +27,6 @@
     </style>
 </head>
 <body class="bg-slate-50 flex font-sans text-slate-900 overflow-x-hidden">
-
     <aside id="sidebar" class="h-screen bg-indigo-950 text-white p-6 fixed top-0 left-0 no-print flex flex-col shadow-2xl z-50">
         <div class="mb-6 border-b border-indigo-800 pb-4">
             <div class="flex items-center gap-2 mb-2">
@@ -43,7 +42,6 @@
             <button onclick="switchTab('realisasi-rpd')" class="w-full text-left hover:bg-indigo-900 p-2 rounded-lg">Realisasi & GAP</button>
         </nav>
     </aside>
-
     <main id="main-content" class="flex-1 p-8 ml-64 main-container">
         <header class="flex justify-between items-center mb-6 no-print border-b pb-4">
             <div class="flex items-center gap-4">
@@ -92,57 +90,8 @@
                     <div><label class="text-[9px] font-bold uppercase">Detil POK</label><input type="text" id="in-pok" class="w-full p-2 border rounded text-xs mt-1"></div>
                     <div><label class="text-[9px] font-bold uppercase">Anggaran (Rp)</label><input type="number" id="in-anggaran" class="w-full p-2 border rounded text-xs font-bold mt-1 text-indigo-700"></div>
                 </div>
-                <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py-2 rounded font-bold uppercase shadow-lg">Simpan Rencana RPD</button>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
-                <table class="w-full text-center">
-                    <thead><tr><th>Tim</th><th>Keg</th><th>Akun</th><th>Detil POK</th><th>Anggaran</th><th>Bulan</th><th class="no-print">Aksi</th></tr></thead>
-                    <tbody id="body-rpd"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="section-permintaan-belanja" class="tab-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-green-600 no-print">
-                <div class="grid grid-cols-4 gap-3 mb-4">
-                    <div><label class="text-[9px] font-bold uppercase">No. FPB</label><input type="text" id="req-no" class="w-full p-2 border rounded text-xs mt-1"></div>
-                    <div><label class="text-[9px] font-bold uppercase">Tgl FPB</label><input type="date" id="req-tgl" class="w-full p-2 border rounded text-xs mt-1"></div>
-                    <div><label class="text-[9px] font-bold uppercase">Jenis</label><select id="req-type" onchange="toggleSourceRPD(this.value)" class="w-full p-2 border rounded text-xs mt-1 font-bold"><option>RPD</option><option>Non RPD</option></select></div>
-                    <div id="source-rpd-wrap"><label class="text-[9px] font-bold uppercase">Sumber RPD</label><select id="req-rpd-id" class="w-full p-2 border rounded text-xs mt-1 font-bold text-indigo-700"></select></div>
-                </div>
-                <div id="non-rpd-fields" class="hidden grid grid-cols-2 gap-3 mb-4">
-                    <div><label class="text-[9px] font-bold uppercase">Uraian Pembayaran</label><input type="text" id="req-uraian" class="w-full p-2 border rounded text-xs mt-1"></div>
-                    <div><label class="text-[9px] font-bold uppercase">Nilai (Rp)</label><input type="number" id="req-nilai" class="w-full p-2 border rounded text-xs mt-1"></div>
-                </div>
-                <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded font-bold uppercase shadow">AJUKAN PERMINTAAN</button>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
-                <table class="w-full text-center">
-                    <thead><tr><th>No FPB</th><th>Tgl FPB</th><th>Uraian</th><th>Nilai</th><th>Approve</th><th>Tgl App</th><th>Status Bayar</th><th>Tgl Bayar</th><th class="no-print">Aksi</th></tr></thead>
-                    <tbody id="body-permintaan"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="section-realisasi-rpd" class="tab-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
-                <div class="flex gap-4 mb-4 no-print">
-                    <select id="f-real-bulan" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Bulan (Kumulatif)</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option></select>
-                </div>
-                <table class="w-full border text-center">
-                    <thead class="bg-slate-50 font-bold uppercase">
-                        <tr>
-                            <th>Tim</th><th>Uraian</th><th class="bg-indigo-50">Bulan RPD</th><th class="bg-orange-50">Bulan Bayar</th><th>Rencana (Rp)</th><th>Realisasi (Rp)</th><th>GAP (Selisih)</th><th>%</th>
-                        </tr>
-                    </thead>
-                    <tbody id="body-realisasi"></tbody>
-                    <tfoot id="foot-realisasi" class="foot-total bg-slate-100"></tfoot>
-                </table>
-            </div>
-        </section>
-    </main>
-
-    <script type="module">
+                <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py
+                    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -154,7 +103,6 @@
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
 
         window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('hidden-sidebar');
-        
         window.switchTab = (id) => {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
             document.getElementById('section-' + id).classList.remove('hidden');
@@ -172,11 +120,7 @@
         });
 
         window.renderAll = () => {
-            renderRPD();
-            renderPermintaan();
-            renderRealisasi();
-            renderDashboard();
-            updateRPDDropdown();
+            renderRPD(); renderPermintaan(); renderRealisasi(); renderDashboard(); updateRPDDropdown();
         };
 
         window.updateRPDDropdown = () => {
@@ -211,11 +155,11 @@
             dataRPD.forEach(d => {
                 if(editR === d.id) {
                     h += `<tr class="bg-indigo-50">
-                        <td><input id="er-tim" value="${d.tim}" class="w-full border"></td>
-                        <td><input id="er-keg" value="${d.kegiatan}" class="w-full border"></td>
-                        <td><input id="er-aku" value="${d.akun}" class="w-full border"></td>
-                        <td><input id="er-pok" value="${d.pok}" class="w-full border"></td>
-                        <td><input type="number" id="er-ang" value="${d.anggaran}" class="w-full border font-bold"></td>
+                        <td><input id="er-tim" value="${d.tim}" class="w-full border p-1 text-[9px]"></td>
+                        <td><input id="er-keg" value="${d.kegiatan}" class="w-full border p-1 text-[9px]"></td>
+                        <td><input id="er-aku" value="${d.akun}" class="w-full border p-1 text-[9px]"></td>
+                        <td><input id="er-pok" value="${d.pok}" class="w-full border p-1 text-[9px]"></td>
+                        <td><input type="number" id="er-ang" value="${d.anggaran}" class="w-full border p-1 text-[9px] font-bold"></td>
                         <td>${d.bulan}</td>
                         <td class="no-print"><button onclick="saveEditR('${d.id}')">💾</button> <button onclick="setEditR(null)">❌</button></td>
                     </tr>`;
@@ -229,12 +173,12 @@
         window.renderPermintaan = () => {
             let h = "";
             dataPerm.forEach(d => {
-                const postBtn = d.isPosted ? `<button onclick="unpost('${d.id}')" class="btn-unpost">BATAL POST ↩️</button>` : `<button onclick="post('${d.id}')" class="btn-post">POST 📮</button>`;
+                const postBtn = d.isPosted ? `<button onclick="unpost('${d.id}')" class="btn-unpost">BATAL</button>` : `<button onclick="post('${d.id}')" class="btn-post">POST</button>`;
                 if(editP === d.id) {
                     h += `<tr class="bg-green-50">
-                        <td><input id="ep-no" value="${d.noForm}" class="w-full border"></td>
-                        <td><input type="date" id="ep-tgl" value="${d.tglFPB}" class="w-full border"></td>
-                        <td colspan="6" class="text-left italic text-[10px]">Mode Edit (Hanya No & Tgl FPB)</td>
+                        <td><input id="ep-no" value="${d.noForm}" class="w-full border p-1 text-[9px]"></td>
+                        <td><input type="date" id="ep-tgl" value="${d.tglFPB}" class="w-full border p-1 text-[9px]"></td>
+                        <td colspan="6" class="text-left italic text-[10px]">Edit Mode</td>
                         <td class="no-print"><button onclick="saveEditP('${d.id}')">💾</button> <button onclick="setEditP(null)">❌</button></td>
                     </tr>`;
                 } else {
@@ -263,16 +207,14 @@
                 sR += r; sB += b;
             });
             document.getElementById('body-realisasi').innerHTML = h;
-            document.getElementById('foot-realisasi').innerHTML = `<tr><td colspan="4" class="text-right font-black p-2 uppercase">Total Kumulatif:</td><td class="text-right font-black">Rp ${sR.toLocaleString()}</td><td class="text-right font-black">Rp ${sB.toLocaleString()}</td><td class="text-right font-black text-red-600">Rp ${(sR-sB).toLocaleString()}</td><td class="text-center font-black">${sR>0?Math.round((sB/sR)*100):0}%</td></tr>`;
+            document.getElementById('foot-realisasi').innerHTML = `<tr><td colspan="4" class="text-right font-black p-2 uppercase">Total:</td><td class="text-right font-black">Rp ${sR.toLocaleString()}</td><td class="text-right font-black">Rp ${sB.toLocaleString()}</td><td class="text-right font-black text-red-600">Rp ${(sR-sB).toLocaleString()}</td><td class="text-center font-black">${sR>0?Math.round((sB/sR)*100):0}%</td></tr>`;
         };
 
         window.setEditR = (id) => { editR = id; renderRPD(); };
         window.saveEditR = async (id) => { 
             await updateDoc(doc(db, "rpd_entries", id), { 
-                tim: document.getElementById('er-tim').value, 
-                kegiatan: document.getElementById('er-keg').value, 
-                akun: document.getElementById('er-aku').value, 
-                pok: document.getElementById('er-pok').value, 
+                tim: document.getElementById('er-tim').value, kegiatan: document.getElementById('er-keg').value, 
+                akun: document.getElementById('er-aku').value, pok: document.getElementById('er-pok').value, 
                 anggaran: Number(document.getElementById('er-ang').value) 
             }); 
             editR = null; renderRPD(); 
@@ -281,67 +223,42 @@
         window.setEditP = (id) => { editP = id; renderPermintaan(); updateRPDDropdown(); };
         window.saveEditP = async (id) => { 
             await updateDoc(doc(db, "permintaan_belanja", id), { 
-                noForm: document.getElementById('ep-no').value, 
-                tglFPB: document.getElementById('ep-tgl').value 
+                noForm: document.getElementById('ep-no').value, tglFPB: document.getElementById('ep-tgl').value 
             }); 
             editP = null; renderPermintaan(); 
         };
 
         window.valApp = async (id, v) => {
             const d = dataPerm.find(p => p.id === id);
-            if(d.tglReal && v > d.tglReal) {
-                alert("Tgl Approve tidak boleh setelah Tgl Bayar!");
-                renderPermintaan();
-            } else {
-                await updateDoc(doc(db, "permintaan_belanja", id), { tglApp: v });
-            }
+            if(d.tglReal && v > d.tglReal) { alert("Tgl Approve > Tgl Bayar!"); renderPermintaan(); }
+            else await updateDoc(doc(db, "permintaan_belanja", id), { tglApp: v });
         };
 
         window.valPay = async (id, v) => {
             const d = dataPerm.find(p => p.id === id);
-            if(!d.tglApp || v < d.tglApp) {
-                alert("Tgl Bayar tidak boleh sebelum Tgl Approve!");
-                renderPermintaan();
-            } else {
-                await updateDoc(doc(db, "permintaan_belanja", id), { tglReal: v });
-            }
+            if(!d.tglApp || v < d.tglApp) { alert("Tgl Bayar < Tgl Approve!"); renderPermintaan(); }
+            else await updateDoc(doc(db, "permintaan_belanja", id), { tglReal: v });
         };
 
         window.upS = async (id, v) => {
             const d = dataPerm.find(p => p.id === id);
             let obj = { status_realisasi: v };
-            if(v === 'Selesai Bayar' && !d.tglReal) {
-                obj.tglReal = new Date().toISOString().split('T')[0];
-            }
+            if(v === 'Selesai Bayar' && !d.tglReal) obj.tglReal = new Date().toISOString().split('T')[0];
             await updateDoc(doc(db, "permintaan_belanja", id), obj);
         };
 
         window.updateF = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
-        
-        window.post = async (id) => {
-            if(confirm("Posting ke Realisasi?")) {
-                await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true });
-            }
-        };
-        
-        window.unpost = async (id) => {
-            if(confirm("Batalkan Posting?")) {
-                await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: false });
-            }
-        };
+        window.post = async (id) => { if(confirm("Posting ke Realisasi?")) await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
+        window.unpost = async (id) => { if(confirm("Batalkan Posting?")) await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: false }); };
 
         window.simpanRPD = async () => {
             const d = { 
-                tim: document.getElementById('in-tim').value, 
-                kegiatan: document.getElementById('in-keg').value, 
-                akun: document.getElementById('in-akun').value, 
-                bulan: document.getElementById('in-bulan').value, 
-                pok: document.getElementById('in-pok').value, 
-                anggaran: Number(document.getElementById('in-anggaran').value), 
+                tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-keg').value, 
+                akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, 
+                pok: document.getElementById('in-pok').value, anggaran: Number(document.getElementById('in-anggaran').value), 
                 createdAt: serverTimestamp() 
             };
-            await addDoc(collection(db, "rpd_entries"), d);
-            alert("Rencana RPD Berhasil Disimpan!");
+            await addDoc(collection(db, "rpd_entries"), d); alert("Tersimpan!");
         };
 
         window.simpanPermintaan = async () => {
@@ -349,26 +266,20 @@
             const type = document.getElementById('req-type').value;
             const sel = dataRPD.find(x => x.id === rId);
             const d = { 
-                noForm: document.getElementById('req-no').value, 
-                tglFPB: document.getElementById('req-tgl').value, 
-                typeRPD: type, 
-                rpdId: rId || "NON", 
+                noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, 
+                typeRPD: type, rpdId: rId || "NON", 
                 tim: type==='RPD' ? (sel ? sel.tim : '-') : 'NON-TIM', 
                 uraian: type==='RPD' ? (sel ? (sel.pok || '-') : '-') : document.getElementById('req-uraian').value, 
                 nilai: type==='RPD' ? (sel ? sel.anggaran : 0) : Number(document.getElementById('req-nilai').value), 
-                isPosted: false, 
-                approval_status: 'BELUM', 
-                status_realisasi: 'DOKUMEN', 
-                createdAt: serverTimestamp() 
+                isPosted: false, approval_status: 'BELUM', status_realisasi: 'DOKUMEN', createdAt: serverTimestamp() 
             };
             await addDoc(collection(db, "permintaan_belanja"), d);
-            alert("Permintaan Berhasil Diajukan!");
-            document.getElementById('req-no').value = "";
+            alert("Berhasil!"); document.getElementById('req-no').value = "";
         };
 
         window.toggleSourceRPD = (v) => document.getElementById('non-rpd-fields').classList.toggle('hidden', v === 'RPD');
-        window.hapusRPD = async (id) => { if(confirm("Hapus Rencana RPD ini?")) await deleteDoc(doc(db, "rpd_entries", id)); };
-        window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan ini?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+        window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
     </script>
 </body>
 </html>
