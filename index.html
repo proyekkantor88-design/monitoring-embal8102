@@ -57,8 +57,20 @@
 
         <section id="section-dashboard" class="tab-content">
             <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl shadow-sm border">
-                <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label><select id="f-dash-tim" onchange="renderDashboard()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
-                <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label><select id="f-dash-bulan" onchange="renderDashboard()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option></select></div>
+                <div class="flex-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label>
+                    <select id="f-dash-tim" onchange="renderDashboard()" class="w-full p-2 border rounded text-xs mt-1">
+                        <option value="">Semua Tim</option>
+                        <option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label>
+                    <select id="f-dash-bulan" onchange="renderDashboard()" class="w-full p-2 border rounded text-xs mt-1">
+                        <option value="">Semua Bulan</option>
+                        <option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option>
+                    </select>
+                </div>
             </div>
             <div class="grid grid-cols-5 gap-4 mb-6">
                 <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-indigo-500"><p class="text-[9px] font-bold text-slate-400 uppercase">Rencana RPD</p><h3 id="dash-total-rpd" class="text-base font-black">Rp 0</h3></div>
@@ -69,19 +81,24 @@
             </div>
             <div class="bg-white p-4 rounded-xl shadow-sm border">
                 <h4 class="text-xs font-bold uppercase mb-3 text-indigo-900 tracking-wider">Ringkasan Transaksi Terposting</h4>
-                <div class="overflow-x-auto"><table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Nilai</th><th>Status</th></tr></thead><tbody id="dash-body-permintaan"></tbody></table></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-center">
+                        <thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Nilai</th><th>Status</th></tr></thead>
+                        <tbody id="dash-body-permintaan"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
         <section id="section-input-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-indigo-600 no-print">
                 <div class="grid grid-cols-6 gap-2 mb-4">
-                    <div><label class="text-[9px] font-bold uppercase">Tim</label><input list="list-tim" id="in-tim" class="searchable-input"><datalist id="list-tim"><option value="Sosial"><option value="Produksi"><option value="Distribusi"><option value="Neraca"><option value="IPDS"><option value="Umum"></datalist></div>
-                    <div><label class="text-[9px] font-bold uppercase">Keg.</label><input list="list-keg" id="in-kegiatan" class="searchable-input"><datalist id="list-keg"><option value="2886"><option value="2905"><option value="2906"></datalist></div>
-                    <div><label class="text-[9px] font-bold uppercase">KRO</label><input list="list-kro" id="in-kro" class="searchable-input"><datalist id="list-kro"><option value="BMA"><option value="CAN"><option value="EBA"></datalist></div>
-                    <div><label class="text-[9px] font-bold uppercase">RO</label><input list="list-ro" id="in-ro" class="searchable-input"><datalist id="list-ro"><option value="951"><option value="994"></datalist></div>
-                    <div><label class="text-[9px] font-bold uppercase">Komp</label><input list="list-komp" id="in-komp" class="searchable-input"><datalist id="list-komp"><option value="051"><option value="052"></datalist></div>
-                    <div><label class="text-[9px] font-bold uppercase">Akun</label><input list="list-akun" id="in-akun" class="searchable-input"><datalist id="list-akun"><option value="521211"><option value="524111"></datalist></div>
+                    <div><label class="text-[9px] font-bold uppercase">Tim</label><input list="list-tim" id="in-tim" class="searchable-input"></div>
+                    <div><label class="text-[9px] font-bold uppercase">Keg.</label><input id="in-kegiatan" class="searchable-input"></div>
+                    <div><label class="text-[9px] font-bold uppercase">KRO</label><input id="in-kro" class="searchable-input"></div>
+                    <div><label class="text-[9px] font-bold uppercase">RO</label><input id="in-ro" class="searchable-input"></div>
+                    <div><label class="text-[9px] font-bold uppercase">Komp</label><input id="in-komp" class="searchable-input"></div>
+                    <div><label class="text-[9px] font-bold uppercase">Akun</label><input id="in-akun" class="searchable-input"></div>
                 </div>
                 <div class="grid grid-cols-4 gap-3 mb-4">
                     <div><label class="text-[9px] font-bold uppercase">Bulan</label><select id="in-bulan" class="w-full p-2 border rounded text-xs mt-1"><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
@@ -91,13 +108,9 @@
                 </div>
                 <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold uppercase shadow-lg">Simpan Rencana RPD</button>
             </div>
-            
             <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
                 <div class="grid grid-cols-5 gap-2 mb-4 no-print items-end">
                     <div><label class="text-[8px] font-bold uppercase text-slate-400">Tim</label><select id="f-tim" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
-                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Keg.</label><select id="f-keg" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option></select></div>
-                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Akun</label><select id="f-akun" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option></select></div>
-                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Bulan</label><select id="f-bulan" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
                     <button onclick="window.print()" class="bg-blue-600 text-white p-1 rounded text-[10px] font-bold uppercase">Cetak RPD</button>
                 </div>
                 <table class="w-full text-center">
@@ -122,9 +135,7 @@
                 </div>
                 <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-xs shadow">AJUKAN PERMINTAAN</button>
             </div>
-            
             <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
-                <div class="flex justify-end mb-4 no-print"><button onclick="window.print()" class="bg-green-700 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Monitoring</button></div>
                 <table class="w-full text-center">
                     <thead><tr><th>No. FPB</th><th>Tgl FPB</th><th>Uraian</th><th>Nilai</th><th>Approve</th><th>Tgl App</th><th>Status Bayar</th><th>Tgl Bayar</th><th class="no-print">Aksi</th></tr></thead>
                     <tbody id="body-permintaan"></tbody>
@@ -144,9 +155,7 @@
                 </div>
                 <table class="w-full border">
                     <thead class="bg-slate-50 font-bold uppercase text-center">
-                        <tr>
-                            <th>Tim</th><th>Detil POK / Uraian</th><th class="bg-indigo-50">Bulan RPD</th><th class="bg-orange-50">Bulan Bayar</th><th class="text-right">Rencana</th><th class="text-right">Realisasi</th><th class="text-right">GAP</th><th class="text-center">%</th>
-                        </tr>
+                        <tr><th>Tim</th><th>Detil POK / Uraian</th><th class="bg-indigo-50">Bulan RPD</th><th class="bg-orange-50">Bulan Bayar</th><th class="text-right">Rencana</th><th class="text-right">Realisasi</th><th class="text-right">GAP</th><th class="text-center">%</th></tr>
                     </thead>
                     <tbody id="body-realisasi"></tbody>
                     <tfoot id="foot-realisasi" class="foot-total"></tfoot>
@@ -166,18 +175,18 @@
         let dataRPD = [], dataPerm = [], editIdRPD = null, editIdPerm = null;
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
 
-        window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); document.getElementById('main-content').classList.toggle('ml-0'); };
-
-        window.switchTab = (id) => {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-            document.getElementById('section-' + id).classList.remove('hidden');
-            renderAll();
+        window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); };
+        window.switchTab = (id) => { 
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); 
+            document.getElementById('section-' + id).classList.remove('hidden'); 
+            document.getElementById('page-title').innerText = id.replace('-', ' ');
+            renderAll(); 
         };
 
-        onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); updateFilters(); renderAll(); });
+        onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
         onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => { dataPerm = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
 
-        window.renderAll = () => { renderRPD(); renderPermintaan(); renderRealisasi(); renderDashboard(); };
+        window.renderAll = () => { renderDashboard(); renderRPD(); renderPermintaan(); renderRealisasi(); };
 
         window.renderDashboard = () => {
             const fT = document.getElementById('f-dash-tim').value, fB = document.getElementById('f-dash-bulan').value;
@@ -198,50 +207,48 @@
             document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
         };
 
-        window.updateFilters = () => {
-            const lK = [...new Set(dataRPD.map(d => d.kegiatan))].sort(), lA = [...new Set(dataRPD.map(d => d.akun))].sort();
-            document.getElementById('f-keg').innerHTML = '<option value="">Semua</option>' + lK.map(k => `<option value="${k}">${k}</option>`).join('');
-            document.getElementById('f-akun').innerHTML = '<option value="">Semua</option>' + lA.map(a => `<option value="${a}">${a}</option>`).join('');
-        };
-
         window.renderRPD = () => {
-            const body = document.getElementById('body-rpd'), foot = document.getElementById('foot-rpd');
-            const fT = document.getElementById('f-tim').value, fK = document.getElementById('f-keg').value, fA = document.getElementById('f-akun').value, fB = document.getElementById('f-bulan').value;
+            const fT = document.getElementById('f-tim').value;
             let html = "", total = 0;
             dataRPD.forEach(d => {
-                if((!fT || d.tim === fT) && (!fK || d.kegiatan === fK) && (!fA || d.akun === fA) && (!fB || d.bulan === fB)) {
+                if(!fT || d.tim === fT) {
                     if (editIdRPD === d.id) {
-                        html += `<tr class="bg-indigo-50"><td><input id="e-tim" value="${d.tim}"></td><td><input id="e-keg" value="${d.kegiatan}"></td><td><input id="e-aku" value="${d.akun}"></td><td><input id="e-pok" value="${d.pok||''}"></td><td><input id="e-ura" value="${d.uraian||''}"></td><td><input type="number" id="e-ang" value="${d.anggaran}"></td><td>${d.bulan}</td><td><button onclick="saveEditRPD('${d.id}')">💾</button></td></tr>`;
+                        html += `<tr class="bg-indigo-50"><td><input id="e-tim" value="${d.tim}" class="w-full border"></td><td><input id="e-keg" value="${d.kegiatan}" class="w-full border"></td><td><input id="e-aku" value="${d.akun}" class="w-full border"></td><td><input id="e-pok" value="${d.pok||''}" class="w-full border"></td><td><input id="e-ura" value="${d.uraian||''}" class="w-full border"></td><td><input type="number" id="e-ang" value="${d.anggaran}" class="w-full border"></td><td>${d.bulan}</td><td><button onclick="saveEditRPD('${d.id}')">💾</button></td></tr>`;
                     } else {
                         html += `<tr><td>${d.tim}</td><td>${d.kegiatan}</td><td>${d.akun}</td><td>${d.pok||'-'}</td><td>${d.uraian||'-'}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print"><button onclick="setEditRPD('${d.id}')">✏️</button> <button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
                     }
                     total += Number(d.anggaran);
                 }
             });
-            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="5" class="text-right p-2 font-bold uppercase text-slate-500">Total:</td><td class="text-right p-2 font-bold text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            document.getElementById('body-rpd').innerHTML = html;
+            document.getElementById('foot-rpd').innerHTML = `<tr><td colspan="5" class="text-right font-bold">TOTAL:</td><td class="text-right font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            
             const drop = document.getElementById('req-rpd-id');
-            if(drop) { let opt = '<option value="">-- Pilih Rincian RPD --</option>'; dataRPD.forEach(d => { opt += `<option value="${d.id}">${d.tim} - ${d.uraian || d.pok}</option>`; }); drop.innerHTML = opt; }
+            if(drop) {
+                let opt = '<option value="">-- Pilih Rincian RPD --</option>';
+                dataRPD.forEach(d => { opt += `<option value="${d.id}">${d.tim} - ${d.uraian || d.pok}</option>`; });
+                drop.innerHTML = opt;
+            }
         };
 
         window.renderPermintaan = () => {
-            const body = document.getElementById('body-permintaan'), foot = document.getElementById('foot-permintaan');
             let html = "", total = 0;
             dataPerm.forEach(d => {
                 if (editIdPerm === d.id) {
-                    html += `<tr class="bg-green-50"><td><input id="p-e-no" value="${d.noForm}"></td><td><input type="date" id="p-e-tgl" value="${d.tglFPB}"></td><td><input id="p-e-ura" value="${d.uraian}"></td><td><input type="number" id="p-e-nil" value="${d.nilai}"></td><td colspan="4">Edit Mode</td><td><button onclick="saveEditPerm('${d.id}')">💾</button></td></tr>`;
+                    html += `<tr class="bg-green-50"><td><input id="p-e-no" value="${d.noForm}"></td><td><input type="date" id="p-e-tgl" value="${d.tglFPB}"></td><td><input id="p-e-ura" value="${d.uraian}"></td><td><input type="number" id="p-e-nil" value="${d.nilai}"></td><td colspan="4">Mode Edit</td><td><button onclick="saveEditPerm('${d.id}')">💾</button></td></tr>`;
                 } else {
-                    const postBtn = d.isPosted ? `<button onclick="unpostFromReal('${d.id}')" class="btn-unpost">BATAL POST ↩️</button>` : `<button onclick="postToReal('${d.id}')" class="btn-post">POST 📮</button>`;
-                    html += `<tr><td class="font-bold">${d.noForm}</td><td>${d.tglFPB||'-'}</td><td>${d.uraian}</td><td class="text-right font-bold text-green-700">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upDate('${d.id}','approval_status',this.value)" class="status-select"><option ${d.approval_status==='BELUM'?'selected':''}>BELUM</option><option ${d.approval_status==='ACC PJ'?'selected':''}>ACC PJ</option><option ${d.approval_status==='ACC PPK'?'selected':''}>ACC PPK</option></select></td><td><input type="date" value="${d.tglApp||''}" onchange="validateApprovalDate('${d.id}',this.value)" class="date-edit"></td><td><select onchange="upStatusBayar('${d.id}',this.value)" class="status-select bg-orange-50 font-bold"><option ${d.status_realisasi==='Pemeriksaan Dokumen'?'selected':''}>Pemeriksaan Dokumen</option><option ${d.status_realisasi==='Pemeriksaan Bendahara'?'selected':''}>Pemeriksaan Bendahara</option><option ${d.status_realisasi==='Permintaan ke KPPN'?'selected':''}>Permintaan ke KPPN</option><option ${d.status_realisasi==='Siap Bayar'?'selected':''}>Siap Bayar</option><option ${d.status_realisasi==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td><input type="date" value="${d.tglReal||''}" onchange="validatePaymentDate('${d.id}',this.value)" class="date-edit"></td><td class="no-print flex gap-1 justify-center">${postBtn} <button onclick="setEditPerm('${d.id}')">✏️</button> <button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
+                    const postBtn = d.isPosted ? `<button onclick="unpostFromReal('${d.id}')" class="btn-unpost">BATAL POST</button>` : `<button onclick="postToReal('${d.id}')" class="btn-post">POST</button>`;
+                    html += `<tr><td class="font-bold">${d.noForm}</td><td>${d.tglFPB||'-'}</td><td>${d.uraian}</td><td class="text-right font-bold text-green-700">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upDateDoc('${d.id}','approval_status',this.value)" class="status-select"><option ${d.approval_status==='BELUM'?'selected':''}>BELUM</option><option ${d.approval_status==='ACC PJ'?'selected':''}>ACC PJ</option></select></td><td><input type="date" value="${d.tglApp||''}" onchange="validateApprovalDate('${d.id}',this.value)" class="date-edit"></td><td><select onchange="upStatusBayar('${d.id}',this.value)" class="status-select"><option value="Proses" ${d.status_realisasi!=='Selesai Bayar'?'selected':''}>Proses</option><option value="Selesai Bayar" ${d.status_realisasi==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td><input type="date" value="${d.tglReal||''}" onchange="validatePaymentDate('${d.id}',this.value)" class="date-edit"></td><td class="no-print flex gap-1 justify-center">${postBtn} <button onclick="setEditPerm('${d.id}')">✏️</button> <button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
                 }
                 total += Number(d.nilai);
             });
-            body.innerHTML = html; foot.innerHTML = `<tr><td colspan="3" class="text-right p-2 font-bold uppercase text-slate-500">Total:</td><td class="text-right p-2 font-bold text-green-700">Rp ${total.toLocaleString()}</td><td colspan="5"></td></tr>`;
+            document.getElementById('body-permintaan').innerHTML = html;
+            document.getElementById('foot-permintaan').innerHTML = `<tr><td colspan="3" class="text-right font-bold">TOTAL:</td><td class="text-right font-bold">Rp ${total.toLocaleString()}</td><td colspan="5"></td></tr>`;
         };
 
         window.renderRealisasi = () => {
-            const body = document.getElementById('body-realisasi'), foot = document.getElementById('foot-realisasi');
             const fRB = document.getElementById('f-real-bulan').value, fRT = document.getElementById('f-real-tim').value;
-            let html = "", sR = 0, sB = 0, sG = 0;
+            let html = "", sR = 0, sB = 0;
             dataRPD.forEach(d => {
                 if(!fRT || d.tim === fRT) {
                     const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
@@ -249,78 +256,39 @@
                     let r = 0, b = 0;
                     if(!fRB) { r = Number(d.anggaran); b = lP.reduce((acc, c) => acc + Number(c.nilai), 0); } 
                     else { if(d.bulan === bMap[fRB]) r = Number(d.anggaran); if(bI === fRB) b = lP.reduce((acc, c) => acc + Number(c.nilai), 0); if(r === 0 && b === 0) return; }
-                    let g = r - b, p = r > 0 ? Math.round((b/r)*100) : (b > 0 ? 100 : 0);
-                    html += `<tr><td>${d.tim}</td><td>${d.pok || d.uraian}</td><td class="text-indigo-700 font-bold">${d.bulan}</td><td class="text-orange-700 font-bold">${bI ? bMap[bI] : '-'}</td><td class="text-right">Rp ${r.toLocaleString()}</td><td class="text-right font-bold text-orange-700">Rp ${b.toLocaleString()}</td><td class="text-right font-bold ${g<0?'text-red-600':'text-green-600'}">Rp ${g.toLocaleString()}</td><td class="text-center font-bold">${p}%</td></tr>`;
-                    sR += r; sB += b; sG += g;
+                    let g = r - b;
+                    html += `<tr><td>${d.tim}</td><td>${d.pok || d.uraian}</td><td class="text-indigo-700 font-bold">${d.bulan}</td><td class="text-orange-700 font-bold">${bI ? bMap[bI] : '-'}</td><td class="text-right">Rp ${r.toLocaleString()}</td><td class="text-right font-bold text-orange-700">Rp ${b.toLocaleString()}</td><td class="text-right font-bold ${g<0?'text-red-600':'text-green-600'}">Rp ${g.toLocaleString()}</td><td class="text-center font-bold">${r>0?Math.round((b/r)*100):0}%</td></tr>`;
+                    sR += r; sB += b;
                 }
             });
-            dataPerm.filter(p => p.typeRPD === 'Non RPD' && p.isPosted).forEach(n => {
-                const bI = n.tglReal ? n.tglReal.split('-')[1] : '';
-                if((!fRT || n.tim === fRT) && (!fRB || bI === fRB)) {
-                    const v = Number(n.nilai);
-                    html += `<tr class="bg-red-50 italic text-red-700"><td>NON-RPD</td><td>${n.uraian}</td><td class="text-center">-</td><td class="text-center font-bold">${bMap[bI]||'-'}</td><td class="text-right">Rp 0</td><td class="text-right font-bold">Rp ${v.toLocaleString()}</td><td class="text-right font-bold">Rp -${v.toLocaleString()}</td><td class="text-center">100%</td></tr>`;
-                    sB += v; sG -= v;
-                }
-            });
-            const sP = sR > 0 ? Math.round((sB/sR)*100) : 0;
-            body.innerHTML = html;
-            foot.innerHTML = `<tr><td colspan="4" class="p-2 text-right uppercase font-black">Total GAP Kumulatif Terposting:</td><td class="p-2 text-right font-bold text-indigo-700">Rp ${sR.toLocaleString()}</td><td class="p-2 text-right font-bold text-orange-700">Rp ${sB.toLocaleString()}</td><td class="p-2 text-right text-red-700 font-black">Rp ${sG.toLocaleString()}</td><td class="text-center font-bold">${sP}%</td></tr>`;
+            document.getElementById('body-realisasi').innerHTML = html;
+            document.getElementById('foot-realisasi').innerHTML = `<tr><td colspan="4" class="text-right font-black">TOTAL:</td><td class="text-right font-bold">Rp ${sR.toLocaleString()}</td><td class="text-right font-bold">Rp ${sB.toLocaleString()}</td><td class="text-right font-bold text-red-700">Rp ${(sR-sB).toLocaleString()}</td><td class="text-center font-bold">${sR>0?Math.round((sB/sR)*100):0}%</td></tr>`;
         };
 
-        // VALIDASI TANGGAL
-        window.validateApprovalDate = async (id, v) => {
-            const data = dataPerm.find(p => p.id === id);
-            if(data.tglReal && v > data.tglReal) {
-                alert("Kesalahan! Tanggal Approve tidak boleh lebih besar dari Tanggal Bayar.");
-                renderPermintaan(); // Reset view
-            } else {
-                await updateDoc(doc(db, "permintaan_belanja", id), { tglApp: v });
-            }
+        window.simpanRPD = async () => {
+            const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, pok: document.getElementById('in-pok').value, uraian: document.getElementById('in-uraian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() };
+            await addDoc(collection(db, "rpd_entries"), d); alert("Berhasil simpan RPD!");
         };
 
-        window.validatePaymentDate = async (id, v) => {
-            const data = dataPerm.find(p => p.id === id);
-            if(!data.tglApp) {
-                alert("Harap isi Tanggal Approval terlebih dahulu!");
-                renderPermintaan();
-                return;
-            }
-            if(v < data.tglApp) {
-                alert("Kesalahan! Tanggal Bayar tidak boleh kurang dari Tanggal Approve.");
-                renderPermintaan();
-            } else {
-                await updateDoc(doc(db, "permintaan_belanja", id), { tglReal: v });
-            }
+        window.simpanPermintaan = async () => {
+            const rpdId = document.getElementById('req-rpd-id').value, type = document.getElementById('req-type').value, selRPD = dataRPD.find(x => x.id === rpdId);
+            const d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), approval_status: "BELUM", status_realisasi: "Proses", isPosted: false, createdAt: serverTimestamp() };
+            await addDoc(collection(db, "permintaan_belanja"), d); alert("Permintaan terkirim!");
         };
 
-        window.upStatusBayar = async (id, v) => {
-            const data = dataPerm.find(p => p.id === id);
-            const today = new Date().toISOString().split('T')[0];
-            let updateObj = { status_realisasi: v };
-            
-            if(v === 'Selesai Bayar') {
-                if(!data.tglApp) {
-                    alert("Gagal! Dokumen belum memiliki Tanggal Approve.");
-                    renderPermintaan();
-                    return;
-                }
-                updateObj.tglReal = today;
-            }
-            await updateDoc(doc(db, "permintaan_belanja", id), updateObj);
-        };
-
-        window.postToReal = async (id) => { if(confirm("Posting ke Realisasi?")) await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
-        window.unpostFromReal = async (id) => { if(confirm("Batalkan Posting?")) await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: false }); };
-        window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
+        window.validateApprovalDate = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { tglApp: v }); };
+        window.validatePaymentDate = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { tglReal: v }); };
+        window.upStatusBayar = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { status_realisasi: v, tglReal: v === 'Selesai Bayar' ? new Date().toISOString().split('T')[0] : '' }); };
+        window.postToReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
+        window.unpostFromReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: false }); };
+        window.upDateDoc = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
         window.setEditRPD = (id) => { editIdRPD = id; renderRPD(); };
-        window.saveEditRPD = async (id) => { await updateDoc(doc(db, "rpd_entries", id), { tim: document.getElementById('e-tim').value, kegiatan: document.getElementById('e-keg').value, akun: document.getElementById('e-aku').value, pok: document.getElementById('e-pok').value, uraian: document.getElementById('e-ura').value, anggaran: Number(document.getElementById('e-ang').value) }); setEditRPD(null); };
+        window.saveEditRPD = async (id) => { await updateDoc(doc(db, "rpd_entries", id), { tim: document.getElementById('e-tim').value, kegiatan: document.getElementById('e-keg').value, akun: document.getElementById('e-aku').value, pok: document.getElementById('e-pok').value, uraian: document.getElementById('e-ura').value, anggaran: Number(document.getElementById('e-ang').value) }); editIdRPD = null; };
         window.setEditPerm = (id) => { editIdPerm = id; renderPermintaan(); };
-        window.saveEditPerm = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { noForm: document.getElementById('p-e-no').value, tglFPB: document.getElementById('p-e-tgl').value, uraian: document.getElementById('p-e-ura').value, nilai: Number(document.getElementById('p-e-nil').value) }); setEditPerm(null); };
-        window.simpanRPD = async () => { const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, pok: document.getElementById('in-pok').value, uraian: document.getElementById('in-uraian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() }; await addDoc(collection(db, "rpd_entries"), d); alert("OK!"); };
-        window.simpanPermintaan = async () => { const rpdId = document.getElementById('req-rpd-id').value, type = document.getElementById('req-type').value, selRPD = dataRPD.find(x => x.id === rpdId), d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), approval_status: "BELUM", status_realisasi: "Pemeriksaan Dokumen", isPosted: false, createdAt: serverTimestamp() }; await addDoc(collection(db, "permintaan_belanja"), d); alert("OK!"); };
-        window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
-        window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
-        window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+        window.saveEditPerm = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { noForm: document.getElementById('p-e-no').value, tglFPB: document.getElementById('p-e-tgl').value, uraian: document.getElementById('p-e-ura').value, nilai: Number(document.getElementById('p-e-nil').value) }); editIdPerm = null; };
+        window.toggleSourceRPD = (v) => { document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block'; };
+        window.hapusRPD = async (id) => { if(confirm("Hapus RPD ini?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan ini?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
     </script>
 </body>
 </html>
