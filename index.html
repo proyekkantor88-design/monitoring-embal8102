@@ -177,7 +177,7 @@
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); updateFilters(); renderAll(); });
         onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => { dataPerm = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
 
-        window.renderAll = () => { renderRPD(); renderPermintaan(); renderRealisasi(); renderDashboard(); };
+        window.renderAll = () => { renderRPD(); renderPermintaan(); renderRealisasi(); renderDashboard(); updateDropdownSumber(); };
 
         window.renderDashboard = () => {
             const fT = document.getElementById('f-dash-tim').value, fB = document.getElementById('f-dash-bulan').value;
@@ -204,6 +204,25 @@
             document.getElementById('f-akun').innerHTML = '<option value="">Semua</option>' + lA.map(a => `<option value="${a}">${a}</option>`).join('');
         };
 
+        // LOGIKA BARU: DROPDOWN HANYA MUNCULKAN RPD YANG BELUM DIPILIH
+        window.updateDropdownSumber = () => {
+            const drop = document.getElementById('req-rpd-id');
+            if(!drop) return;
+
+            // Kumpulkan ID RPD yang sudah pernah dipakai di Permintaan
+            const idsDipakai = dataPerm.filter(p => p.typeRPD === 'RPD').map(p => p.rpdId);
+            
+            let opt = '<option value="">-- Pilih Rincian RPD --</option>'; 
+            dataRPD.forEach(d => { 
+                // Jika ID RPD ini belum ada di daftar "idsDipakai", tampilkan di dropdown
+                if(!idsDipakai.includes(d.id)) {
+                    const formatLabel = `${d.tim} - Rp ${Number(d.anggaran).toLocaleString()} - ${d.uraian || d.pok}`;
+                    opt += `<option value="${d.id}">${formatLabel}</option>`; 
+                }
+            }); 
+            drop.innerHTML = opt; 
+        };
+
         window.renderRPD = () => {
             const body = document.getElementById('body-rpd'), foot = document.getElementById('foot-rpd');
             const fT = document.getElementById('f-tim').value, fK = document.getElementById('f-keg').value, fA = document.getElementById('f-akun').value, fB = document.getElementById('f-bulan').value;
@@ -219,17 +238,6 @@
                 }
             });
             body.innerHTML = html; foot.innerHTML = `<tr><td colspan="5" class="text-right p-2 font-bold uppercase text-slate-500">Total:</td><td class="text-right p-2 font-bold text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
-            
-            // UPDATE DROPDOWN SUMBER RPD (FORMAT BARU)
-            const drop = document.getElementById('req-rpd-id');
-            if(drop) { 
-                let opt = '<option value="">-- Pilih Rincian RPD --</option>'; 
-                dataRPD.forEach(d => { 
-                    const formatLabel = `${d.tim} - Rp ${Number(d.anggaran).toLocaleString()} - ${d.uraian || d.pok}`;
-                    opt += `<option value="${d.id}">${formatLabel}</option>`; 
-                }); 
-                drop.innerHTML = opt; 
-            }
         };
 
         window.renderPermintaan = () => {
