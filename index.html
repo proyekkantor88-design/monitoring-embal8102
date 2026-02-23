@@ -108,10 +108,10 @@
                     <div><label class="text-[9px] font-bold uppercase">No. FPB</label><input type="text" id="req-no" class="w-full p-2 border rounded text-xs mt-1"></div>
                     <div><label class="text-[9px] font-bold uppercase">Tgl FPB</label><input type="date" id="req-tgl" class="w-full p-2 border rounded text-xs mt-1"></div>
                     <div><label class="text-[9px] font-bold uppercase">Jenis</label><select id="req-type" onchange="toggleSourceRPD(this.value)" class="w-full p-2 border rounded text-xs mt-1 font-bold"><option>RPD</option><option>Non RPD</option></select></div>
-                    <div id="source-rpd-wrap"><label class="text-[9px] font-bold uppercase">Sumber RPD (Tim-Nilai-Uraian)</label><select id="req-rpd-id" class="w-full p-2 border rounded text-xs mt-1 font-bold text-indigo-700"></select></div>
+                    <div id="source-rpd-wrap"><label class="text-[9px] font-bold uppercase">Sumber RPD</label><select id="req-rpd-id" class="w-full p-2 border rounded text-xs mt-1 font-bold text-indigo-700"></select></div>
                 </div>
                 <div id="non-rpd-fields" class="hidden grid grid-cols-2 gap-3 mb-4">
-                    <div><label class="text-[9px] font-bold uppercase">Uraian Pembayaran (Non RPD)</label><input type="text" id="req-uraian" class="w-full p-2 border rounded text-xs mt-1"></div>
+                    <div><label class="text-[9px] font-bold uppercase">Uraian Pembayaran</label><input type="text" id="req-uraian" class="w-full p-2 border rounded text-xs mt-1"></div>
                     <div><label class="text-[9px] font-bold uppercase">Nilai (Rp)</label><input type="number" id="req-nilai" class="w-full p-2 border rounded text-xs mt-1"></div>
                 </div>
                 <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded font-bold uppercase shadow">AJUKAN PERMINTAAN</button>
@@ -183,7 +183,7 @@
             const drop = document.getElementById('req-rpd-id');
             if(!drop) return;
             const idsDipakai = dataPerm.filter(p => p.typeRPD === 'RPD' && p.id !== editP).map(p => p.rpdId);
-            let opt = '<option value="">-- Pilih Tim - Nilai - Uraian --</option>';
+            let opt = '<option value="">-- Pilih RPD --</option>';
             dataRPD.forEach(d => {
                 if(!idsDipakai.includes(d.id)) {
                     opt += `<option value="${d.id}">${d.tim} - Rp ${Number(d.anggaran).toLocaleString()} - ${d.pok}</option>`;
@@ -348,16 +348,14 @@
             const rId = document.getElementById('req-rpd-id').value;
             const type = document.getElementById('req-type').value;
             const sel = dataRPD.find(x => x.id === rId);
-            
             const d = { 
                 noForm: document.getElementById('req-no').value, 
                 tglFPB: document.getElementById('req-tgl').value, 
                 typeRPD: type, 
                 rpdId: rId || "NON", 
-                tim: type==='RPD'?(sel?sel.tim
-                                   '-'):'NON-TIM', 
-                uraian: type==='RPD'?(sel?sel.pok:'-'):document.getElementById('req-uraian').value, 
-                nilai: type==='RPD'?(sel?sel.anggaran:0):Number(document.getElementById('req-nilai').value), 
+                tim: type==='RPD' ? (sel ? sel.tim : '-') : 'NON-TIM', 
+                uraian: type==='RPD' ? (sel ? (sel.pok || '-') : '-') : document.getElementById('req-uraian').value, 
+                nilai: type==='RPD' ? (sel ? sel.anggaran : 0) : Number(document.getElementById('req-nilai').value), 
                 isPosted: false, 
                 approval_status: 'BELUM', 
                 status_realisasi: 'DOKUMEN', 
