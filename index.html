@@ -355,3 +355,22 @@
                 typeRPD: type, 
                 rpdId: rId || "NON", 
                 tim: type==='RPD'?(sel?sel.tim
+                                   '-'):'NON-TIM', 
+                uraian: type==='RPD'?(sel?sel.pok:'-'):document.getElementById('req-uraian').value, 
+                nilai: type==='RPD'?(sel?sel.anggaran:0):Number(document.getElementById('req-nilai').value), 
+                isPosted: false, 
+                approval_status: 'BELUM', 
+                status_realisasi: 'DOKUMEN', 
+                createdAt: serverTimestamp() 
+            };
+            await addDoc(collection(db, "permintaan_belanja"), d);
+            alert("Permintaan Berhasil Diajukan!");
+            document.getElementById('req-no').value = "";
+        };
+
+        window.toggleSourceRPD = (v) => document.getElementById('non-rpd-fields').classList.toggle('hidden', v === 'RPD');
+        window.hapusRPD = async (id) => { if(confirm("Hapus Rencana RPD ini?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan ini?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+    </script>
+</body>
+</html>
