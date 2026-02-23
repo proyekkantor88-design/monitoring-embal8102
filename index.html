@@ -460,6 +460,100 @@
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
         window.hapusRPD = async (id) => { if (confirm("Hapus RPD ini?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if (confirm("Hapus Permintaan ini?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+        // 1. FUNGSI SIMPAN (Menambahkan KRO, RO, KOMP)
+        window.simpanRPD = async () => {
+            const tim = document.getElementById('in-tim').value;
+            const ang = document.getElementById('in-anggaran').value;
+            if(!tim || !ang) return alert("Mohon isi Tim dan Anggaran!");
+            
+            const d = { 
+                tim: tim, 
+                kegiatan: document.getElementById('in-kegiatan').value, 
+                kro: document.getElementById('in-kro').value,
+                ro: document.getElementById('in-ro').value,
+                komp: document.getElementById('in-komp').value,
+                akun: document.getElementById('in-akun').value, 
+                bulan: document.getElementById('in-bulan').value, 
+                pok: document.getElementById('in-pok').value, 
+                uraian: document.getElementById('in-uraian').value, 
+                anggaran: Number(ang), 
+                createdAt: serverTimestamp() 
+            };
+            try { 
+                await addDoc(collection(db, "rpd_entries"), d); 
+                alert("Data RPD Berhasil Disimpan!"); 
+                // Reset form setelah simpan
+                ["in-tim","in-kegiatan","in-kro","in-ro","in-komp","in-akun","in-pok","in-uraian","in-anggaran"].forEach(id => document.getElementById(id).value = "");
+            } catch (e) { alert("Gagal menyimpan!"); }
+        };
+
+        // 2. FUNGSI RENDER TABEL (Menambahkan Kolom KRO, RO, KOMP)
+        window.renderRPD = () => {
+            const body = document.getElementById('body-rpd');
+            const foot = document.getElementById('foot-rpd');
+            const fT = document.getElementById('f-tim').value;
+            const fK = document.getElementById('f-keg').value;
+            const fA = document.getElementById('f-akun').value;
+            const fB = document.getElementById('f-bulan').value;
+            
+            let html = "", total = 0;
+            dataRPD.forEach(d => {
+                if ((!fT || d.tim === fT) && (!fK || d.kegiatan === fK) && (!fA || d.akun === fA) && (!fB || d.bulan === fB)) {
+                    if (editIdRPD === d.id) {
+                        html += `<tr class="bg-indigo-50">
+                            <td><input id="e-tim" class="w-full border p-1" value="${d.tim}"></td>
+                            <td><input id="e-keg" class="w-full border p-1" value="${d.kegiatan}"></td>
+                            <td>
+                                <div class="flex flex-col gap-1">
+                                    <input id="e-kro" placeholder="KRO" class="border p-1" value="${d.kro || ''}">
+                                    <input id="e-ro" placeholder="RO" class="border p-1" value="${d.ro || ''}">
+                                    <input id="e-komp" placeholder="KOMP" class="border p-1" value="${d.komp || ''}">
+                                </div>
+                            </td>
+                            <td><input id="e-aku" class="w-full border p-1" value="${d.akun}"></td>
+                            <td><input id="e-pok" class="w-full border p-1" value="${d.pok || ''}"></td>
+                            <td><input id="e-ura" class="w-full border p-1" value="${d.uraian || ''}"></td>
+                            <td><input type="number" id="e-ang" class="w-full border p-1 font-bold" value="${d.anggaran}"></td>
+                            <td>${d.bulan}</td>
+                            <td><button onclick="saveEditRPD('${d.id}')">💾</button></td>
+                        </tr>`;
+                    } else {
+                        html += `<tr>
+                            <td>${d.tim}</td>
+                            <td>${d.kegiatan}</td>
+                            <td class="text-[8px] leading-tight">
+                                ${d.kro || '-'}<br>${d.ro || '-'}<br>${d.komp || '-'}
+                            </td>
+                            <td>${d.akun}</td>
+                            <td class="text-left">${d.pok || '-'}</td>
+                            <td class="text-left">${d.uraian || '-'}</td>
+                            <td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td>
+                            <td>${d.bulan}</td>
+                            <td class="no-print"><button onclick="setEditRPD('${d.id}')">✏️</button> <button onclick="hapusRPD('${d.id}')">🗑️</button></td>
+                        </tr>`;
+                    }
+                    total += Number(d.anggaran);
+                }
+            });
+            body.innerHTML = html;
+            foot.innerHTML = `<tr><td colspan="6" class="text-right p-2 font-bold uppercase">Total:</td><td class="text-right p-2 font-bold text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+        };
+
+        // 3. FUNGSI UPDATE EDIT (Menambahkan KRO, RO, KOMP)
+        window.saveEditRPD = async (id) => {
+            await updateDoc(doc(db, "rpd_entries", id), { 
+                tim: document.getElementById('e-tim').value, 
+                kegiatan: document.getElementById('e-keg').value, 
+                kro: document.getElementById('e-kro').value,
+                ro: document.getElementById('e-ro').value,
+                komp: document.getElementById('e-komp').value,
+                akun: document.getElementById('e-aku').value, 
+                pok: document.getElementById('e-pok').value, 
+                uraian: document.getElementById('e-ura').value, 
+                anggaran: Number(document.getElementById('e-ang').value) 
+            }); 
+            editIdRPD = null; 
+        };
     </script>
 </body>
 </html>
