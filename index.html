@@ -219,8 +219,17 @@
                 }
             });
             body.innerHTML = html; foot.innerHTML = `<tr><td colspan="5" class="text-right p-2 font-bold uppercase text-slate-500">Total:</td><td class="text-right p-2 font-bold text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            
+            // UPDATE DROPDOWN SUMBER RPD (FORMAT BARU)
             const drop = document.getElementById('req-rpd-id');
-            if(drop) { let opt = '<option value="">-- Pilih Rincian RPD --</option>'; dataRPD.forEach(d => { opt += `<option value="${d.id}">${d.tim} - ${d.uraian || d.pok}</option>`; }); drop.innerHTML = opt; }
+            if(drop) { 
+                let opt = '<option value="">-- Pilih Rincian RPD --</option>'; 
+                dataRPD.forEach(d => { 
+                    const formatLabel = `${d.tim} - Rp ${Number(d.anggaran).toLocaleString()} - ${d.uraian || d.pok}`;
+                    opt += `<option value="${d.id}">${formatLabel}</option>`; 
+                }); 
+                drop.innerHTML = opt; 
+            }
         };
 
         window.renderPermintaan = () => {
@@ -267,43 +276,25 @@
             foot.innerHTML = `<tr><td colspan="4" class="p-2 text-right uppercase font-black">Total GAP Kumulatif Terposting:</td><td class="p-2 text-right font-bold text-indigo-700">Rp ${sR.toLocaleString()}</td><td class="p-2 text-right font-bold text-orange-700">Rp ${sB.toLocaleString()}</td><td class="p-2 text-right text-red-700 font-black">Rp ${sG.toLocaleString()}</td><td class="text-center font-bold">${sP}%</td></tr>`;
         };
 
-        // VALIDASI TANGGAL
         window.validateApprovalDate = async (id, v) => {
             const data = dataPerm.find(p => p.id === id);
-            if(data.tglReal && v > data.tglReal) {
-                alert("Kesalahan! Tanggal Approve tidak boleh lebih besar dari Tanggal Bayar.");
-                renderPermintaan(); // Reset view
-            } else {
-                await updateDoc(doc(db, "permintaan_belanja", id), { tglApp: v });
-            }
+            if(data.tglReal && v > data.tglReal) { alert("Kesalahan! Tanggal Approve tidak boleh lebih besar dari Tanggal Bayar."); renderPermintaan(); } 
+            else { await updateDoc(doc(db, "permintaan_belanja", id), { tglApp: v }); }
         };
 
         window.validatePaymentDate = async (id, v) => {
             const data = dataPerm.find(p => p.id === id);
-            if(!data.tglApp) {
-                alert("Harap isi Tanggal Approval terlebih dahulu!");
-                renderPermintaan();
-                return;
-            }
-            if(v < data.tglApp) {
-                alert("Kesalahan! Tanggal Bayar tidak boleh kurang dari Tanggal Approve.");
-                renderPermintaan();
-            } else {
-                await updateDoc(doc(db, "permintaan_belanja", id), { tglReal: v });
-            }
+            if(!data.tglApp) { alert("Harap isi Tanggal Approval terlebih dahulu!"); renderPermintaan(); return; }
+            if(v < data.tglApp) { alert("Kesalahan! Tanggal Bayar tidak boleh kurang dari Tanggal Approve."); renderPermintaan(); } 
+            else { await updateDoc(doc(db, "permintaan_belanja", id), { tglReal: v }); }
         };
 
         window.upStatusBayar = async (id, v) => {
             const data = dataPerm.find(p => p.id === id);
             const today = new Date().toISOString().split('T')[0];
             let updateObj = { status_realisasi: v };
-            
             if(v === 'Selesai Bayar') {
-                if(!data.tglApp) {
-                    alert("Gagal! Dokumen belum memiliki Tanggal Approve.");
-                    renderPermintaan();
-                    return;
-                }
+                if(!data.tglApp) { alert("Gagal! Dokumen belum memiliki Tanggal Approve."); renderPermintaan(); return; }
                 updateObj.tglReal = today;
             }
             await updateDoc(doc(db, "permintaan_belanja", id), updateObj);
@@ -317,7 +308,25 @@
         window.setEditPerm = (id) => { editIdPerm = id; renderPermintaan(); };
         window.saveEditPerm = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { noForm: document.getElementById('p-e-no').value, tglFPB: document.getElementById('p-e-tgl').value, uraian: document.getElementById('p-e-ura').value, nilai: Number(document.getElementById('p-e-nil').value) }); setEditPerm(null); };
         window.simpanRPD = async () => { const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, pok: document.getElementById('in-pok').value, uraian: document.getElementById('in-uraian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() }; await addDoc(collection(db, "rpd_entries"), d); alert("OK!"); };
-        window.simpanPermintaan = async () => { const rpdId = document.getElementById('req-rpd-id').value, type = document.getElementById('req-type').value, selRPD = dataRPD.find(x => x.id === rpdId), d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), approval_status: "BELUM", status_realisasi: "Pemeriksaan Dokumen", isPosted: false, createdAt: serverTimestamp() }; await addDoc(collection(db, "permintaan_belanja"), d); alert("OK!"); };
+        window.simpanPermintaan = async () => { 
+            const rpdId = document.getElementById('req-rpd-id').value;
+            const type = document.getElementById('req-type').value;
+            const selRPD = dataRPD.find(x => x.id === rpdId);
+            const d = { 
+                noForm: document.getElementById('req-no').value, 
+                tglFPB: document.getElementById('req-tgl').value, 
+                typeRPD: type, 
+                rpdId: rpdId || "NON", 
+                tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', 
+                uraian: document.getElementById('req-uraian').value, 
+                nilai: Number(document.getElementById('req-nilai').value), 
+                approval_status: "BELUM", 
+                status_realisasi: "Pemeriksaan Dokumen", 
+                isPosted: false, 
+                createdAt: serverTimestamp() 
+            }; 
+            await addDoc(collection(db, "permintaan_belanja"), d); alert("OK!"); 
+        };
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
         window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
