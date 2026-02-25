@@ -351,7 +351,33 @@
         document.getElementById('dash-total-real').innerText = "Rp " + totB.toLocaleString();
         document.getElementById('dash-total-gap').innerText = devFinal.toFixed(2) + "%";
         document.getElementById('dash-total-persen').innerText = ikpa.toFixed(2);
-        document.getElementById('dash-total-sisa').innerText = ikpa > 95 ? "SANGAT BAIK" : (ikpa > 90 ? "BAIK" : "EVALUASI");
+        const devFinal = devTertimbang * 100;
+        const ikpa = Math.max(0, 100 - devFinal);
+
+        // --- MULAI PASTE DI SINI ---
+        let kategoriIKPA = "";
+        let warnaKategori = "";
+
+        if (ikpa >= 95) {
+            kategoriIKPA = "A. SANGAT BAIK";
+            warnaKategori = "text-blue-600"; 
+        } else if (ikpa >= 89) {
+            kategoriIKPA = "B. BAIK";
+            warnaKategori = "text-sky-500"; 
+        } else if (ikpa >= 70) {
+            kategoriIKPA = "C. CUKUP";
+            warnaKategori = "text-amber-500"; 
+        } else {
+            kategoriIKPA = "D. KURANG";
+            warnaKategori = "text-red-600"; 
+        }
+
+        const statusEl = document.getElementById('dash-total-sisa');
+        statusEl.innerText = kategoriIKPA;
+        statusEl.className = `text-base font-black ${warnaKategori}`;
+        // --- SELESAI PASTE ---
+
+        document.getElementById('dash-total-rpd').innerText = "Rp " + totR.toLocaleString();
         document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
     };
 
