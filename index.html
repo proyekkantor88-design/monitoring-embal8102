@@ -75,31 +75,11 @@
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-indigo-600 no-print">
                 <div class="grid grid-cols-7 gap-2 mb-4">
                     <div><label class="text-[9px] font-bold uppercase">Tim</label><input list="list-tim" id="in-tim" class="searchable-input"><datalist id="list-tim"><option value="Sosial"><option value="Produksi"><option value="Distribusi"><option value="Neraca"><option value="IPDS"><option value="Umum"></datalist></div>
-                    <div><label class="text-[9px] font-bold uppercase">Keg.</label>
-                        <select id="in-kegiatan" class="searchable-input">
-                            <option value="2886">2886</option><option value="2896">2896</option><option value="2897">2897</option><option value="2898">2898</option><option value="2899">2899</option><option value="2900">2900</option><option value="2901">2901</option><option value="2902">2902</option><option value="2903">2903</option><option value="2904">2904</option><option value="2905">2905</option><option value="2906">2906</option><option value="2907">2907</option><option value="2908">2908</option><option value="2909">2909</option><option value="2910">2910</option>
-                        </select>
-                    </div>
-                    <div><label class="text-[9px] font-bold uppercase">KRO</label>
-                        <select id="in-kro" class="searchable-input">
-                            <option value="BMA">BMA</option><option value="QBD">QBD</option><option value="CAN">CAN</option><option value="EBA">EBA</option><option value="EBB">EBB</option><option value="EBD">EBD</option>
-                        </select>
-                    </div>
-                    <div><label class="text-[9px] font-bold uppercase">RO</label>
-                        <select id="in-ro" class="searchable-input">
-                            <option value="003">003</option><option value="004">004</option><option value="005">005</option><option value="006">006</option><option value="007">007</option><option value="008">008</option><option value="009">009</option><option value="056">056</option><option value="951">951</option><option value="955">955</option><option value="962">962</option><option value="994">994</option>
-                        </select>
-                    </div>
-                    <div><label class="text-[9px] font-bold uppercase">Komp</label>
-                        <select id="in-komp" class="searchable-input">
-                            <option value="001">001</option><option value="002">002</option><option value="005">005</option><option value="051">051</option><option value="052">052</option><option value="053">053</option><option value="054">054</option><option value="056">056</option><option value="506">506</option><option value="519">519</option><option value="530">530</option>
-                        </select>
-                    </div>
-                    <div><label class="text-[9px] font-bold uppercase">Jenis</label>
-                        <select id="in-jenis" onchange="filterAkunByJenis(this.value)" class="searchable-input font-bold bg-yellow-50">
-                            <option value="51">51</option><option value="52">52</option><option value="53">53</option>
-                        </select>
-                    </div>
+                    <div><label class="text-[9px] font-bold uppercase">Keg.</label><select id="in-kegiatan" class="searchable-input"><option value="2886">2886</option><option value="2896">2896</option><option value="2897">2897</option><option value="2898">2898</option><option value="2899">2899</option><option value="2900">2900</option><option value="2901">2901</option><option value="2902">2902</option><option value="2903">2903</option><option value="2904">2904</option><option value="2905">2905</option><option value="2906">2906</option><option value="2907">2907</option><option value="2908">2908</option><option value="2909">2909</option><option value="2910">2910</option></select></div>
+                    <div><label class="text-[9px] font-bold uppercase">KRO</label><select id="in-kro" class="searchable-input"><option value="BMA">BMA</option><option value="QBD">QBD</option><option value="CAN">CAN</option><option value="EBA">EBA</option><option value="EBB">EBB</option><option value="EBD">EBD</option></select></div>
+                    <div><label class="text-[9px] font-bold uppercase">RO</label><select id="in-ro" class="searchable-input"><option value="003">003</option><option value="004">004</option><option value="005">005</option><option value="006">006</option><option value="007">007</option><option value="008">008</option><option value="009">009</option><option value="056">056</option><option value="951">951</option><option value="955">955</option><option value="962">962</option><option value="994">994</option></select></div>
+                    <div><label class="text-[9px] font-bold uppercase">Komp</label><select id="in-komp" class="searchable-input"><option value="001">001</option><option value="002">002</option><option value="005">005</option><option value="051">051</option><option value="052">052</option><option value="053">053</option><option value="054">054</option><option value="056">056</option><option value="506">506</option><option value="519">519</option><option value="530">530</option></select></div>
+                    <div><label class="text-[9px] font-bold uppercase">Jenis</label><select id="in-jenis" onchange="filterAkunByJenis(this.value)" class="searchable-input font-bold bg-yellow-50"><option value="51">51</option><option value="52">52</option><option value="53">53</option></select></div>
                     <div><label class="text-[9px] font-bold uppercase">Akun</label><select id="in-akun" class="searchable-input font-bold"></select></div>
                 </div>
                 <div class="grid grid-cols-4 gap-3 mb-4">
@@ -110,12 +90,9 @@
                 </div>
                 <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold uppercase shadow-lg">Simpan Rencana RPD</button>
             </div>
-            
             <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
                 <div class="grid grid-cols-5 gap-2 mb-4 no-print items-end">
                     <div><label class="text-[8px] font-bold uppercase text-slate-400">Tim</label><select id="f-tim" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
-                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Keg.</label><select id="f-keg" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option></select></div>
-                    <div><label class="text-[8px] font-bold uppercase text-slate-400">Akun</label><select id="f-akun" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option></select></div>
                     <div><label class="text-[8px] font-bold uppercase text-slate-400">Bulan</label><select id="f-bulan" onchange="renderRPD()" class="w-full p-1 border rounded text-[10px]"><option value="">Semua</option><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
                     <button onclick="window.print()" class="bg-blue-600 text-white p-1 rounded text-[10px] font-bold uppercase">Cetak RPD</button>
                 </div>
@@ -187,6 +164,7 @@
 
         window.filterAkunByJenis = (jenis) => {
             const akunSelect = document.getElementById('in-akun');
+            if(!akunSelect) return;
             akunSelect.innerHTML = "";
             const filtered = daftarAkunLengkap.filter(akun => akun.startsWith(jenis));
             filtered.forEach(akun => {
@@ -234,7 +212,21 @@
             dataRPD.forEach(d => {
                 if ((!fT || d.tim === fT) && (!fB || d.bulan === fB)) {
                     const kG = `${d.kegiatan || ''}.${d.kro || ''}.${d.ro || ''}.${d.komp || ''}`;
-                    html += `<tr><td>${d.tim}</td><td class="font-mono font-bold text-indigo-900">${kG}</td><td class="font-bold">${d.jenis || '-'}</td><td>${d.akun}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print flex gap-1 justify-center"><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
+                    if (editIdRPD === d.id) {
+                        html += `<tr class="bg-indigo-50">
+                            <td><input id="e-tim" value="${d.tim}" class="w-full"></td>
+                            <td><input id="e-kg" value="${kG}" class="w-full" readonly></td>
+                            <td><input id="e-jen" value="${d.jenis}" class="w-full"></td>
+                            <td><input id="e-aku" value="${d.akun}" class="w-full"></td>
+                            <td><input id="e-pok" value="${d.pok||''}" class="w-full"></td>
+                            <td><input id="e-ura" value="${d.uraian||''}" class="w-full"></td>
+                            <td><input id="e-ang" type="number" value="${d.anggaran}" class="w-full"></td>
+                            <td>${d.bulan}</td>
+                            <td><button onclick="saveEditRPD('${d.id}')">💾</button></td>
+                        </tr>`;
+                    } else {
+                        html += `<tr><td>${d.tim}</td><td class="font-mono font-bold text-indigo-900">${kG}</td><td class="font-bold">${d.jenis || '-'}</td><td>${d.akun}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print flex gap-1 justify-center"><button onclick="setEditRPD('${d.id}')">✏️</button><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
+                    }
                     total += Number(d.anggaran);
                 }
             });
@@ -253,7 +245,7 @@
             let html = "", total = 0;
             dataPerm.forEach(d => {
                 const postBtn = d.isPosted ? `<button onclick="unpostFromReal('${d.id}')" class="btn-unpost">BATAL ↩️</button>` : `<button onclick="postToReal('${d.id}')" class="btn-post">POST 📮</button>`;
-                html += `<tr><td class="font-bold">${d.noForm}</td><td>${d.tglFPB||'-'}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upDate('${d.id}','approval_status',this.value)" class="status-select"><option ${d.approval_status==='BELUM'?'selected':''}>BELUM</option><option ${d.approval_status==='ACC PJ'?'selected':''}>ACC PJ</option></select></td><td><input type="date" value="${d.tglApp||''}" onchange="upDate('${d.id}','tglApp',this.value)" class="date-edit"></td><td><select onchange="upStatusBayar('${d.id}',this.value)" class="status-select"><option value="Proses" ${d.status_realisasi!=='Selesai Bayar'?'selected':''}>Proses</option><option value="Selesai Bayar" ${d.status_realisasi==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td><input type="date" value="${d.tglReal||''}" onchange="upDate('${d.id}','tglReal',this.value)" class="date-edit"></td><td class="no-print flex gap-1 justify-center">${postBtn}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
+                html += `<tr><td class="font-bold">${d.noForm}</td><td>${d.tglFPB||'-'}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upDate('${d.id}','approval_status',this.value)" class="status-select"><option ${d.approval_status==='BELUM'?'selected':''}>BELUM</option><option ${d.approval_status==='ACC PJ'?'selected':''}>ACC PJ</option></select></td><td><input type="date" value="${d.tglApp||''}" onchange="upDate('${d.id}','tglApp',this.value)" class="date-edit"></td><td><select onchange="upStatusBayar('${d.id}',this.value)" class="status-select"><option value="Proses" ${d.status_real_bayar!=='Selesai Bayar'?'selected':''}>Proses</option><option value="Selesai Bayar" ${d.status_real_bayar==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td><input type="date" value="${d.tglReal||''}" onchange="upDate('${d.id}','tglReal',this.value)" class="date-edit"></td><td class="no-print flex gap-1 justify-center">${postBtn}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
                 total += Number(d.nilai);
             });
             body.innerHTML = html;
@@ -289,16 +281,29 @@
 
         window.simpanPermintaan = async () => {
             const rpdId = document.getElementById('req-rpd-id').value, type = document.getElementById('req-type').value, selRPD = dataRPD.find(x => x.id === rpdId);
-            const d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), approval_status: "BELUM", status_realisasi: "Proses", isPosted: false, createdAt: serverTimestamp() };
+            const d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), approval_status: "BELUM", status_real_bayar: "Proses", isPosted: false, createdAt: serverTimestamp() };
             await addDoc(collection(db, "permintaan_belanja"), d); alert("OK!");
         };
 
-        window.upStatusBayar = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { status_realisasi: v, tglReal: v === 'Selesai Bayar' ? new Date().toISOString().split('T')[0] : '' }); };
+        window.setEditRPD = (id) => { editIdRPD = id; renderRPD(); };
+        window.saveEditRPD = async (id) => {
+            await updateDoc(doc(db, "rpd_entries", id), { 
+                tim: document.getElementById('e-tim').value, 
+                jenis: document.getElementById('e-jen').value, 
+                akun: document.getElementById('e-aku').value, 
+                pok: document.getElementById('e-pok').value, 
+                uraian: document.getElementById('e-ura').value, 
+                anggaran: Number(document.getElementById('e-ang').value) 
+            }); editIdRPD = null;
+        };
+
+        window.upStatusBayar = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { status_real_bayar: v, tglReal: v === 'Selesai Bayar' ? new Date().toISOString().split('T')[0] : '' }); };
         window.postToReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
         window.unpostFromReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: false }); };
         window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
         window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+        window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
 
         document.addEventListener('DOMContentLoaded', () => { filterAkunByJenis("51"); });
     </script>
