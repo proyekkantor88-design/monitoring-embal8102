@@ -224,6 +224,15 @@
                             <td>${d.bulan}</td>
                             <td><button onclick="saveEditRPD('${d.id}')">💾</button></td>
                         </tr>`;
+                        // Di dalam window.renderRPD pada bagian edit mode
+html += `<tr class="bg-indigo-50">
+    <td><input id="e-ang" type="number" value="${d.anggaran}" class="w-full"></td>
+    <td>${d.bulan}</td>
+    <td class="flex gap-1 justify-center">
+        <button onclick="saveEditRPD('${d.id}')" title="Simpan">💾</button>
+        <button onclick="setEditRPD(null)" title="Batal">❌</button>
+    </td>
+</tr>`;
                     } else {
                         html += `<tr><td>${d.tim}</td><td class="font-mono font-bold text-indigo-900">${kG}</td><td class="font-bold">${d.jenis || '-'}</td><td>${d.akun}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print flex gap-1 justify-center"><button onclick="setEditRPD('${d.id}')">✏️</button><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
                     }
