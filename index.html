@@ -168,26 +168,37 @@
 
         window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); document.getElementById('main-content').classList.toggle('ml-0'); };
 
+       // --- NAVIGASI TAB & UPDATE JUDUL ---
         window.switchTab = (id) => {
-    // Sembunyikan semua konten tab
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-    
-    // Tampilkan tab yang dipilih
-    document.getElementById('section-' + id).classList.remove('hidden');
-    
-    // PERBAIKAN JUDUL: Ambil teks dari tombol menu atau buat teks manual
-    let titleText = "";
-    if (id === 'dashboard') titleText = "Dashboard Utama";
-    else if (id === 'input-rpd') titleText = "Input Rencana RPD";
-    else if (id === 'permintaan-belanja') titleText = "Permintaan Belanja";
-    else if (id === 'realisasi-rpd') titleText = "Realisasi & Analisis GAP";
-
-    // Update judul di header
-    document.getElementById('page-title').innerText = titleText;
-    
-    // Refresh data
-    renderAll();
+            // 1. Sembunyikan semua konten tab
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            
+            // 2. Tampilkan tab yang dipilih
+            const targetSection = document.getElementById('section-' + id);
+            if (targetSection) targetSection.classList.remove('hidden');
+            
+            // 3. Update Judul Halaman di Header secara Otomatis
+            let titleText = "";
+            switch (id) {
+                case 'dashboard': titleText = "Dashboard Utama"; break;
+                case 'input-rpd': titleText = "Input Rencana RPD"; break;
+                case 'permintaan-belanja': titleText = "Permintaan Belanja"; break;
+                case 'realisasi-rpd': titleText = "Realisasi & Analisis GAP"; break;
+                default: titleText = "EMBAL BPS";
+            }
+            document.getElementById('page-title').innerText = titleText;
+            
+            // 4. Refresh data untuk tab tersebut
+            renderAll();
         };
+
+        // --- SATU FUNGSI UTAMA UNTUK UPDATE SEMUA TABEL ---
+        window.renderAll = () => {
+            renderDashboard();
+            renderRPD();
+            renderPermintaan();
+            renderRealisasi();
+            };
 
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); updateFilters(); renderAll(); });
         onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => { dataPerm = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
