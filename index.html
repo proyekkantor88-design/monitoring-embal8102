@@ -12,9 +12,7 @@
             table { font-size: 7pt !important; width: 100% !important; border-collapse: collapse !important; }
             th, td { border: 1px solid black !important; padding: 2px !important; }
             @page { size: landscape; margin: 0.5cm; }
-            .print-only { display: block !important; text-align: center; margin-bottom: 20px; font-weight: bold; }
         }
-        .print-only { display: none; }
         .tab-content { transition: opacity 0.2s; }
         #sidebar { transition: all 0.3s; width: 17rem; }
         #sidebar.hidden-sidebar { margin-left: -17rem; }
@@ -46,7 +44,7 @@
         </nav>
     </aside>
 
-  <main id="main-content" class="flex-1 p-8 ml-64 main-container">
+    <main id="main-content" class="flex-1 p-8 ml-64 main-container">
         <header class="flex justify-between items-center mb-6 no-print border-b pb-4">
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="p-2 bg-white border rounded-lg shadow-sm"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
@@ -76,47 +74,33 @@
         <section id="section-input-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-indigo-600 no-print">
                 <div class="grid grid-cols-7 gap-2 mb-4">
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Tim</label>
-                        <input list="list-tim" id="in-tim" class="searchable-input">
-                        <datalist id="list-tim">
-                            <option value="Sosial"><option value="Produksi"><option value="Distribusi"><option value="Neraca"><option value="IPDS"><option value="Umum">
-                        </datalist>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Keg.</label>
+                    <div><label class="text-[9px] font-bold uppercase">Tim</label><input list="list-tim" id="in-tim" class="searchable-input"><datalist id="list-tim"><option value="Sosial"><option value="Produksi"><option value="Distribusi"><option value="Neraca"><option value="IPDS"><option value="Umum"></datalist></div>
+                    <div><label class="text-[9px] font-bold uppercase">Keg.</label>
                         <select id="in-kegiatan" class="searchable-input">
                             <option value="2886">2886</option><option value="2896">2896</option><option value="2897">2897</option><option value="2898">2898</option><option value="2899">2899</option><option value="2900">2900</option><option value="2901">2901</option><option value="2902">2902</option><option value="2903">2903</option><option value="2904">2904</option><option value="2905">2905</option><option value="2906">2906</option><option value="2907">2907</option><option value="2908">2908</option><option value="2909">2909</option><option value="2910">2910</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">KRO</label>
+                    <div><label class="text-[9px] font-bold uppercase">KRO</label>
                         <select id="in-kro" class="searchable-input">
                             <option value="BMA">BMA</option><option value="QBD">QBD</option><option value="CAN">CAN</option><option value="EBA">EBA</option><option value="EBB">EBB</option><option value="EBD">EBD</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">RO</label>
+                    <div><label class="text-[9px] font-bold uppercase">RO</label>
                         <select id="in-ro" class="searchable-input">
                             <option value="003">003</option><option value="004">004</option><option value="005">005</option><option value="006">006</option><option value="007">007</option><option value="008">008</option><option value="009">009</option><option value="056">056</option><option value="951">951</option><option value="955">955</option><option value="962">962</option><option value="994">994</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Komp</label>
+                    <div><label class="text-[9px] font-bold uppercase">Komp</label>
                         <select id="in-komp" class="searchable-input">
                             <option value="001">001</option><option value="002">002</option><option value="005">005</option><option value="051">051</option><option value="052">052</option><option value="053">053</option><option value="054">054</option><option value="056">056</option><option value="506">506</option><option value="519">519</option><option value="530">530</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Jenis</label>
+                    <div><label class="text-[9px] font-bold uppercase">Jenis</label>
                         <select id="in-jenis" onchange="filterAkunByJenis(this.value)" class="searchable-input font-bold bg-yellow-50">
                             <option value="51">51</option><option value="52">52</option><option value="53">53</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase">Akun</label>
-                        <select id="in-akun" class="searchable-input font-bold"></select>
-                    </div>
+                    <div><label class="text-[9px] font-bold uppercase">Akun</label><select id="in-akun" class="searchable-input font-bold"></select></div>
                 </div>
                 <div class="grid grid-cols-4 gap-3 mb-4">
                     <div><label class="text-[9px] font-bold uppercase">Bulan</label><select id="in-bulan" class="w-full p-2 border rounded text-xs mt-1"><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
@@ -136,11 +120,7 @@
                     <button onclick="window.print()" class="bg-blue-600 text-white p-1 rounded text-[10px] font-bold uppercase">Cetak RPD</button>
                 </div>
                 <table class="w-full text-center">
-                    <thead>
-                        <tr>
-                            <th>TIM</th><th>KEG.KRO.RO.KOMP</th><th>JENIS</th><th>AKUN</th><th>DETIL POK</th><th>URAIAN</th><th>ANGGARAN</th><th>BULAN</th><th class="no-print">AKSI</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>TIM</th><th>KEG.KRO.RO.KOMP</th><th>JENIS</th><th>AKUN</th><th>DETIL POK</th><th>URAIAN</th><th>ANGGARAN</th><th>BULAN</th><th class="no-print">AKSI</th></tr></thead>
                     <tbody id="body-rpd"></tbody>
                     <tfoot id="foot-rpd" class="foot-total"></tfoot>
                 </table>
@@ -175,8 +155,8 @@
                 <div class="flex justify-between items-center mb-4 no-print">
                     <div class="flex gap-2">
                         <select id="f-real-bulan" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option></select>
-                        <select id="f-real-tim" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option></select>
-                        <select id="f-real-jenis" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold bg-indigo-50"><option value="">Semua Jenis (51,52,53)</option><option value="51">Jenis 51</option><option value="52">Jenis 52</option><option value="53">Jenis 53</option></select>
+                        <select id="f-real-tim" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select>
+                        <select id="f-real-jenis" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold bg-indigo-50"><option value="">Semua Jenis</option><option value="51">Jenis 51</option><option value="52">Jenis 52</option><option value="53">Jenis 53</option></select>
                     </div>
                     <button onclick="window.print()" class="bg-orange-600 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Analisis GAP</button>
                 </div>
@@ -199,7 +179,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let dataRPD = [], dataPerm = [], editIdRPD = null, editIdPerm = null;
+        let dataRPD = [], dataPerm = [], editIdRPD = null;
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
         const daftarAkunLengkap = ["511111", "511119", "511121", "511122", "511123", "511124", "511125", "511126", "511129", "511151", "512211", "512411", "521111", "521115", "521211", "521213", "521219", "521811", "522111", "522112", "522113", "522119", "522141", "522151", "522191", "523111", "523121", "523123", "521252", "524111", "524113", "524114", "532111"];
 
@@ -219,8 +199,7 @@
         window.switchTab = (id) => {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
             document.getElementById('section-' + id).classList.remove('hidden');
-            let titleText = (id === 'dashboard') ? "Dashboard Utama" : (id === 'input-rpd') ? "Input Rencana RPD" : (id === 'permintaan-belanja') ? "Permintaan Belanja" : "Realisasi & Analisis GAP";
-            document.getElementById('page-title').innerText = titleText;
+            document.getElementById('page-title').innerText = id.replace('-', ' ').toUpperCase();
             renderAll();
         };
 
@@ -250,12 +229,12 @@
 
         window.renderRPD = () => {
             const body = document.getElementById('body-rpd'), foot = document.getElementById('foot-rpd');
-            const fT = document.getElementById('f-tim').value, fK = document.getElementById('f-keg').value, fA = document.getElementById('f-akun').value, fB = document.getElementById('f-bulan').value;
+            const fT = document.getElementById('f-tim').value, fB = document.getElementById('f-bulan').value;
             let html = "", total = 0;
             dataRPD.forEach(d => {
-                if ((!fT || d.tim === fT) && (!fK || d.kegiatan === fK) && (!fA || d.akun === fA) && (!fB || d.bulan === fB)) {
+                if ((!fT || d.tim === fT) && (!fB || d.bulan === fB)) {
                     const kG = `${d.kegiatan || ''}.${d.kro || ''}.${d.ro || ''}.${d.komp || ''}`;
-                    html += `<tr><td>${d.tim}</td><td class="font-mono font-bold text-indigo-900">${kG}</td><td class="font-bold">${d.jenis || '-'}</td><td>${d.akun}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print flex gap-1 justify-center"><button onclick="setEditRPD('${d.id}')">✏️</button><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
+                    html += `<tr><td>${d.tim}</td><td class="font-mono font-bold text-indigo-900">${kG}</td><td class="font-bold">${d.jenis || '-'}</td><td>${d.akun}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print flex gap-1 justify-center"><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
                     total += Number(d.anggaran);
                 }
             });
@@ -270,15 +249,15 @@
         };
 
         window.renderPermintaan = () => {
-            const body = document.getElementById('body-permintaan');
+            const body = document.getElementById('body-permintaan'), foot = document.getElementById('foot-permintaan');
             let html = "", total = 0;
             dataPerm.forEach(d => {
                 const postBtn = d.isPosted ? `<button onclick="unpostFromReal('${d.id}')" class="btn-unpost">BATAL ↩️</button>` : `<button onclick="postToReal('${d.id}')" class="btn-post">POST 📮</button>`;
-                html += `<tr><td class="font-bold">${d.noForm}</td><td>${d.tglFPB||'-'}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upDate('${d.id}','approval_status',this.value)" class="status-select"><option ${d.approval_status==='BELUM'?'selected':''}>BELUM</option><option ${d.approval_status==='ACC PJ'?'selected':''}>ACC PJ</option></select></td><td><input type="date" value="${d.tglApp||''}" onchange="validateApprovalDate('${d.id}',this.value)" class="date-edit"></td><td><select onchange="upStatusBayar('${d.id}',this.value)" class="status-select"><option value="Proses" ${d.status_realisasi!=='Selesai Bayar'?'selected':''}>Proses</option><option value="Selesai Bayar" ${d.status_realisasi==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td><input type="date" value="${d.tglReal||''}" onchange="validatePaymentDate('${d.id}',this.value)" class="date-edit"></td><td class="no-print flex gap-1 justify-center">${postBtn}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
+                html += `<tr><td class="font-bold">${d.noForm}</td><td>${d.tglFPB||'-'}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upDate('${d.id}','approval_status',this.value)" class="status-select"><option ${d.approval_status==='BELUM'?'selected':''}>BELUM</option><option ${d.approval_status==='ACC PJ'?'selected':''}>ACC PJ</option></select></td><td><input type="date" value="${d.tglApp||''}" onchange="upDate('${d.id}','tglApp',this.value)" class="date-edit"></td><td><select onchange="upStatusBayar('${d.id}',this.value)" class="status-select"><option value="Proses" ${d.status_realisasi!=='Selesai Bayar'?'selected':''}>Proses</option><option value="Selesai Bayar" ${d.status_realisasi==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td><input type="date" value="${d.tglReal||''}" onchange="upDate('${d.id}','tglReal',this.value)" class="date-edit"></td><td class="no-print flex gap-1 justify-center">${postBtn}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
                 total += Number(d.nilai);
             });
             body.innerHTML = html;
-            document.getElementById('foot-permintaan').innerHTML = `<tr><td colspan="3" class="text-right font-bold">Total:</td><td class="text-right font-bold">Rp ${total.toLocaleString()}</td><td colspan="5"></td></tr>`;
+            foot.innerHTML = `<tr><td colspan="3" class="text-right font-bold">Total:</td><td class="text-right font-bold">Rp ${total.toLocaleString()}</td><td colspan="5"></td></tr>`;
         };
 
         window.renderRealisasi = () => {
@@ -302,11 +281,10 @@
         };
 
         window.simpanRPD = async () => {
-            const tim = document.getElementById('in-tim').value, ang = document.getElementById('in-anggaran').value;
-            if(!tim || !ang) return alert("Isi Tim & Anggaran!");
-            const d = { tim, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, jenis: document.getElementById('in-jenis').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, pok: document.getElementById('in-pok').value, uraian: document.getElementById('in-uraian').value, anggaran: Number(ang), createdAt: serverTimestamp() };
+            const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, jenis: document.getElementById('in-jenis').value, akun: document.getElementById('in-akun').value, bulan: document.getElementById('in-bulan').value, pok: document.getElementById('in-pok').value, uraian: document.getElementById('in-uraian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() };
+            if(!d.tim || !d.anggaran) return alert("Isi Tim & Anggaran!");
             await addDoc(collection(db, "rpd_entries"), d); alert("Disimpan!");
-            ["in-tim","in-kegiatan","in-kro","in-ro","in-komp","in-akun","in-pok","in-uraian","in-anggaran"].forEach(id => { const el = document.getElementById(id); if(el) el.value = ""; });
+            ["in-tim","in-pok","in-uraian","in-anggaran"].forEach(id => document.getElementById(id).value = "");
         };
 
         window.simpanPermintaan = async () => {
@@ -319,10 +297,8 @@
         window.postToReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
         window.unpostFromReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: false }); };
         window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
-        window.validateApprovalDate = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { tglApp: v }); };
-        window.validatePaymentDate = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { tglReal: v }); };
-        window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
-        window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+        window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
 
         document.addEventListener('DOMContentLoaded', () => { filterAkunByJenis("51"); });
     </script>
