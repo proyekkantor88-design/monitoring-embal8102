@@ -143,20 +143,85 @@
         </section>
     </main>
 
-    <script type="module">
+   <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyC_PnAtxsdajd0Hltq9X1e0eYcsiASFPxE", authDomain: "proyekkantor-88.firebaseapp.com", projectId: "proyekkantor-88", storageBucket: "proyekkantor-88.firebasestorage.app", messagingSenderId: "381153923700", appId: "1:381153923700:web:4db81ac1a35b42ef4eb721" };
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC_PnAtxsdajd0Hltq9X1e0eYcsiASFPxE", 
+            authDomain: "proyekkantor-88.firebaseapp.com", 
+            projectId: "proyekkantor-88", 
+            storageBucket: "proyekkantor-88.firebasestorage.app", 
+            messagingSenderId: "381153923700", 
+            appId: "1:381153923700:web:4db81ac1a35b42ef4eb721" 
+        };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let CONFIG_PAGU_ALL = { "TRIWULAN I": { "51": 0, "52": 0, "53": 0 }, "TRIWULAN II": { "51": 0, "52": 0, "53": 0 }, "TRIWULAN III": { "51": 0, "52": 0, "53": 0 }, "TRIWULAN IV": { "51": 0, "52": 0, "53": 0 } };
+        // --- GLOBAL DATA ---
+        let CONFIG_PAGU_ALL = { 
+            "TRIWULAN I": { "51": 0, "52": 0, "53": 0 }, 
+            "TRIWULAN II": { "51": 0, "52": 0, "53": 0 }, 
+            "TRIWULAN III": { "51": 0, "52": 0, "53": 0 }, 
+            "TRIWULAN IV": { "51": 0, "52": 0, "53": 0 } 
+        };
         let dataRPD = [], dataPerm = [];
-        const allAkuns = ["521211","521213","521219","521811","522141","522151","524111","521252","524113","524114","532111","511111","511119","511121","511122","511123","511124","511125","511126","523123","511129","511151","512211","512411","521111","521115","522111","522112","522113","522119","522191","523111","523121","532111","524111","511611","511628","512414"];
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
+        const allAkuns = ["521211","521213","521219","521811","522141","522151","524111","521252","524113","524114","532111","511111","511119","511121","511122","511123","511124","511125","511126","523123","511129","511151","512211","512411","521111","521115","522111","522112","522113","522119","522191","523111","523121","511611","511628","512414"];
 
-        // --- FILTER AKUN OTOMATIS ---
+        // --- 1. LOGIKA SETTING PAGU (FIXED MATRIKS) ---
+        const renderInfoPagu = () => {
+            const bodyAll = document.getElementById('body-info-pagu-all');
+            if (!bodyAll) return;
+            
+            let htmlAll = "";
+            ["51", "52", "53"].forEach(jb => {
+                const label = jb === "51" ? "Pegawai (51)" : (jb === "52" ? "Barang (52)" : "Modal (53)");
+                htmlAll += `<tr class="text-[10px]">
+                    <td class="p-2 border font-bold text-left bg-slate-50 pl-4">${label}</td>`;
+                
+                ["TRIWULAN I", "TRIWULAN II", "TRIWULAN III", "TRIWULAN IV"].forEach(tw => {
+                    const val = (CONFIG_PAGU_ALL[tw] && CONFIG_PAGU_ALL[tw][jb]) ? CONFIG_PAGU_ALL[tw][jb] : 0;
+                    htmlAll += `<td class="p-2 border text-right font-bold">Rp ${val.toLocaleString('id-ID')}</td>`;
+                });
+                htmlAll += `</tr>`;
+            });
+            bodyAll.innerHTML = htmlAll;
+        };
+
+        window.updateFormInputPagu = () => {
+            const tw = document.getElementById('set-pagu-periode').value;
+            document.getElementById('set-pagu-51').value = CONFIG_PAGU_ALL[tw]["51"] || 0;
+            document.getElementById('set-pagu-52').value = CONFIG_PAGU_ALL[tw]["52"] || 0;
+            document.getElementById('set-pagu-53').value = CONFIG_PAGU_ALL[tw]["53"] || 0;
+            renderInfoPagu();
+        };
+
+        window.simpanSettingPagu = () => {
+            const tw = document.getElementById('set-pagu-periode').value;
+            CONFIG_PAGU_ALL[tw] = {
+                "51": Number(document.getElementById('set-pagu-51').value) || 0,
+                "52": Number(document.getElementById('set-pagu-52').value) || 0,
+                "53": Number(document.getElementById('set-pagu-53').value) || 0
+            };
+            localStorage.setItem('emba_pagu_all_final_v4', JSON.stringify(CONFIG_PAGU_ALL));
+            renderInfoPagu(); 
+            renderDashboard();
+            alert(`Matriks Pagu ${tw} Berhasil Diperbarui!`);
+        };
+
+        const loadPagu = () => {
+            const saved = localStorage.getItem('emba_pagu_all_final_v4');
+            if(saved) {
+                CONFIG_PAGU_ALL = JSON.parse(saved);
+                renderInfoPagu(); 
+                updateFormInputPagu();
+            } else {
+                renderInfoPagu();
+            }
+        };
+
+        // --- 2. FILTER AKUN & DROPDOWN ---
         window.filterAkunByJenis = (jenis) => {
             const akunSelect = document.getElementById('in-akun');
             akunSelect.innerHTML = '<option value="">Pilih Akun</option>';
@@ -169,57 +234,14 @@
             });
         };
 
-        const renderInfoPagu = () => {
-            const twAktif = document.getElementById('set-pagu-periode').value;
-            const bodyAll = document.getElementById('body-info-pagu-all');
-            const bodyProp = document.getElementById('body-info-pagu');
-            if (!bodyAll || !bodyProp) return;
-            let htmlAll = "";
-            ["51", "52", "53"].forEach(jb => {
-                htmlAll += `<tr class="text-[10px]"><td class="p-2 border font-bold text-left bg-slate-50 pl-4">${jb}</td>`;
-                ["TRIWULAN I", "TRIWULAN II", "TRIWULAN III", "TRIWULAN IV"].forEach(tw => { htmlAll += `<td class="p-2 border text-right">Rp ${(CONFIG_PAGU_ALL[tw][jb] || 0).toLocaleString()}</td>`; });
-                htmlAll += `</tr>`;
-            });
-            bodyAll.innerHTML = htmlAll;
-            const dataTW = CONFIG_PAGU_ALL[twAktif];
-            const total = Number(dataTW["51"]) + Number(dataTW["52"]) + Number(dataTW["53"]);
-            let htmlProp = "";
-            ["51", "52", "53"].forEach(jb => {
-                const prop = total > 0 ? ((dataTW[jb] / total) * 100).toFixed(2) : 0;
-                htmlProp += `<tr><td class="p-2 border text-left pl-4">${jb}</td><td class="p-2 border text-right">Rp ${dataTW[jb].toLocaleString()}</td><td class="p-2 border text-indigo-600 font-bold">${prop}%</td></tr>`;
-            });
-            bodyProp.innerHTML = htmlProp;
-            document.getElementById('info-total-pagu').innerText = "Rp " + total.toLocaleString();
-        };
-
-        window.updateFormInputPagu = () => {
-            const tw = document.getElementById('set-pagu-periode').value;
-            document.getElementById('set-pagu-51').value = CONFIG_PAGU_ALL[tw]["51"];
-            document.getElementById('set-pagu-52').value = CONFIG_PAGU_ALL[tw]["52"];
-            document.getElementById('set-pagu-53').value = CONFIG_PAGU_ALL[tw]["53"];
-            renderInfoPagu();
-        };
-
-        window.simpanSettingPagu = () => {
-            const tw = document.getElementById('set-pagu-periode').value;
-            CONFIG_PAGU_ALL[tw]["51"] = Number(document.getElementById('set-pagu-51').value);
-            CONFIG_PAGU_ALL[tw]["52"] = Number(document.getElementById('set-pagu-52').value);
-            CONFIG_PAGU_ALL[tw]["53"] = Number(document.getElementById('set-pagu-53').value);
-            localStorage.setItem('emba_pagu_all_final_v4', JSON.stringify(CONFIG_PAGU_ALL));
-            renderInfoPagu(); renderDashboard(); alert("Pagu Berhasil Disimpan!");
-        };
-
-        const loadPagu = () => {
-            const saved = localStorage.getItem('emba_pagu_all_final_v4');
-            if(saved) { CONFIG_PAGU_ALL = JSON.parse(saved); updateFormInputPagu(); } else { renderInfoPagu(); }
-        };
-
+        // --- 3. RENDER DASHBOARD & DASHBOARD LOGIC ---
         window.renderDashboard = () => {
             const fT = document.getElementById('f-dash-tim').value, fB = document.getElementById('f-dash-bulan').value;
             let twRef = "TRIWULAN I";
             if (["04","05","06"].includes(fB)) twRef = "TRIWULAN II";
             if (["07","08","09"].includes(fB)) twRef = "TRIWULAN III";
             if (["10","11","12"].includes(fB)) twRef = "TRIWULAN IV";
+
             let stats = { "51": { r: 0, b: 0 }, "52": { r: 0, b: 0 }, "53": { r: 0, b: 0 } };
             let dashHtml = "";
             dataRPD.forEach(d => { if ((!fT || d.tim === fT) && (!fB || d.bulan === bMap[fB])) { if (stats[d.jenis]) stats[d.jenis].r += Number(d.anggaran); } });
@@ -232,6 +254,7 @@
                     dashHtml += `<tr><td>${p.noForm}</td><td>${p.tim}</td><td>${p.uraian}</td><td class="text-right font-mono font-bold">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold uppercase">Posted</td></tr>`;
                 }
             });
+
             const pTW = CONFIG_PAGU_ALL[twRef], totP = Number(pTW["51"]) + Number(pTW["52"]) + Number(pTW["53"]);
             let devT = 0, tR = 0, tB = 0;
             ["51", "52", "53"].forEach(jb => {
@@ -239,9 +262,11 @@
                 const prop = totP > 0 ? (pTW[jb] / totP) : 0;
                 if (stats[jb].r > 0) devT += (Math.abs(stats[jb].b - stats[jb].r) / stats[jb].r) * prop;
             });
+
             const devFinal = devT * 100, ikpa = Math.max(0, 100 - devFinal);
             let kat = ikpa >= 95 ? "A. SANGAT BAIK" : (ikpa >= 89 ? "B. BAIK" : (ikpa >= 70 ? "C. CUKUP" : "D. KURANG"));
             let col = ikpa >= 95 ? "text-blue-600" : (ikpa >= 89 ? "text-sky-500" : (ikpa >= 70 ? "text-amber-500" : "text-red-600"));
+
             document.getElementById('dash-total-rpd').innerText = "Rp " + tR.toLocaleString();
             document.getElementById('dash-total-real').innerText = "Rp " + tB.toLocaleString();
             document.getElementById('dash-total-gap').innerText = devFinal.toFixed(2) + "%";
@@ -250,16 +275,14 @@
             document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
         };
 
-        window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
-
+        // --- 4. FIREBASE LISTENERS & CRUD ---
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
         onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => { 
             dataPerm = s.docs.map(d => ({id: d.id, ...d.data()})); 
             const drop = document.getElementById('req-rpd-id');
             if(drop) {
-                let opt = '<option value="">-- Pilih RPD --</option>';
-                dataRPD.forEach(r => { opt += `<option value="${r.id}">${r.tim} | Rp ${Number(r.anggaran).toLocaleString()} | ${r.pok || r.uraian}</option>`; });
-                drop.innerHTML = opt;
+                drop.innerHTML = '<option value="">-- Pilih RPD --</option>';
+                dataRPD.forEach(r => { opt = `<option value="${r.id}">${r.tim} | Rp ${Number(r.anggaran).toLocaleString()} | ${r.pok || r.uraian}</option>`; drop.innerHTML += opt; });
             }
             renderAll(); 
         });
@@ -274,10 +297,10 @@
             dataRPD.forEach(d => { 
                 total += Number(d.anggaran);
                 const k = `${d.kegiatan || ''}.${d.kro || ''}.${d.ro || ''}.${d.komp || ''}`;
-                h += `<tr><td>${d.tim}</td><td>${k}</td><td>${d.jenis}</td><td>${d.akun}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td class="text-right font-bold font-mono">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`; 
+                h += `<tr><td>${d.tim}</td><td>${k}</td><td>${d.jenis}</td><td>${d.akun}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`; 
             });
             b.innerHTML = h;
-            f.innerHTML = `<tr><td colspan="6" class="p-2">TOTAL RENCANA PENARIKAN (RPD)</td><td class="text-right p-2 text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            if(f) f.innerHTML = `<tr><td colspan="6" class="p-2">TOTAL RENCANA PENARIKAN (RPD)</td><td class="text-right p-2 text-indigo-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
         window.renderPermintaan = () => {
@@ -286,10 +309,10 @@
             dataPerm.forEach(d => {
                 total += Number(d.nilai);
                 const pB = d.isPosted ? `<button onclick="upDate('${d.id}','isPosted',false)" class="btn-unpost">BATAL</button>` : `<button onclick="upDate('${d.id}','isPosted',true)" class="btn-post">POST</button>`;
-                h += `<tr><td>${d.noForm}</td><td>${d.tim}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold font-mono">Rp ${Number(d.nilai).toLocaleString()}</td><td class="uppercase text-[8px] font-bold ${d.isPosted?'text-emerald-600':'text-orange-500'}">${d.isPosted ? 'Posted' : 'Pending'}</td><td class="flex gap-1 justify-center no-print">${pB}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
+                h += `<tr><td>${d.noForm}</td><td>${d.tim}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold">Rp ${Number(d.nilai).toLocaleString()}</td><td>${d.isPosted ? 'POSTED' : 'PENDING'}</td><td class="flex gap-1 justify-center no-print">${pB}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
             });
             b.innerHTML = h;
-            f.innerHTML = `<tr><td colspan="3" class="p-2">TOTAL AJUAN PERMINTAAN</td><td class="text-right p-2 text-green-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            if(f) f.innerHTML = `<tr><td colspan="3" class="p-2">TOTAL AJUAN PERMINTAAN</td><td class="text-right p-2 text-green-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
         window.renderRealisasi = () => {
@@ -300,15 +323,20 @@
                 const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
                 const r = Number(d.anggaran), re = lP.reduce((acc,c)=>acc+Number(c.nilai),0), g = r - re;
                 totR += r; totB += re;
-                h += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td>${d.bulan}</td><td class="text-right font-mono">Rp ${r.toLocaleString()}</td><td class="text-right text-orange-600 font-mono">Rp ${re.toLocaleString()}</td><td class="text-right text-red-600 font-mono">Rp ${g.toLocaleString()}</td><td class="font-bold">${r>0?Math.round((re/r)*100):0}%</td></tr>`;
+                h += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td>${d.bulan}</td><td class="text-right">Rp ${r.toLocaleString()}</td><td class="text-right text-orange-600 font-bold">Rp ${re.toLocaleString()}</td><td class="text-right text-red-600 font-bold">Rp ${g.toLocaleString()}</td><td class="font-bold">${r>0?Math.round((re/r)*100):0}%</td></tr>`;
             });
             b.innerHTML = h;
-            f.innerHTML = `<tr><td colspan="5" class="p-2">TOTAL KESELURUHAN</td><td class="text-right p-2">Rp ${totR.toLocaleString()}</td><td class="text-right p-2 text-orange-600">Rp ${totB.toLocaleString()}</td><td class="text-right p-2 text-red-600">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
+            if(f) f.innerHTML = `<tr><td colspan="5" class="p-2 font-bold uppercase">Total Keseluruhan</td><td class="text-right p-2 font-bold">Rp ${totR.toLocaleString()}</td><td class="text-right p-2 text-orange-600 font-bold">Rp ${totB.toLocaleString()}</td><td class="text-right p-2 text-red-600 font-bold">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
         };
+
+        window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
+        window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
+        window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
 
         window.simpanRPD = async () => {
             const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, jenis: document.getElementById('in-jenis').value, akun: document.getElementById('in-akun').value, pok: document.getElementById('in-pok').value, anggaran: Number(document.getElementById('in-anggaran').value), bulan: document.getElementById('in-bulan').value, uraian: document.getElementById('in-uraian').value, createdAt: serverTimestamp() };
-            if(!d.tim || !d.anggaran || !d.akun) return alert("Mohon lengkapi Tim, Akun, dan Anggaran!");
+            if(!d.tim || !d.anggaran) return alert("Lengkapi data!");
             await addDoc(collection(db, "rpd_entries"), d); alert("Data RPD Berhasil Disimpan!");
         };
 
@@ -316,14 +344,10 @@
             const rType = document.getElementById('req-type').value, rId = document.getElementById('req-rpd-id').value;
             const sel = dataRPD.find(x => x.id === rId);
             const d = { noForm: document.getElementById('req-no').value, nilai: Number(document.getElementById('req-nilai').value), uraian: document.getElementById('req-uraian').value, tglFPB: document.getElementById('req-tgl').value, rpdId: rType === 'RPD' ? rId : 'NON_RPD', tim: (rType === 'RPD' && sel) ? sel.tim : 'Umum', isPosted: false, createdAt: serverTimestamp() };
-            if(!d.noForm || !d.nilai) return alert("No. FPB dan Nilai wajib diisi!");
+            if(!d.noForm || !d.nilai) return alert("Lengkapi data FPB!");
             await addDoc(collection(db, "permintaan_belanja"), d); alert("Permintaan Belanja Diajukan!");
         };
 
-        window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
-        window.hapusRPD = async (id) => { if(confirm("Hapus data RPD ini?")) await deleteDoc(doc(db, "rpd_entries", id)); };
-        window.hapusPerm = async (id) => { if(confirm("Hapus permintaan belanja ini?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
-        window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); };
         document.addEventListener('DOMContentLoaded', loadPagu);
     </script>
 </body>
