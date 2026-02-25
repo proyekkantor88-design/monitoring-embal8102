@@ -49,7 +49,7 @@
 
         <section id="section-dashboard" class="tab-content">
             <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl shadow-sm border">
-                <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label><select id="f-dash-tim" onchange="renderDashboard()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select></div>
+                <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label><select id="f-dash-tim" onchange="renderDashboard()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Tim</option><option>Umum</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option></select></div>
                 <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label><select id="f-dash-bulan" onchange="renderDashboard()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option></select></div>
             </div>
             <div class="grid grid-cols-5 gap-4 mb-6">
@@ -67,7 +67,7 @@
 
         <section id="section-setting-pagu" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-600 mb-6">
-                <h3 class="text-sm font-bold uppercase mb-4 text-purple-900">Konfigurasi Pagu DIPA (Dinamis)</h3>
+                <h3 class="text-sm font-bold uppercase mb-4 text-purple-900 font-black">KONFIGURASI PAGU DIPA (DINAMIS)</h3>
                 <div class="mb-4">
                     <label class="text-[10px] font-bold uppercase">Periode Triwulan</label>
                     <select id="set-pagu-periode" onchange="updateFormInputPagu()" class="w-full p-2 border rounded font-bold text-purple-700 bg-purple-50">
@@ -81,12 +81,20 @@
                 </div>
                 <button onclick="simpanSettingPagu()" class="mt-6 bg-purple-600 text-white px-6 py-2 rounded-lg text-xs font-bold uppercase shadow-lg hover:bg-purple-700">Update Pagu Satker</button>
                 <div class="mt-8 border-t pt-6">
-                    <h4 class="text-xs font-bold uppercase mb-4 text-indigo-900">Matriks Pagu Dasar IKPA</h4>
+                    <h4 class="text-xs font-bold uppercase mb-4 text-indigo-900">MATRIKS PAGU DASAR IKPA (SEMUA TW)</h4>
                     <table class="w-full border-collapse">
                         <thead><tr class="bg-slate-50 uppercase text-[9px]"><th class="p-2 border">Jenis Belanja</th><th class="p-2 border bg-blue-50">TW I</th><th class="p-2 border bg-emerald-50">TW II</th><th class="p-2 border bg-orange-50">TW III</th><th class="p-2 border bg-red-50">TW IV</th></tr></thead>
                         <tbody id="body-info-pagu-all" class="text-center font-mono"></tbody>
                     </table>
                 </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h4 id="title-info-proporsi" class="text-xs font-bold uppercase mb-4 text-indigo-900">INFORMASI PROPORSI / BOBOT IKPA</h4>
+                <table class="w-full border-collapse">
+                    <thead><tr class="bg-slate-50"><th class="p-2 border">Jenis Belanja</th><th class="p-2 border">Pagu (Rp)</th><th class="p-2 border">Proporsi / Bobot</th></tr></thead>
+                    <tbody id="body-info-pagu" class="text-center"></tbody>
+                    <tfoot class="bg-slate-50 font-bold"><tr><td class="p-2 border">TOTAL PAGU</td><td id="info-total-pagu" class="p-2 border">Rp 0</td><td class="p-2 border">100%</td></tr></tfoot>
+                </table>
             </div>
         </section>
 
@@ -97,19 +105,19 @@
                     <div><label class="text-[9px] font-bold uppercase">Keg.</label><select id="in-kegiatan" class="searchable-input"><option value="2886">2886</option><option value="2896">2896</option><option value="2897">2897</option><option value="2898">2898</option><option value="2899">2899</option><option value="2900">2900</option><option value="2901">2901</option><option value="2902">2902</option><option value="2903">2903</option><option value="2904">2904</option><option value="2905">2905</option><option value="2906">2906</option></select></div>
                     <div><label class="text-[9px] font-bold uppercase">KRO</label><select id="in-kro" class="searchable-input"><option value="BMA">BMA</option><option value="QBD">QBD</option><option value="CAN">CAN</option><option value="EBA">EBA</option><option value="EBB">EBB</option><option value="EBD">EBD</option></select></div>
                     <div><label class="text-[9px] font-bold uppercase">RO</label><select id="in-ro" class="searchable-input"><option value="001">001</option><option value="002">002</option><option value="003">003</option><option value="004">004</option><option value="005">005</option><option value="006">006</option><option value="007">007</option><option value="008">008</option><option value="009">009</option><option value="010">010</option><option value="056">056</option><option value="951">951</option><option value="962">962</option><option value="994">994</option></select></div>
-                    <div><label class="text-[9px] font-bold uppercase">Komp</label><select id="in-komp" class="searchable-input"><option value="001">001</option><option value="002">002</option><option value="051">051</option><option value="052">052</option><option value="506">506</option></select></div>
+                    <div><label class="text-[9px] font-bold uppercase">Komp</label><select id="in-komp" class="searchable-input"><option value="001">001</option><option value="002">002</option><option value="051">051</option><option value="052">052</option><option value="053">053</option><option value="506">506</option></select></div>
                     <div><label class="text-[9px] font-bold uppercase">Jenis</label><select id="in-jenis" class="searchable-input font-bold bg-yellow-50"><option value="51">51</option><option value="52">52</option><option value="53">53</option></select></div>
-                    <div><label class="text-[9px] font-bold uppercase">Akun</label><select id="in-akun" class="searchable-input font-bold"><option value="511111">511111</option><option value="511119">511119</option><option value="511129">511129</option><option value="512211">512211</option><option value="521111">521111</option><option value="521211">521211</option><option value="521213">521213</option><option value="521219">521219</option><option value="521811">521811</option><option value="522111">522111</option><option value="522141">522141</option><option value="522151">522151</option><option value="524111">524111</option><option value="524113">524113</option><option value="532111">532111</option><option value="533111">533111</option></select></div>
+                    <div><label class="text-[9px] font-bold uppercase">Akun</label><select id="in-akun" class="searchable-input font-bold"><option value="511111">511111</option><option value="511119">511119</option><option value="521111">521111</option><option value="521211">521211</option><option value="521213">521213</option><option value="521219">521219</option><option value="521811">521811</option><option value="522111">522111</option><option value="522141">522141</option><option value="524111">524111</option><option value="524113">524113</option><option value="532111">532111</option></select></div>
                 </div>
                 <div class="grid grid-cols-4 gap-3 mb-4">
                     <div><label class="text-[9px] font-bold uppercase">Bulan</label><select id="in-bulan" class="w-full p-2 border rounded text-xs mt-1"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
-                    <div><label class="text-[9px] font-bold uppercase">Detil POK</label><input type="text" id="in-pok" class="w-full p-2 border rounded text-xs mt-1"></div>
-                    <div><label class="text-[9px] font-bold uppercase">Uraian</label><input type="text" id="in-uraian" class="w-full p-2 border rounded text-xs mt-1"></div>
+                    <div><label class="text-[9px] font-bold uppercase">Detil POK</label><input type="text" id="in-pok" class="w-full p-2 border rounded text-xs mt-1" placeholder="Detil POK..."></div>
+                    <div><label class="text-[9px] font-bold uppercase">Uraian</label><input type="text" id="in-uraian" class="w-full p-2 border rounded text-xs mt-1" placeholder="Uraian belanja..."></div>
                     <div><label class="text-[9px] font-bold uppercase">Anggaran (Rp)</label><input type="number" id="in-anggaran" class="w-full p-2 border rounded text-xs font-bold mt-1 text-indigo-700"></div>
                 </div>
                 <button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold uppercase shadow-lg">Simpan Rencana RPD</button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto"><table class="w-full text-center"><thead><tr><th>TIM</th><th>KODE ANGGARAN</th><th>JENIS</th><th>AKUN</th><th>URAIAN</th><th>ANGGARAN</th><th>BULAN</th><th class="no-print">AKSI</th></tr></thead><tbody id="body-rpd"></tbody><tfoot id="foot-rpd" class="foot-total"></tfoot></table></div>
+            <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto"><table class="w-full text-center"><thead><tr><th>TIM</th><th>KODE ANGGARAN</th><th>JENIS</th><th>AKUN</th><th>URAIAN/POK</th><th>ANGGARAN</th><th>BULAN</th><th class="no-print">AKSI</th></tr></thead><tbody id="body-rpd"></tbody><tfoot id="foot-rpd" class="foot-total"></tfoot></table></div>
         </section>
 
         <section id="section-permintaan-belanja" class="tab-content hidden">
@@ -118,7 +126,7 @@
                     <div><label class="text-[9px] font-bold uppercase">No. FPB</label><input type="text" id="req-no" class="w-full p-2 border rounded text-xs mt-1"></div>
                     <div><label class="text-[9px] font-bold uppercase">Tgl FPB</label><input type="date" id="req-tgl" class="w-full p-2 border rounded text-xs mt-1"></div>
                     <div><label class="text-[9px] font-bold uppercase">Jenis Permintaan</label><select id="req-type" onchange="toggleSourceRPD(this.value)" class="w-full p-2 border rounded text-xs mt-1 font-bold"><option value="RPD">RPD</option><option value="Non RPD">Non RPD</option></select></div>
-                    <div id="source-rpd-wrap"><label class="text-[9px] font-bold uppercase">Sumber RPD (Tim + Rp + Uraian)</label><select id="req-rpd-id" class="w-full p-2 border rounded text-xs mt-1"></select></div>
+                    <div id="source-rpd-wrap"><label class="text-[9px] font-bold uppercase">Sumber RPD (Tim | Rp | Uraian)</label><select id="req-rpd-id" class="w-full p-2 border rounded text-xs mt-1"></select></div>
                 </div>
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <div><label class="text-[9px] font-bold uppercase">Uraian Pembayaran</label><input type="text" id="req-uraian" class="w-full p-2 border rounded text-xs mt-1"></div>
@@ -132,11 +140,11 @@
         <section id="section-realisasi-rpd" class="tab-content hidden">
             <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl shadow-sm border">
                 <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label><select id="f-real-tim" onchange="renderRealisasi()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Tim</option><option>Umum</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option></select></div>
-                <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label><select id="f-real-bulan" onchange="renderRealisasi()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option></select></div>
+                <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label><select id="f-real-bulan" onchange="renderRealisasi()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
             </div>
             <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
                 <table class="w-full border text-center">
-                    <thead class="bg-slate-50 uppercase"><tr><th>Tim</th><th>Jenis</th><th>Uraian/POK</th><th>Bulan RPD</th><th>Rencana</th><th>Realisasi</th><th>GAP (Deviasi)</th><th>%</th></tr></thead>
+                    <thead class="bg-slate-50 uppercase"><tr><th>Tim</th><th>Jenis</th><th>Uraian/POK</th><th>Bulan RPD</th><th>Rencana Penarikan</th><th>Realisasi Bayar</th><th>GAP (Deviasi)</th><th>%</th></tr></thead>
                     <tbody id="body-realisasi"></tbody>
                     <tfoot id="foot-realisasi" class="foot-total"></tfoot>
                 </table>
@@ -152,15 +160,18 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // --- GLOBAL DATA ---
         let CONFIG_PAGU_ALL = { "TRIWULAN I": { "51": 0, "52": 0, "53": 0 }, "TRIWULAN II": { "51": 0, "52": 0, "53": 0 }, "TRIWULAN III": { "51": 0, "52": 0, "53": 0 }, "TRIWULAN IV": { "51": 0, "52": 0, "53": 0 } };
         let dataRPD = [], dataPerm = [];
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
 
+        // --- 1. LOGIKA SETTING PAGU ---
         const renderInfoPagu = () => {
             const twAktif = document.getElementById('set-pagu-periode').value;
             const bodyAll = document.getElementById('body-info-pagu-all');
             const bodyProp = document.getElementById('body-info-pagu');
             if (!bodyAll || !bodyProp) return;
+            
             let htmlAll = "";
             ["51", "52", "53"].forEach(jb => {
                 htmlAll += `<tr class="text-[10px]"><td class="p-2 border font-bold text-left bg-slate-50 pl-4">${jb}</td>`;
@@ -170,6 +181,7 @@
                 htmlAll += `</tr>`;
             });
             bodyAll.innerHTML = htmlAll;
+
             const dataTW = CONFIG_PAGU_ALL[twAktif];
             const total = Number(dataTW["51"]) + Number(dataTW["52"]) + Number(dataTW["53"]);
             let htmlProp = "";
@@ -194,21 +206,23 @@
             CONFIG_PAGU_ALL[tw]["51"] = Number(document.getElementById('set-pagu-51').value);
             CONFIG_PAGU_ALL[tw]["52"] = Number(document.getElementById('set-pagu-52').value);
             CONFIG_PAGU_ALL[tw]["53"] = Number(document.getElementById('set-pagu-53').value);
-            localStorage.setItem('emba_pagu_all_final', JSON.stringify(CONFIG_PAGU_ALL));
-            renderInfoPagu(); renderDashboard(); alert("Pagu Diperbarui!");
+            localStorage.setItem('emba_pagu_all_final_fix', JSON.stringify(CONFIG_PAGU_ALL));
+            renderInfoPagu(); renderDashboard(); alert(`Data Pagu ${tw} Disimpan!`);
         };
 
         const loadPagu = () => {
-            const saved = localStorage.getItem('emba_pagu_all_final');
-            if(saved) { CONFIG_PAGU_ALL = JSON.parse(saved); renderInfoPagu(); updateFormInputPagu(); }
+            const saved = localStorage.getItem('emba_pagu_all_final_fix');
+            if(saved) { CONFIG_PAGU_ALL = JSON.parse(saved); updateFormInputPagu(); } else { renderInfoPagu(); }
         };
 
+        // --- 2. LOGIKA DASHBOARD ---
         window.renderDashboard = () => {
             const fT = document.getElementById('f-dash-tim').value, fB = document.getElementById('f-dash-bulan').value;
             let twRef = "TRIWULAN I";
             if (["04","05","06"].includes(fB)) twRef = "TRIWULAN II";
             if (["07","08","09"].includes(fB)) twRef = "TRIWULAN III";
             if (["10","11","12"].includes(fB)) twRef = "TRIWULAN IV";
+
             let stats = { "51": { r: 0, b: 0 }, "52": { r: 0, b: 0 }, "53": { r: 0, b: 0 } };
             let dashHtml = "";
             dataRPD.forEach(d => { if ((!fT || d.tim === fT) && (!fB || d.bulan === bMap[fB])) { if (stats[d.jenis]) stats[d.jenis].r += Number(d.anggaran); } });
@@ -218,9 +232,10 @@
                     const rpd = dataRPD.find(r => r.id === p.rpdId);
                     const jb = rpd ? rpd.jenis : "52";
                     if (stats[jb]) stats[jb].b += Number(p.nilai);
-                    dashHtml += `<tr><td>${p.noForm}</td><td>${p.tim}</td><td>${p.uraian}</td><td class="text-right">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold">POSTED</td></tr>`;
+                    dashHtml += `<tr><td>${p.noForm}</td><td>${p.tim}</td><td>${p.uraian}</td><td class="text-right font-mono">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold uppercase">Posted</td></tr>`;
                 }
             });
+
             const pTW = CONFIG_PAGU_ALL[twRef], totP = Number(pTW["51"]) + Number(pTW["52"]) + Number(pTW["53"]);
             let devT = 0, tR = 0, tB = 0;
             ["51", "52", "53"].forEach(jb => {
@@ -228,9 +243,11 @@
                 const prop = totP > 0 ? (pTW[jb] / totP) : 0;
                 if (stats[jb].r > 0) devT += (Math.abs(stats[jb].b - stats[jb].r) / stats[jb].r) * prop;
             });
+
             const devFinal = devT * 100, ikpa = Math.max(0, 100 - devFinal);
             let kat = ikpa >= 95 ? "A. SANGAT BAIK" : (ikpa >= 89 ? "B. BAIK" : (ikpa >= 70 ? "C. CUKUP" : "D. KURANG"));
             let col = ikpa >= 95 ? "text-blue-600" : (ikpa >= 89 ? "text-sky-500" : (ikpa >= 70 ? "text-amber-500" : "text-red-600"));
+
             document.getElementById('dash-total-rpd').innerText = "Rp " + tR.toLocaleString();
             document.getElementById('dash-total-real').innerText = "Rp " + tB.toLocaleString();
             document.getElementById('dash-total-gap').innerText = devFinal.toFixed(2) + "%";
@@ -239,6 +256,7 @@
             document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
         };
 
+        // --- 3. CRUD & RENDER ---
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
 
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
@@ -263,10 +281,10 @@
             dataRPD.forEach(d => { 
                 total += Number(d.anggaran);
                 const k = `${d.kegiatan || ''}.${d.kro || ''}.${d.ro || ''}.${d.komp || ''}`;
-                h += `<tr><td>${d.tim}</td><td>${k}</td><td>${d.jenis}</td><td>${d.akun}</td><td class="text-left">${d.uraian}</td><td class="text-right">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`; 
+                h += `<tr><td>${d.tim}</td><td>${k}</td><td>${d.jenis}</td><td>${d.akun}</td><td class="text-left">${d.pok || d.uraian}</td><td class="text-right font-bold font-mono">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`; 
             });
             b.innerHTML = h;
-            f.innerHTML = `<tr><td colspan="5" class="p-2">TOTAL RENCANA PENARIKAN (RPD)</td><td class="text-right p-2">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            f.innerHTML = `<tr><td colspan="5" class="p-2">TOTAL SELURUH RENCANA PENARIKAN (RPD)</td><td class="text-right p-2 text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
         window.renderPermintaan = () => {
@@ -275,10 +293,10 @@
             dataPerm.forEach(d => {
                 total += Number(d.nilai);
                 const pB = d.isPosted ? `<button onclick="upDate('${d.id}','isPosted',false)" class="btn-unpost">BATAL</button>` : `<button onclick="upDate('${d.id}','isPosted',true)" class="btn-post">POST</button>`;
-                h += `<tr><td>${d.noForm}</td><td>${d.tim}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold">Rp ${Number(d.nilai).toLocaleString()}</td><td>${d.isPosted ? 'POSTED' : 'PENDING'}</td><td class="flex gap-1 justify-center">${pB}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
+                h += `<tr><td>${d.noForm}</td><td>${d.tim}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold font-mono">Rp ${Number(d.nilai).toLocaleString()}</td><td class="uppercase text-[8px] font-bold ${d.isPosted?'text-emerald-600':'text-orange-500'}">${d.isPosted ? 'Posted' : 'Pending'}</td><td class="flex gap-1 justify-center no-print">${pB}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
             });
             b.innerHTML = h;
-            f.innerHTML = `<tr><td colspan="3" class="p-2">TOTAL AJUAN PERMINTAAN</td><td class="text-right p-2">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            f.innerHTML = `<tr><td colspan="3" class="p-2">TOTAL SELURUH AJUAN PERMINTAAN</td><td class="text-right p-2 text-green-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
         window.renderRealisasi = () => {
@@ -289,28 +307,29 @@
                 const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
                 const r = Number(d.anggaran), re = lP.reduce((acc,c)=>acc+Number(c.nilai),0), g = r - re;
                 totR += r; totB += re;
-                h += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td class="text-left">${d.pok || d.uraian}</td><td>${d.bulan}</td><td class="text-right">Rp ${r.toLocaleString()}</td><td class="text-right text-orange-600">Rp ${re.toLocaleString()}</td><td class="text-right text-red-600">Rp ${g.toLocaleString()}</td><td class="font-bold">${r>0?Math.round((re/r)*100):0}%</td></tr>`;
+                h += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td class="text-left">${d.pok || d.uraian}</td><td>${d.bulan}</td><td class="text-right font-mono">Rp ${r.toLocaleString()}</td><td class="text-right text-orange-600 font-mono">Rp ${re.toLocaleString()}</td><td class="text-right text-red-600 font-mono">Rp ${g.toLocaleString()}</td><td class="font-bold">${r>0?Math.round((re/r)*100):0}%</td></tr>`;
             });
             b.innerHTML = h;
-            f.innerHTML = `<tr><td colspan="4" class="p-2">TOTAL KESELURUHAN</td><td class="text-right p-2">Rp ${totR.toLocaleString()}</td><td class="text-right p-2 text-orange-600">Rp ${totB.toLocaleString()}</td><td class="text-right p-2 text-red-600">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
+            f.innerHTML = `<tr><td colspan="4" class="p-2">TOTAL KESELURUHAN (BERDASARKAN FILTER)</td><td class="text-right p-2">Rp ${totR.toLocaleString()}</td><td class="text-right p-2 text-orange-600">Rp ${totB.toLocaleString()}</td><td class="text-right p-2 text-red-600">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
         };
 
         window.simpanRPD = async () => {
             const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, jenis: document.getElementById('in-jenis').value, akun: document.getElementById('in-akun').value, pok: document.getElementById('in-pok').value, anggaran: Number(document.getElementById('in-anggaran').value), bulan: document.getElementById('in-bulan').value, uraian: document.getElementById('in-uraian').value, createdAt: serverTimestamp() };
-            if(!d.tim || !d.anggaran) return alert("Lengkapi data!");
-            await addDoc(collection(db, "rpd_entries"), d); alert("Data Disimpan!");
+            if(!d.tim || !d.anggaran) return alert("Tim dan Anggaran wajib diisi!");
+            await addDoc(collection(db, "rpd_entries"), d); alert("Data RPD Berhasil Disimpan!");
         };
 
         window.simpanPermintaan = async () => {
             const rType = document.getElementById('req-type').value, rId = document.getElementById('req-rpd-id').value;
             const sel = dataRPD.find(x => x.id === rId);
             const d = { noForm: document.getElementById('req-no').value, nilai: Number(document.getElementById('req-nilai').value), uraian: document.getElementById('req-uraian').value, tglFPB: document.getElementById('req-tgl').value, rpdId: rType === 'RPD' ? rId : 'NON_RPD', tim: (rType === 'RPD' && sel) ? sel.tim : 'Umum', isPosted: false, createdAt: serverTimestamp() };
-            await addDoc(collection(db, "permintaan_belanja"), d); alert("Ajukan!");
+            if(!d.noForm || !d.nilai) return alert("No. FPB dan Nilai wajib diisi!");
+            await addDoc(collection(db, "permintaan_belanja"), d); alert("Permintaan Belanja Diajukan!");
         };
 
         window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
-        window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
-        window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+        window.hapusRPD = async (id) => { if(confirm("Hapus data RPD ini?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.hapusPerm = async (id) => { if(confirm("Hapus permintaan belanja ini?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
         document.addEventListener('DOMContentLoaded', loadPagu);
     </script>
 </body>
