@@ -255,25 +255,48 @@
         };
 
         window.renderRealisasi = () => {
-            const body = document.getElementById('body-realisasi'), foot = document.getElementById('foot-realisasi');
-            const fRB = document.getElementById('f-real-bulan').value, fRT = document.getElementById('f-real-tim').value;
-            let html = "", sR = 0, sB = 0, sG = 0;
-            dataRPD.forEach(d => {
-                if(!fRT || d.tim === fRT) {
-                    const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
-                    const bI = lP.length > 0 ? (lP[0].tglReal ? lP[0].tglReal.split('-')[1] : '') : '';
-                    let r = 0, b = 0;
-                    if(!fRB) { r = Number(d.anggaran); b = lP.reduce((acc, c) => acc + Number(c.nilai), 0); } 
-                    else { if(d.bulan === bMap[fRB]) r = Number(d.anggaran); if(bI === fRB) b = lP.reduce((acc, c) => acc + Number(c.nilai), 0); if(r === 0 && b === 0) return; }
-                    let g = r - b, p = r > 0 ? Math.round((b/r)*100) : (b > 0 ? 100 : 0);
-                    html += `<tr><td>${d.tim}</td><td>${d.pok || d.uraian}</td><td class="text-indigo-700 font-bold">${d.bulan}</td><td class="text-orange-700 font-bold">${bI ? bMap[bI] : '-'}</td><td class="text-right">Rp ${r.toLocaleString()}</td><td class="text-right font-bold text-orange-700">Rp ${b.toLocaleString()}</td><td class="text-right font-bold">Rp ${g.toLocaleString()}</td><td class="text-center font-bold">${p}%</td></tr>`;
-                    sR += r; sB += b; sG += g;
-                }
-            });
-            body.innerHTML = html;
-            foot.innerHTML = `<tr><td colspan="4" class="text-right font-black uppercase">Total GAP:</td><td class="text-right font-bold text-indigo-700">Rp ${sR.toLocaleString()}</td><td class="text-right font-bold text-orange-700">Rp ${sB.toLocaleString()}</td><td class="text-right text-red-700 font-black">Rp ${sG.toLocaleString()}</td><td></td></tr>`;
-        };
+    const body = document.getElementById('body-realisasi'), foot = document.getElementById('foot-realisasi');
+    const fRB = document.getElementById('f-real-bulan').value, fRT = document.getElementById('f-real-tim').value;
+    let html = "", sR = 0, sB = 0, sG = 0;
 
+    // 1. Tampilkan Data RPD (Rencana vs Realisasi)
+    dataRPD.forEach(d => {
+        if(!fRT || d.tim === fRT) {
+            const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
+            const bI = lP.length > 0 ? (lP[0].tglReal ? lP[0].tglReal.split('-')[1] : '') : '';
+            let r = 0, b = 0;
+            
+            if(!fRB) { 
+                r = Number(d.anggaran); 
+                b = lP.reduce((acc, c) => acc + Number(c.nilai), 0); 
+            } else { 
+                if(d.bulan === bMap[fRB]) r = Number(d.anggaran); 
+                if(bI === fRB) b = lP.reduce((acc, c) => acc + Number(c.nilai), 0); 
+                if(r === 0 && b === 0) return; 
+            }
+            
+            let g = r - b, p = r > 0 ? Math.round((b/r)*100) : (b > 0 ? 100 : 0);
+            html += `<tr><td>${d.tim}</td><td>${d.pok || d.uraian}</td><td class="text-indigo-700 font-bold">${d.bulan}</td><td class="text-orange-700 font-bold">${bI ? bMap[bI] : '-'}</td><td class="text-right">Rp ${r.toLocaleString()}</td><td class="text-right font-bold text-orange-700">Rp ${b.toLocaleString()}</td><td class="text-right font-bold ${g<0?'text-red-600':'text-green-600'}">Rp ${g.toLocaleString()}</td><td class="text-center font-bold">${p}%</td></tr>`;
+            sR += r; sB += b; sG += g;
+        }
+    });
+
+    // 2. TAMBAHAN: Tampilkan Data NON-RPD yang Terposting
+    dataPerm.filter(p => p.rpdId === "NON" && p.isPosted).forEach(p => {
+        const bI = p.tglReal ? p.tglReal.split('-')[1] : '';
+        if ((!fRT || fRT === 'Umum') && (!fRB || bI === fRB)) { // Asumsi Non RPD masuk ke Umum atau filter kosong
+            let r = 0; // Rencana selalu 0 untuk Non RPD
+            let b = Number(p.nilai);
+            let g = r - b;
+            
+            html += `<tr class="bg-red-50"><td>NON-RPD</td><td>${p.uraian}</td><td class="text-slate-400">-</td><td class="text-orange-700 font-bold">${bI ? bMap[bI] : '-'}</td><td class="text-right">Rp 0</td><td class="text-right font-bold text-orange-700">Rp ${b.toLocaleString()}</td><td class="text-right font-bold text-red-600">Rp ${g.toLocaleString()}</td><td class="text-center font-bold">!</td></tr>`;
+            sB += b; sG += g;
+        }
+    });
+
+    body.innerHTML = html;
+    foot.innerHTML = `<tr><td colspan="4" class="text-right font-black uppercase">Total GAP:</td><td class="text-right font-bold text-indigo-700">Rp ${sR.toLocaleString()}</td><td class="text-right font-bold text-orange-700">Rp ${sB.toLocaleString()}</td><td class="text-right text-red-700 font-black">Rp ${sG.toLocaleString()}</td><td></td></tr>`;
+};
         window.simpanRPD = async () => {
             const tim = document.getElementById('in-tim').value, ang = document.getElementById('in-anggaran').value;
             if(!tim || !ang) return alert("Isi Tim & Anggaran!");
