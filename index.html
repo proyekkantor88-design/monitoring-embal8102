@@ -438,28 +438,24 @@ document.addEventListener('DOMContentLoaded', () => {
         <td></td>
     </tr>`;
 };
-       window.simpanRPD = async () => {
-    const tim = document.getElementById('in-tim').value, ang = document.getElementById('in-anggaran').value;
-    if(!tim || !ang) return alert("Isi Tim & Anggaran!");
-    
-    // Kita ambil nilai dari ID in-jenis yang baru dibuat tadi
-    const d = { 
-        tim, 
-        kegiatan: document.getElementById('in-kegiatan').value, 
-        kro: document.getElementById('in-kro').value, 
-        ro: document.getElementById('in-ro').value, 
-        komp: document.getElementById('in-komp').value, 
-        jenis: document.getElementById('in-jenis').value, // Simpan jenis belanja
-        akun: document.getElementById('in-akun').value, 
-        bulan: document.getElementById('in-bulan').value, 
-        pok: document.getElementById('in-pok').value, 
-        uraian: document.getElementById('in-uraian').value, 
-        anggaran: Number(ang), 
-        createdAt: serverTimestamp() 
+      window.simpanRPD = async () => {
+    const d = {
+        tim: document.getElementById('in-tim').value,
+        kegiatan: document.getElementById('in-kegiatan').value,
+        kro: document.getElementById('in-kro').value,
+        ro: document.getElementById('in-ro').value,
+        komp: document.getElementById('in-komp').value,
+        jenis: document.getElementById('in-jenis').value,
+        akun: document.getElementById('in-akun').value,
+        bulan: document.getElementById('in-bulan').value,
+        pok: document.getElementById('in-pok').value,
+        uraian: document.getElementById('in-uraian').value,
+        anggaran: Number(document.getElementById('in-anggaran').value),
+        createdAt: serverTimestamp()
     };
-    
-    await addDoc(collection(db, "rpd_entries"), d); 
-    alert("Disimpan!");
+    await addDoc(collection(db, "rpd_entries"), d);
+    alert("Data RPD Berhasil Disimpan!");
+};
     
     // Kosongkan form setelah simpan
     ["in-tim","in-kegiatan","in-kro","in-ro","in-komp","in-akun","in-pok","in-uraian","in-anggaran"].forEach(id => document.getElementById(id).value = "");
