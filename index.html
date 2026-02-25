@@ -287,15 +287,25 @@
 
         window.setEditRPD = (id) => { editIdRPD = id; renderRPD(); };
         window.saveEditRPD = async (id) => {
-            await updateDoc(doc(db, "rpd_entries", id), { 
-                tim: document.getElementById('e-tim').value, 
-                jenis: document.getElementById('e-jen').value, 
-                akun: document.getElementById('e-aku').value, 
-                pok: document.getElementById('e-pok').value, 
-                uraian: document.getElementById('e-ura').value, 
-                anggaran: Number(document.getElementById('e-ang').value) 
-            }); editIdRPD = null;
-        };
+    try {
+        await updateDoc(doc(db, "rpd_entries", id), { 
+            tim: document.getElementById('e-tim').value, 
+            jenis: document.getElementById('e-jen').value, 
+            akun: document.getElementById('e-aku').value, 
+            pok: document.getElementById('e-pok').value, 
+            uraian: document.getElementById('e-ura').value, 
+            anggaran: Number(document.getElementById('e-ang').value) 
+        });
+        
+        // PENTING: Kembalikan ke mode normal dan refresh tabel
+        editIdRPD = null; 
+        renderRPD(); 
+        alert("Perubahan Berhasil Disimpan!");
+    } catch (error) {
+        console.error("Gagal update:", error);
+        alert("Terjadi kesalahan saat menyimpan.");
+    }
+};
 
         window.upStatusBayar = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { status_real_bayar: v, tglReal: v === 'Selesai Bayar' ? new Date().toISOString().split('T')[0] : '' }); };
         window.postToReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
