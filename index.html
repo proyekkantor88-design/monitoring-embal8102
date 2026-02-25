@@ -253,10 +253,15 @@
             const saved = localStorage.getItem('emba_pagu');
             if(saved) {
                 CONFIG_PAGU = JSON.parse(saved);
+                // Tambahkan baris ini di dalam if(saved)
+    if(CONFIG_PAGU["periode"]) {
+        document.getElementById('set-pagu-periode').value = CONFIG_PAGU["periode"];
+    }
                 if(document.getElementById('set-pagu-51')){
                     document.getElementById('set-pagu-51').value = CONFIG_PAGU["51"];
                     document.getElementById('set-pagu-52').value = CONFIG_PAGU["52"];
                     document.getElementById('set-pagu-53').value = CONFIG_PAGU["53"];
+                    
                 }
                 renderInfoPagu();
             }
