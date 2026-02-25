@@ -72,18 +72,42 @@
             </div>
         </section>
 
-        <section id="section-setting-pagu" class="tab-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-600 no-print">
-                <h3 class="text-sm font-bold uppercase mb-4 text-purple-900">Konfigurasi Pagu DIPA (Dinamis)</h3>
-                <p class="text-[10px] text-slate-500 mb-4">Masukkan Pagu murni untuk menghitung proporsi bobot belanja 51, 52, dan 53 secara otomatis.</p>
-                <div class="grid grid-cols-3 gap-4">
-                    <div><label class="text-[10px] font-bold">Pagu 51 (Pegawai)</label><input type="number" id="set-pagu-51" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
-                    <div><label class="text-[10px] font-bold">Pagu 52 (Barang)</label><input type="number" id="set-pagu-52" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
-                    <div><label class="text-[10px] font-bold">Pagu 53 (Modal)</label><input type="number" id="set-pagu-53" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
-                </div>
-                <button onclick="simpanSettingPagu()" class="mt-6 bg-purple-600 text-white px-6 py-2 rounded-lg text-xs font-bold uppercase shadow-lg hover:bg-purple-700">Update Pagu Satker</button>
-            </div>
-        </section>
+       <section id="section-setting-pagu" class="tab-content hidden">
+    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-600 no-print mb-6">
+        <h3 class="text-sm font-bold uppercase mb-4 text-purple-900">Konfigurasi Pagu DIPA (Dinamis)</h3>
+        <p class="text-[10px] text-slate-500 mb-4">Masukkan Pagu murni untuk menghitung proporsi bobot belanja 51, 52, dan 53 secara otomatis.</p>
+        <div class="grid grid-cols-3 gap-4">
+            <div><label class="text-[10px] font-bold">Pagu 51 (Pegawai)</label><input type="number" id="set-pagu-51" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
+            <div><label class="text-[10px] font-bold">Pagu 52 (Barang)</label><input type="number" id="set-pagu-52" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
+            <div><label class="text-[10px] font-bold">Pagu 53 (Modal)</label><input type="number" id="set-pagu-53" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
+        </div>
+        <button onclick="simpanSettingPagu()" class="mt-6 bg-purple-600 text-white px-6 py-2 rounded-lg text-xs font-bold uppercase shadow-lg hover:bg-purple-700">Update Pagu Satker</button>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <h4 class="text-xs font-bold uppercase mb-4 text-indigo-900">Informasi Pagu Dasar IKPA Triwulan</h4>
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-slate-50">
+                        <th class="p-2 border">Jenis Belanja</th>
+                        <th class="p-2 border">Pagu (Rp)</th>
+                        <th class="p-2 border">Proporsi / Bobot</th>
+                    </tr>
+                </thead>
+                <tbody id="body-info-pagu" class="text-center">
+                    </tbody>
+                <tfoot class="bg-slate-50 font-bold">
+                    <tr>
+                        <td class="p-2 border">TOTAL PAGU</td>
+                        <td id="info-total-pagu" class="p-2 border">Rp 0</td>
+                        <td class="p-2 border">100%</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
 
         <section id="section-input-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-indigo-600 no-print">
