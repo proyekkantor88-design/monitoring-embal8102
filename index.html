@@ -169,11 +169,16 @@
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
         const allAkuns = ["521211","521213","521219","521811","522141","522151","524111","521252","524113","524114","532111","511111","511119","511121","511122","511123","511124","511125","511126","523123","511129","511151","512211","512411","521111","521115","522111","522112","522113","522119","522191","523111","523121","511611","511628","512414"];
 
-        // --- 1. LOGIKA SETTING PAGU (FIXED MATRIKS) ---
+        // --- 1. LOGIKA SETTING PAGU (FIXED MATRIKS & PROPORSI) ---
         const renderInfoPagu = () => {
+            const twAktif = document.getElementById('set-pagu-periode').value;
             const bodyAll = document.getElementById('body-info-pagu-all');
+            const bodyProp = document.getElementById('body-info-pagu'); // Tabel proporsi di bawahnya
+            const infoTotalPagu = document.getElementById('info-total-pagu');
+
             if (!bodyAll) return;
             
+            // A. RENDER MATRIKS SEMUA TW
             let htmlAll = "";
             ["51", "52", "53"].forEach(jb => {
                 const label = jb === "51" ? "Pegawai (51)" : (jb === "52" ? "Barang (52)" : "Modal (53)");
@@ -187,14 +192,25 @@
                 htmlAll += `</tr>`;
             });
             bodyAll.innerHTML = htmlAll;
-        };
 
-        window.updateFormInputPagu = () => {
-            const tw = document.getElementById('set-pagu-periode').value;
-            document.getElementById('set-pagu-51').value = CONFIG_PAGU_ALL[tw]["51"] || 0;
-            document.getElementById('set-pagu-52').value = CONFIG_PAGU_ALL[tw]["52"] || 0;
-            document.getElementById('set-pagu-53').value = CONFIG_PAGU_ALL[tw]["53"] || 0;
-            renderInfoPagu();
+            // B. RENDER PROPORSI/BOBOT (KHUSUS TW YANG AKTIF)
+            if (bodyProp) {
+                const dataTW = CONFIG_PAGU_ALL[twAktif];
+                const total = Number(dataTW["51"]) + Number(dataTW["52"]) + Number(dataTW["53"]);
+                let htmlProp = "";
+                
+                ["51", "52", "53"].forEach(jb => {
+                    const pagu = dataTW[jb] || 0;
+                    const prop = total > 0 ? ((pagu / total) * 100).toFixed(2) : 0;
+                    htmlProp += `<tr>
+                        <td class="p-2 border text-left pl-4 font-bold text-slate-600">${jb}</td>
+                        <td class="p-2 border text-right">Rp ${pagu.toLocaleString('id-ID')}</td>
+                        <td class="p-2 border text-indigo-600 font-black">${prop}%</td>
+                    </tr>`;
+                });
+                bodyProp.innerHTML = htmlProp;
+                if(infoTotalPagu) infoTotalPagu.innerText = "Rp " + total.toLocaleString('id-ID');
+            }
         };
 
         window.simpanSettingPagu = () => {
@@ -205,20 +221,10 @@
                 "53": Number(document.getElementById('set-pagu-53').value) || 0
             };
             localStorage.setItem('emba_pagu_all_final_v4', JSON.stringify(CONFIG_PAGU_ALL));
-            renderInfoPagu(); 
-            renderDashboard();
-            alert(`Matriks Pagu ${tw} Berhasil Diperbarui!`);
-        };
-
-        const loadPagu = () => {
-            const saved = localStorage.getItem('emba_pagu_all_final_v4');
-            if(saved) {
-                CONFIG_PAGU_ALL = JSON.parse(saved);
-                renderInfoPagu(); 
-                updateFormInputPagu();
-            } else {
-                renderInfoPagu();
-            }
+            
+            renderInfoPagu(); // Render ulang Matriks & Proporsi
+            renderDashboard(); // Update perhitungan IKPA di dashboard
+            alert(`Berhasil! Pagu & Proporsi ${tw} telah diperbarui.`);
         };
 
         // --- 2. FILTER AKUN & DROPDOWN ---
