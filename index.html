@@ -151,22 +151,51 @@
         </section>
 
         <section id="section-realisasi-rpd" class="tab-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
-                <div class="flex justify-between items-center mb-4 no-print">
-                    <div class="flex gap-2">
-                        <select id="f-real-bulan" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option></select>
-                        <select id="f-real-tim" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option></select>
-                    </div>
-                </div>
-                <table class="w-full border text-center">
-                    <thead class="bg-slate-50 uppercase">
-                        <tr><th>Tim</th><th>Detil POK</th><th class="bg-indigo-50">Bulan RPD</th><th class="bg-orange-50">Bulan Bayar</th><th>Rencana</th><th>Realisasi</th><th>GAP</th><th>%</th></tr>
-                    </thead>
-                    <tbody id="body-realisasi"></tbody>
-                    <tfoot id="foot-realisasi" class="foot-total"></tfoot>
-                </table>
+    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
+        <div class="flex justify-between items-center mb-4 no-print">
+            <div class="flex gap-2">
+                <select id="f-real-bulan" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold">
+                    <option value="">Semua Bulan</option>
+                    <option value="01">Januari</option>
+                    <option value="02">Februari</option>
+                    <option value="03">Maret</option>
+                </select>
+                <select id="f-real-tim" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold">
+                    <option value="">Semua Tim</option>
+                    <option>Sosial</option>
+                    <option>Produksi</option>
+                    <option>Distribusi</option>
+                    <option>Neraca</option>
+                    <option>IPDS</option>
+                    <option>Umum</option>
+                </select>
+                <select id="f-real-jenis" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold bg-indigo-50">
+                    <option value="">Semua Jenis (51,52,53)</option>
+                    <option value="51">Jenis 51</option>
+                    <option value="52">Jenis 52</option>
+                    <option value="53">Jenis 53</option>
+                </select>
             </div>
-        </section>
+            <button onclick="window.print()" class="bg-orange-600 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Analisis GAP</button>
+        </div>
+        <table class="w-full border text-center">
+            <thead class="bg-slate-50 uppercase">
+                <tr>
+                    <th>Tim</th>
+                    <th>Jenis</th> <th>Detil POK</th>
+                    <th class="bg-indigo-50">Bulan RPD</th>
+                    <th class="bg-orange-50">Bulan Bayar</th>
+                    <th>Rencana</th>
+                    <th>Realisasi</th>
+                    <th>GAP</th>
+                    <th>%</th>
+                </tr>
+            </thead>
+            <tbody id="body-realisasi"></tbody>
+            <tfoot id="foot-realisasi" class="foot-total"></tfoot>
+        </table>
+    </div>
+</section>
     </main>
 
     <script type="module">
