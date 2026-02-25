@@ -13,10 +13,9 @@
         th { font-size: 8px !important; text-transform: uppercase; background-color: #f8fafc; border: 1px solid #e2e8f0; text-align: center; }
         td { font-size: 9px !important; border: 1px solid #e2e8f0; padding: 4px; }
         .foot-total { background-color: #f1f5f9; font-weight: bold; font-size: 10px !important; }
-        .status-select { font-size: 8.5px; border: 1px solid #cbd5e1; outline: none; border-radius: 4px; padding: 2px; width: 100%; }
+        .searchable-input { width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-size: 0.75rem; outline: none; background: white; }
         .btn-post { background-color: #f59e0b; color: white; padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: bold; }
         .btn-unpost { background-color: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: bold; }
-        .searchable-input { width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-size: 0.75rem; outline: none; background: white; }
     </style>
 </head>
 <body class="bg-slate-50 flex font-sans text-slate-900 overflow-x-hidden">
@@ -102,12 +101,32 @@
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-indigo-600 no-print">
                 <div class="grid grid-cols-7 gap-2 mb-4">
                     <div><label class="text-[9px] font-bold uppercase">Tim</label><select id="in-tim" class="searchable-input"><option>Umum</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option></select></div>
-                    <div><label class="text-[9px] font-bold uppercase">Keg.</label><select id="in-kegiatan" class="searchable-input"><option value="2886">2886</option><option value="2896">2896</option><option value="2897">2897</option><option value="2898">2898</option><option value="2899">2899</option><option value="2900">2900</option><option value="2901">2901</option><option value="2902">2902</option><option value="2903">2903</option><option value="2904">2904</option><option value="2905">2905</option><option value="2906">2906</option></select></div>
+                    <div><label class="text-[9px] font-bold uppercase">Keg.</label>
+                        <select id="in-kegiatan" class="searchable-input">
+                            <option value="2896">2896</option><option value="2897">2897</option><option value="2898">2898</option><option value="2899">2899</option><option value="2900">2900</option>
+                            <option value="2901">2901</option><option value="2902">2902</option><option value="2903">2903</option><option value="2904">2904</option><option value="2905">2905</option>
+                            <option value="2906">2906</option><option value="2907">2907</option><option value="2908">2908</option><option value="2909">2909</option><option value="2910">2910</option><option value="2886">2886</option>
+                        </select>
+                    </div>
                     <div><label class="text-[9px] font-bold uppercase">KRO</label><select id="in-kro" class="searchable-input"><option value="BMA">BMA</option><option value="QBD">QBD</option><option value="CAN">CAN</option><option value="EBA">EBA</option><option value="EBB">EBB</option><option value="EBD">EBD</option></select></div>
-                    <div><label class="text-[9px] font-bold uppercase">RO</label><select id="in-ro" class="searchable-input"><option value="001">001</option><option value="002">002</option><option value="003">003</option><option value="004">004</option><option value="005">005</option><option value="006">006</option><option value="007">007</option><option value="008">008</option><option value="009">009</option><option value="010">010</option><option value="056">056</option><option value="951">951</option><option value="962">962</option><option value="994">994</option></select></div>
-                    <div><label class="text-[9px] font-bold uppercase">Komp</label><select id="in-komp" class="searchable-input"><option value="001">001</option><option value="002">002</option><option value="051">051</option><option value="052">052</option><option value="053">053</option><option value="506">506</option></select></div>
+                    <div><label class="text-[9px] font-bold uppercase">RO</label>
+                        <select id="in-ro" class="searchable-input">
+                            <option value="003">003</option><option value="004">004</option><option value="005">005</option><option value="006">006</option><option value="007">007</option>
+                            <option value="008">008</option><option value="009">009</option><option value="056">056</option><option value="955">955</option><option value="962">962</option><option value="994">994</option><option value="951">951</option>
+                        </select>
+                    </div>
+                    <div><label class="text-[9px] font-bold uppercase">Komp</label>
+                        <select id="in-komp" class="searchable-input">
+                            <option value="005">005</option><option value="051">051</option><option value="052">052</option><option value="053">053</option><option value="054">054</option>
+                            <option value="506">506</option><option value="519">519</option><option value="530">530</option><option value="056">056</option><option value="001">001</option><option value="002">002</option>
+                        </select>
+                    </div>
                     <div><label class="text-[9px] font-bold uppercase">Jenis</label><select id="in-jenis" class="searchable-input font-bold bg-yellow-50"><option value="51">51</option><option value="52">52</option><option value="53">53</option></select></div>
-                    <div><label class="text-[9px] font-bold uppercase">Akun</label><select id="in-akun" class="searchable-input font-bold"><option value="511111">511111</option><option value="511119">511119</option><option value="521111">521111</option><option value="521211">521211</option><option value="521213">521213</option><option value="521219">521219</option><option value="521811">521811</option><option value="522111">522111</option><option value="522141">522141</option><option value="524111">524111</option><option value="524113">524113</option><option value="532111">532111</option></select></div>
+                    <div><label class="text-[9px] font-bold uppercase">Akun</label>
+                        <select id="in-akun" class="searchable-input font-bold">
+                            <option value="521211">521211</option><option value="521213">521213</option><option value="521219">521219</option><option value="521811">521811</option><option value="522141">522141</option><option value="522151">522151</option><option value="524111">524111</option><option value="521252">521252</option><option value="524113">524113</option><option value="524114">524114</option><option value="532111">532111</option><option value="511111">511111</option><option value="511119">511119</option><option value="511121">511121</option><option value="511122">511122</option><option value="511123">511123</option><option value="511124">511124</option><option value="511125">511125</option><option value="511126">511126</option><option value="523123">523123</option><option value="511129">511129</option><option value="511151">511151</option><option value="512211">512211</option><option value="512411">512411</option><option value="521111">521111</option><option value="521115">521115</option><option value="522111">522111</option><option value="522112">522112</option><option value="522113">522113</option><option value="522119">522119</option><option value="522191">522191</option><option value="523111">523111</option><option value="523121">523121</option><option value="511611">511611</option><option value="511628">511628</option><option value="512414">512414</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="grid grid-cols-4 gap-3 mb-4">
                     <div><label class="text-[9px] font-bold uppercase">Bulan</label><select id="in-bulan" class="w-full p-2 border rounded text-xs mt-1"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
@@ -160,12 +179,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- GLOBAL DATA ---
         let CONFIG_PAGU_ALL = { "TRIWULAN I": { "51": 0, "52": 0, "53": 0 }, "TRIWULAN II": { "51": 0, "52": 0, "53": 0 }, "TRIWULAN III": { "51": 0, "52": 0, "53": 0 }, "TRIWULAN IV": { "51": 0, "52": 0, "53": 0 } };
         let dataRPD = [], dataPerm = [];
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
 
-        // --- 1. LOGIKA SETTING PAGU ---
         const renderInfoPagu = () => {
             const twAktif = document.getElementById('set-pagu-periode').value;
             const bodyAll = document.getElementById('body-info-pagu-all');
@@ -206,16 +223,15 @@
             CONFIG_PAGU_ALL[tw]["51"] = Number(document.getElementById('set-pagu-51').value);
             CONFIG_PAGU_ALL[tw]["52"] = Number(document.getElementById('set-pagu-52').value);
             CONFIG_PAGU_ALL[tw]["53"] = Number(document.getElementById('set-pagu-53').value);
-            localStorage.setItem('emba_pagu_all_final_fix', JSON.stringify(CONFIG_PAGU_ALL));
-            renderInfoPagu(); renderDashboard(); alert(`Data Pagu ${tw} Disimpan!`);
+            localStorage.setItem('emba_pagu_all_final_v3', JSON.stringify(CONFIG_PAGU_ALL));
+            renderInfoPagu(); renderDashboard(); alert("Pagu Berhasil Disimpan!");
         };
 
         const loadPagu = () => {
-            const saved = localStorage.getItem('emba_pagu_all_final_fix');
+            const saved = localStorage.getItem('emba_pagu_all_final_v3');
             if(saved) { CONFIG_PAGU_ALL = JSON.parse(saved); updateFormInputPagu(); } else { renderInfoPagu(); }
         };
 
-        // --- 2. LOGIKA DASHBOARD ---
         window.renderDashboard = () => {
             const fT = document.getElementById('f-dash-tim').value, fB = document.getElementById('f-dash-bulan').value;
             let twRef = "TRIWULAN I";
@@ -256,7 +272,6 @@
             document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
         };
 
-        // --- 3. CRUD & RENDER ---
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
 
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
@@ -284,7 +299,7 @@
                 h += `<tr><td>${d.tim}</td><td>${k}</td><td>${d.jenis}</td><td>${d.akun}</td><td class="text-left">${d.pok || d.uraian}</td><td class="text-right font-bold font-mono">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`; 
             });
             b.innerHTML = h;
-            f.innerHTML = `<tr><td colspan="5" class="p-2">TOTAL SELURUH RENCANA PENARIKAN (RPD)</td><td class="text-right p-2 text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            f.innerHTML = `<tr><td colspan="5" class="p-2">TOTAL RENCANA PENARIKAN (RPD)</td><td class="text-right p-2 text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
         window.renderPermintaan = () => {
@@ -296,7 +311,7 @@
                 h += `<tr><td>${d.noForm}</td><td>${d.tim}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold font-mono">Rp ${Number(d.nilai).toLocaleString()}</td><td class="uppercase text-[8px] font-bold ${d.isPosted?'text-emerald-600':'text-orange-500'}">${d.isPosted ? 'Posted' : 'Pending'}</td><td class="flex gap-1 justify-center no-print">${pB}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
             });
             b.innerHTML = h;
-            f.innerHTML = `<tr><td colspan="3" class="p-2">TOTAL SELURUH AJUAN PERMINTAAN</td><td class="text-right p-2 text-green-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            f.innerHTML = `<tr><td colspan="3" class="p-2">TOTAL AJUAN PERMINTAAN</td><td class="text-right p-2 text-green-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
         window.renderRealisasi = () => {
@@ -316,7 +331,7 @@
         window.simpanRPD = async () => {
             const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, jenis: document.getElementById('in-jenis').value, akun: document.getElementById('in-akun').value, pok: document.getElementById('in-pok').value, anggaran: Number(document.getElementById('in-anggaran').value), bulan: document.getElementById('in-bulan').value, uraian: document.getElementById('in-uraian').value, createdAt: serverTimestamp() };
             if(!d.tim || !d.anggaran) return alert("Tim dan Anggaran wajib diisi!");
-            await addDoc(collection(db, "rpd_entries"), d); alert("Data RPD Berhasil Disimpan!");
+            await addDoc(collection(db, "rpd_entries"), d); alert("Data Rencana RPD Tersimpan!");
         };
 
         window.simpanPermintaan = async () => {
