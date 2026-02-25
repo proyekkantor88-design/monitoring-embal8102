@@ -218,292 +218,253 @@
         </section>
     </main>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+   <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyC_PnAtxsdajd0Hltq9X1e0eYcsiASFPxE", authDomain: "proyekkantor-88.firebaseapp.com", projectId: "proyekkantor-88", storageBucket: "proyekkantor-88.firebasestorage.app", messagingSenderId: "381153923700", appId: "1:381153923700:web:4db81ac1a35b42ef4eb721" };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    const firebaseConfig = { apiKey: "AIzaSyC_PnAtxsdajd0Hltq9X1e0eYcsiASFPxE", authDomain: "proyekkantor-88.firebaseapp.com", projectId: "proyekkantor-88", storageBucket: "proyekkantor-88.firebasestorage.app", messagingSenderId: "381153923700", appId: "1:381153923700:web:4db81ac1a35b42ef4eb721" };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        // VARIABEL GLOBAL PAGU (Dinamis)
-        let CONFIG_PAGU = { "51": 0, "52": 0, "53": 0 };
-        let dataRPD = [], dataPerm = [], editIdRPD = null;
-        const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
-        const renderInfoPagu = () => {
-        const totalPagu = CONFIG_PAGU["51"] + CONFIG_PAGU["52"] + CONFIG_PAGU["53"];
-        const periode = document.getElementById('set-pagu-periode').value;
-        const body = document.getElementById('body-info-pagu');
-        if (!body) return;
+    // --- 1. VARIABEL GLOBAL ---
+    let CONFIG_PAGU_ALL = {
+        "TRIWULAN I": { "51": 0, "52": 0, "53": 0 },
+        "TRIWULAN II": { "51": 0, "52": 0, "53": 0 },
+        "TRIWULAN III": { "51": 0, "52": 0, "53": 0 },
+        "TRIWULAN IV": { "51": 0, "52": 0, "53": 0 }
+    };
+    let dataRPD = [], dataPerm = [], editIdRPD = null;
+    const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
 
-        // Update Judul Tabel agar muncul nama Triwulannya
-        document.querySelector('#section-setting-pagu h4').innerText = `Informasi Pagu Dasar IKPA - ${periode}`;
+    // --- 2. FUNGSI SETTING PAGU (TRIWULAN & PROPORSI) ---
 
-        let html = "";
+    // Menampilkan Tabel Matriks (Semua TW) dan Tabel Informasi (Proporsi TW terpilih)
+    const renderInfoPagu = () => {
+        const twAktif = document.getElementById('set-pagu-periode').value;
+        const bodyAll = document.getElementById('body-info-pagu-all');
+        const bodyProporsi = document.getElementById('body-info-pagu');
+        
+        if (!bodyAll || !bodyProporsi) return;
+
+        // Render Matriks Semua Triwulan
+        let htmlAll = "";
         ["51", "52", "53"].forEach(jb => {
-            const pagu = CONFIG_PAGU[jb];
-            const proporsi = totalPagu > 0 ? ((pagu / totalPagu) * 100).toFixed(2) : 0;
             const label = jb === "51" ? "Pegawai (51)" : (jb === "52" ? "Barang (52)" : "Modal (53)");
-            html += `
-                <tr class="text-[11px]">
-                    <td class="p-2 border font-bold text-left pl-4">${label}</td>
-                    <td class="p-2 border text-right">Rp ${pagu.toLocaleString()}</td>
-                    <td class="p-2 border text-indigo-600 font-bold">${proporsi}%</td>
-                </tr>`;
+            htmlAll += `<tr class="text-[10px]"><td class="p-2 border font-bold text-left bg-slate-50 pl-4">${label}</td>`;
+            ["TRIWULAN I", "TRIWULAN II", "TRIWULAN III", "TRIWULAN IV"].forEach(tw => {
+                const nilai = CONFIG_PAGU_ALL[tw][jb] || 0;
+                htmlAll += `<td class="p-2 border text-right">Rp ${nilai.toLocaleString()}</td>`;
+            });
+            htmlAll += `</tr>`;
+        });
+        bodyAll.innerHTML = htmlAll;
+
+        // Render Proporsi IKPA untuk Triwulan yang dipilih
+        const dataTW = CONFIG_PAGU_ALL[twAktif];
+        const totalPaguTW = Number(dataTW["51"]) + Number(dataTW["52"]) + Number(dataTW["53"]);
+        let htmlProp = "";
+        ["51", "52", "53"].forEach(jb => {
+            const pagu = dataTW[jb] || 0;
+            const prop = totalPaguTW > 0 ? ((pagu / totalPaguTW) * 100).toFixed(2) : 0;
+            htmlProp += `<tr class="text-[11px]"><td class="p-2 border font-bold text-left pl-4">${jb}</td><td class="p-2 border text-right">Rp ${pagu.toLocaleString()}</td><td class="p-2 border text-indigo-600 font-bold">${prop}%</td></tr>`;
+        });
+        bodyProporsi.innerHTML = htmlProp;
+        document.getElementById('info-total-pagu').innerText = "Rp " + totalPaguTW.toLocaleString();
+    };
+
+    window.updateFormInputPagu = () => {
+        const tw = document.getElementById('set-pagu-periode').value;
+        document.getElementById('set-pagu-51').value = CONFIG_PAGU_ALL[tw]["51"];
+        document.getElementById('set-pagu-52').value = CONFIG_PAGU_ALL[tw]["52"];
+        document.getElementById('set-pagu-53').value = CONFIG_PAGU_ALL[tw]["53"];
+        renderInfoPagu(); // Update tabel saat ganti pilihan
+    };
+
+    window.simpanSettingPagu = () => {
+        const tw = document.getElementById('set-pagu-periode').value;
+        CONFIG_PAGU_ALL[tw]["51"] = Number(document.getElementById('set-pagu-51').value);
+        CONFIG_PAGU_ALL[tw]["52"] = Number(document.getElementById('set-pagu-52').value);
+        CONFIG_PAGU_ALL[tw]["53"] = Number(document.getElementById('set-pagu-53').value);
+        
+        localStorage.setItem('emba_pagu_all', JSON.stringify(CONFIG_PAGU_ALL));
+        renderInfoPagu();
+        renderDashboard();
+        alert(`Pagu ${tw} berhasil diperbarui!`);
+    };
+
+    const loadPagu = () => {
+        const saved = localStorage.getItem('emba_pagu_all');
+        if(saved) {
+            CONFIG_PAGU_ALL = JSON.parse(saved);
+            renderInfoPagu();
+            updateFormInputPagu();
+        }
+    };
+
+    // --- 3. FUNGSI DASHBOARD & IKPA ---
+    window.renderDashboard = () => {
+        const fT = document.getElementById('f-dash-tim').value;
+        const fB = document.getElementById('f-dash-bulan').value;
+        
+        // Tentukan triwulan berdasarkan bulan filter (untuk ambil proporsi pagu)
+        let twRef = "TRIWULAN I";
+        if (["04","05","06"].includes(fB)) twRef = "TRIWULAN II";
+        if (["07","08","09"].includes(fB)) twRef = "TRIWULAN III";
+        if (["10","11","12"].includes(fB)) twRef = "TRIWULAN IV";
+
+        let stats = { "51": { rpd: 0, real: 0 }, "52": { rpd: 0, real: 0 }, "53": { rpd: 0, real: 0 } };
+        let dashHtml = "";
+
+        dataRPD.forEach(d => {
+            if ((!fT || d.tim === fT) && (!fB || d.bulan === bMap[fB])) {
+                if (stats[d.jenis]) stats[d.jenis].rpd += Number(d.anggaran);
+            }
+        });
+
+        dataPerm.filter(p => p.isPosted).forEach(p => {
+            const bI = p.tglReal ? p.tglReal.split('-')[1] : '';
+            if ((!fT || p.tim === fT) && (!fB || bI === fB)) {
+                const rpdRef = dataRPD.find(r => r.id === p.rpdId);
+                const jb = rpdRef ? rpdRef.jenis : "52";
+                if (stats[jb]) stats[jb].real += Number(p.nilai);
+                dashHtml += `<tr><td>${p.noForm}</td><td>${p.tim}</td><td>${p.uraian}</td><td class="text-right">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold">POSTED</td></tr>`;
+            }
+        });
+
+        const paguTW = CONFIG_PAGU_ALL[twRef];
+        const totalPaguTW = Number(paguTW["51"]) + Number(paguTW["52"]) + Number(paguTW["53"]);
+        let devTertimbang = 0, totR = 0, totB = 0;
+
+        ["51", "52", "53"].forEach(jb => {
+            totR += stats[jb].rpd; totB += stats[jb].real;
+            const proporsi = totalPaguTW > 0 ? (paguTW[jb] / totalPaguTW) : 0;
+            if (stats[jb].rpd > 0) {
+                const devJB = Math.abs(stats[jb].real - stats[jb].rpd) / stats[jb].rpd;
+                devTertimbang += (devJB * proporsi);
+            }
+        });
+
+        const devFinal = devTertimbang * 100;
+        const ikpa = Math.max(0, 100 - devFinal);
+
+        document.getElementById('dash-total-rpd').innerText = "Rp " + totR.toLocaleString();
+        document.getElementById('dash-total-real').innerText = "Rp " + totB.toLocaleString();
+        document.getElementById('dash-total-gap').innerText = devFinal.toFixed(2) + "%";
+        document.getElementById('dash-total-persen').innerText = ikpa.toFixed(2);
+        document.getElementById('dash-total-sisa').innerText = ikpa > 95 ? "SANGAT BAIK" : (ikpa > 90 ? "BAIK" : "EVALUASI");
+        document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
+    };
+
+    // --- 4. FUNGSI STANDAR (CRUD & NAVIGASI) ---
+    window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); };
+    window.switchTab = (id) => {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+        document.getElementById('section-' + id).classList.remove('hidden');
+        document.getElementById('page-title').innerText = id.replace('-', ' ').toUpperCase();
+        renderAll();
+    };
+
+    onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
+    onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => { dataPerm = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
+    
+    window.renderAll = () => { renderDashboard(); renderRPD(); renderPermintaan(); renderRealisasi(); };
+
+    window.renderRPD = () => {
+        const body = document.getElementById('body-rpd');
+        let html = "";
+        dataRPD.forEach(d => {
+            const kG = `${d.kegiatan || ''}.${d.kro || ''}.${d.ro || ''}.${d.komp || ''}`;
+            html += `<tr><td>${d.tim}</td><td>${kG}</td><td>${d.jenis}</td><td>${d.akun}</td><td>${d.pok}</td><td>${d.uraian}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print flex gap-1 justify-center"><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
         });
         body.innerHTML = html;
-        document.getElementById('info-total-pagu').innerText = "Rp " + totalPagu.toLocaleString();
-    };
-   window.simpanSettingPagu = () => {
-        CONFIG_PAGU["51"] = Number(document.getElementById('set-pagu-51').value);
-        CONFIG_PAGU["52"] = Number(document.getElementById('set-pagu-52').value);
-        CONFIG_PAGU["53"] = Number(document.getElementById('set-pagu-53').value);
-        CONFIG_PAGU["periode"] = document.getElementById('set-pagu-periode').value; // Simpan periode
-        
-        localStorage.setItem('emba_pagu', JSON.stringify(CONFIG_PAGU));
-        renderInfoPagu();
-        renderDashboard(); 
-        alert(`Pagu Satker untuk ${CONFIG_PAGU["periode"]} Berhasil Diupdate!`);
     };
 
-        // LOAD PAGU DARI STORAGE
-        const loadPagu = () => {
-            const saved = localStorage.getItem('emba_pagu');
-            if(saved) {
-                CONFIG_PAGU = JSON.parse(saved);
-                // Tambahkan baris ini di dalam if(saved)
-    if(CONFIG_PAGU["periode"]) {
-        document.getElementById('set-pagu-periode').value = CONFIG_PAGU["periode"];
-    }
-                if(document.getElementById('set-pagu-51')){
-                    document.getElementById('set-pagu-51').value = CONFIG_PAGU["51"];
-                    document.getElementById('set-pagu-52').value = CONFIG_PAGU["52"];
-                    document.getElementById('set-pagu-53').value = CONFIG_PAGU["53"];
-                    
-                }
-                renderInfoPagu();
-            }
+    window.renderPermintaan = () => {
+        const body = document.getElementById('body-permintaan');
+        let html = "";
+        dataPerm.forEach(d => {
+            const postBtn = d.isPosted ? `<button onclick="unpostFromReal('${d.id}')" class="btn-unpost">BATAL ↩️</button>` : `<button onclick="postToReal('${d.id}')" class="btn-post">POST 📮</button>`;
+            const optApprove = ["App PJ", "App PPK"];
+            const optStatusBayar = ["Pemeriksaan Dokumen", "Pemeriksaan Bendahara", "Proses Permintaan KPPN", "Dana Tersedia", "Selesai Pembayaran"];
+            html += `<tr><td>${d.noForm}</td><td>${d.tglFPB}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upDate('${d.id}','approval_status',this.value)" class="status-select"><option value="">Pilih</option>${optApprove.map(o=>`<option value="${o}" ${d.approval_status===o?'selected':''}>${o}</option>`).join('')}</select></td><td><input type="date" value="${d.tglApp||''}" onchange="upDate('${d.id}','tglApp',this.value)" class="date-edit"></td><td><select onchange="handleStatusBayar('${d.id}',this.value)" class="status-select"><option value="">Pilih</option>${optStatusBayar.map(o=>`<option value="${o}" ${d.status_real_bayar===o?'selected':''}>${o}</option>`).join('')}</select></td><td><input type="date" id="tgl-real-${d.id}" value="${d.tglReal||''}" onchange="upDate('${d.id}','tglReal',this.value)" class="date-edit"></td><td class="no-print flex gap-1 justify-center">${postBtn}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
+        });
+        body.innerHTML = html;
+    };
+
+    window.handleStatusBayar = async (id, v) => {
+        let update = { status_real_bayar: v };
+        if(v === 'Selesai Pembayaran') {
+            const t = new Date().toISOString().split('T')[0];
+            update.tglReal = t;
+            const el = document.getElementById(`tgl-real-${id}`);
+            if(el) el.value = t;
+        }
+        await updateDoc(doc(db, "permintaan_belanja", id), update);
+    };
+
+    window.renderRealisasi = () => {
+        const body = document.getElementById('body-realisasi');
+        let html = "";
+        dataRPD.forEach(d => {
+            const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
+            const r = Number(d.anggaran), b = lP.reduce((a,c)=>a+Number(c.nilai),0);
+            const g = r - b, p = r > 0 ? Math.round((b/r)*100) : 0;
+            html += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td>${d.pok}</td><td>${d.bulan}</td><td>-</td><td>Rp ${r.toLocaleString()}</td><td>Rp ${b.toLocaleString()}</td><td>Rp ${g.toLocaleString()}</td><td>${p}%</td></tr>`;
+        });
+        body.innerHTML = html;
+    };
+
+    window.simpanRPD = async () => {
+        const d = { 
+            tim: document.getElementById('in-tim').value, 
+            jenis: document.getElementById('in-jenis').value, 
+            anggaran: Number(document.getElementById('in-anggaran').value), 
+            bulan: document.getElementById('in-bulan').value,
+            kegiatan: document.getElementById('in-kegiatan').value,
+            kro: document.getElementById('in-kro').value,
+            ro: document.getElementById('in-ro').value,
+            komp: document.getElementById('in-komp').value,
+            akun: document.getElementById('in-akun').value,
+            pok: document.getElementById('in-pok').value,
+            uraian: document.getElementById('in-uraian').value,
+            createdAt: serverTimestamp() 
         };
+        if(!d.tim || !d.anggaran) return alert("Lengkapi data!");
+        await addDoc(collection(db, "rpd_entries"), d); alert("Data RPD Disimpan!");
+    };
 
-        window.simpanSettingPagu = () => {
-            CONFIG_PAGU["51"] = Number(document.getElementById('set-pagu-51').value);
-            CONFIG_PAGU["52"] = Number(document.getElementById('set-pagu-52').value);
-            CONFIG_PAGU["53"] = Number(document.getElementById('set-pagu-53').value);
-            localStorage.setItem('emba_pagu', JSON.stringify(CONFIG_PAGU));
-            alert("Pagu Terupdate! Menghitung ulang dashboard...");
-            renderDashboard();
-            // Tambahkan fungsi untuk merender tabel informasi pagu
-const renderInfoPagu = () => {
-    const totalPagu = CONFIG_PAGU["51"] + CONFIG_PAGU["52"] + CONFIG_PAGU["53"];
-    const body = document.getElementById('body-info-pagu');
-    
-    if (!body) return;
+    window.simpanPermintaan = async () => {
+        const d = { 
+            noForm: document.getElementById('req-no').value, 
+            nilai: Number(document.getElementById('req-nilai').value), 
+            uraian: document.getElementById('req-uraian').value, 
+            rpdId: document.getElementById('req-rpd-id').value, 
+            tglFPB: document.getElementById('req-tgl').value,
+            isPosted: false, 
+            createdAt: serverTimestamp() 
+        };
+        await addDoc(collection(db, "permintaan_belanja"), d); alert("Permintaan Terkirim!");
+    };
 
-    let html = "";
-    ["51", "52", "53"].forEach(jb => {
-        const pagu = CONFIG_PAGU[jb];
-        const proporsi = totalPagu > 0 ? ((pagu / totalPagu) * 100).toFixed(2) : 0;
-        const label = jb === "51" ? "Pegawai (51)" : (jb === "52" ? "Barang (52)" : "Modal (53)");
-        
-        html += `
-            <tr class="text-[11px]">
-                <td class="p-2 border font-bold">${label}</td>
-                <td class="p-2 border text-right">Rp ${pagu.toLocaleString()}</td>
-                <td class="p-2 border text-blue-600 font-bold">${proporsi}%</td>
-            </tr>
-        `;
+    window.postToReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
+    window.unpostFromReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: false }); };
+    window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
+    window.hapusRPD = async (id) => { if(confirm("Hapus RPD ini?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+    window.hapusPerm = async (id) => { if(confirm("Hapus permintaan ini?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+    window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
+
+    document.addEventListener('DOMContentLoaded', () => { 
+        loadPagu(); 
+        // Inisialisasi Akun sederhana jika belum ada datanya
+        const aSel = document.getElementById('in-akun');
+        if(aSel && aSel.options.length === 0) {
+            ["511111", "521211", "532111"].forEach(akun => {
+                let opt = document.createElement('option');
+                opt.value = akun; opt.innerHTML = akun;
+                aSel.appendChild(opt);
+            });
+        }
     });
-
-    body.innerHTML = html;
-    document.getElementById('info-total-pagu').innerText = "Rp " + totalPagu.toLocaleString();
-};
-
-// Modifikasi fungsi simpan agar memanggil renderInfoPagu
-window.simpanSettingPagu = () => {
-    CONFIG_PAGU["51"] = Number(document.getElementById('set-pagu-51').value);
-    CONFIG_PAGU["52"] = Number(document.getElementById('set-pagu-52').value);
-    CONFIG_PAGU["53"] = Number(document.getElementById('set-pagu-53').value);
-    localStorage.setItem('emba_pagu', JSON.stringify(CONFIG_PAGU));
-    
-    renderInfoPagu(); // Update tabel informasi
-    renderDashboard(); // Update perhitungan dashboard
-    alert("Pagu Terupdate sesuai DIPA terbaru!");
-};
-
-// Modifikasi loadPagu agar memanggil renderInfoPagu saat aplikasi pertama dibuka
-const loadPagu = () => {
-    const saved = localStorage.getItem('emba_pagu');
-    if(saved) {
-        CONFIG_PAGU = JSON.parse(saved);
-        document.getElementById('set-pagu-51').value = CONFIG_PAGU["51"];
-        document.getElementById('set-pagu-52').value = CONFIG_PAGU["52"];
-        document.getElementById('set-pagu-53').value = CONFIG_PAGU["53"];
-        renderInfoPagu(); // Render tabel informasi saat pertama buka
-    }
-};
-        };
-
-        window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); };
-
-        window.switchTab = (id) => {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-            document.getElementById('section-' + id).classList.remove('hidden');
-            document.getElementById('page-title').innerText = id.replace('-', ' ').toUpperCase();
-            renderAll();
-        };
-
-        // DASHBOARD DENGAN RUMUS DEVIASI TERTIMBANG
-        window.renderDashboard = () => {
-            const fT = document.getElementById('f-dash-tim').value;
-            const fB = document.getElementById('f-dash-bulan').value;
-            
-            let stats = {
-                "51": { rpd: 0, real: 0 },
-                "52": { rpd: 0, real: 0 },
-                "53": { rpd: 0, real: 0 }
-            };
-            let dashHtml = "";
-
-            dataRPD.forEach(d => {
-                if ((!fT || d.tim === fT) && (!fB || d.bulan === bMap[fB])) {
-                    if (stats[d.jenis]) stats[d.jenis].rpd += Number(d.anggaran);
-                }
-            });
-
-            dataPerm.filter(p => p.isPosted).forEach(p => {
-                const bI = p.tglReal ? p.tglReal.split('-')[1] : '';
-                if ((!fT || p.tim === fT) && (!fB || bI === fB)) {
-                    const rpdRef = dataRPD.find(r => r.id === p.rpdId);
-                    const jb = rpdRef ? rpdRef.jenis : "52";
-                    if (stats[jb]) stats[jb].real += Number(p.nilai);
-                    dashHtml += `<tr><td>${p.noForm}</td><td>${p.tim}</td><td>${p.uraian}</td><td class="text-right">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold">POSTED</td></tr>`;
-                }
-            });
-
-            // HITUNG DEVIASI TERTIMBANG
-            const totalPagu = CONFIG_PAGU["51"] + CONFIG_PAGU["52"] + CONFIG_PAGU["53"];
-            let devTertimbang = 0;
-            let totR = 0, totB = 0;
-
-            ["51", "52", "53"].forEach(jb => {
-                totR += stats[jb].rpd;
-                totB += stats[jb].real;
-                const proporsi = totalPagu > 0 ? (CONFIG_PAGU[jb] / totalPagu) : 0;
-                if (stats[jb].rpd > 0) {
-                    const devJB = Math.abs(stats[jb].real - stats[jb].rpd) / stats[jb].rpd;
-                    devTertimbang += (devJB * proporsi);
-                }
-            });
-
-            const devFinal = devTertimbang * 100;
-            const ikpa = Math.max(0, 100 - devFinal);
-
-            document.getElementById('dash-total-rpd').innerText = "Rp " + totR.toLocaleString();
-            document.getElementById('dash-total-real').innerText = "Rp " + totB.toLocaleString();
-            document.getElementById('dash-total-gap').innerText = devFinal.toFixed(2) + "%";
-            document.getElementById('dash-total-persen').innerText = ikpa.toFixed(2);
-            document.getElementById('dash-total-sisa').innerText = ikpa > 95 ? "SANGAT BAIK" : (ikpa > 90 ? "BAIK" : "EVALUASI");
-            document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
-        };
-
-        // ... Sisa fungsi (renderRPD, renderPermintaan, simpan, dll) tetap sama
-        // Hanya pastikan dropdown opsi Approve & Status sudah diperbarui di renderPermintaan
-
-        onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
-        onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => { dataPerm = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
-        window.renderAll = () => { renderDashboard(); renderRPD(); renderPermintaan(); renderRealisasi(); };
-
-        window.renderRPD = () => {
-            const body = document.getElementById('body-rpd');
-            let html = "";
-            dataRPD.forEach(d => {
-                const kG = `${d.kegiatan || ''}.${d.kro || ''}.${d.ro || ''}.${d.komp || ''}`;
-                if (editIdRPD === d.id) {
-                    html += `<tr class="bg-indigo-50">
-                        <td><input id="e-tim" value="${d.tim}" class="w-full text-[9px]"></td>
-                        <td><input value="${kG}" class="w-full text-[9px]" readonly></td>
-                        <td><input id="e-jen" value="${d.jenis}" class="w-full text-[9px]"></td>
-                        <td><input id="e-aku" value="${d.akun}" class="w-full text-[9px]"></td>
-                        <td><input id="e-pok" value="${d.pok||''}" class="w-full text-[9px]"></td>
-                        <td><input id="e-ura" value="${d.uraian||''}" class="w-full text-[9px]"></td>
-                        <td><input id="e-ang" type="number" value="${d.anggaran}" class="w-full text-[9px]"></td>
-                        <td>${d.bulan}</td>
-                        <td class="flex gap-1 justify-center"><button onclick="saveEditRPD('${d.id}')">💾</button><button onclick="setEditRPD(null)">❌</button></td>
-                    </tr>`;
-                } else {
-                    html += `<tr><td>${d.tim}</td><td>${kG}</td><td>${d.jenis}</td><td>${d.akun}</td><td>${d.pok}</td><td>${d.uraian}</td><td class="text-right">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print flex gap-1 justify-center"><button onclick="setEditRPD('${d.id}')">✏️</button><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
-                }
-            });
-            body.innerHTML = html;
-        };
-
-        window.renderPermintaan = () => {
-            const body = document.getElementById('body-permintaan');
-            let html = "";
-            dataPerm.forEach(d => {
-                const postBtn = d.isPosted ? `<button onclick="unpostFromReal('${d.id}')" class="btn-unpost">BATAL ↩️</button>` : `<button onclick="postToReal('${d.id}')" class="btn-post">POST 📮</button>`;
-                const optApprove = ["App PJ", "App PPK"];
-                const optStatusBayar = ["Pemeriksaan Dokumen", "Pemeriksaan Bendahara", "Proses Permintaan KPPN", "Dana Tersedia", "Selesai Pembayaran"];
-                
-                html += `<tr>
-                    <td>${d.noForm}</td><td>${d.tglFPB}</td><td>${d.uraian}</td><td class="text-right">Rp ${Number(d.nilai).toLocaleString()}</td>
-                    <td><select onchange="upDate('${d.id}','approval_status',this.value)" class="status-select"><option value="">Pilih</option>${optApprove.map(o=>`<option value="${o}" ${d.approval_status===o?'selected':''}>${o}</option>`).join('')}</select></td>
-                    <td><input type="date" value="${d.tglApp||''}" onchange="upDate('${d.id}','tglApp',this.value)" class="date-edit"></td>
-                    <td><select onchange="handleStatusBayar('${d.id}',this.value)" class="status-select"><option value="">Pilih</option>${optStatusBayar.map(o=>`<option value="${o}" ${d.status_real_bayar===o?'selected':''}>${o}</option>`).join('')}</select></td>
-                    <td><input type="date" id="tgl-real-${d.id}" value="${d.tglReal||''}" onchange="upDate('${d.id}','tglReal',this.value)" class="date-edit"></td>
-                    <td class="no-print flex gap-1 justify-center">${postBtn}<button onclick="hapusPerm('${d.id}')">🗑️</button></td>
-                </tr>`;
-            });
-            body.innerHTML = html;
-        };
-
-        window.handleStatusBayar = async (id, v) => {
-            let update = { status_real_bayar: v };
-            if(v === 'Selesai Pembayaran') {
-                const t = new Date().toISOString().split('T')[0];
-                update.tglReal = t;
-                const el = document.getElementById(`tgl-real-${id}`);
-                if(el) el.value = t;
-            }
-            await updateDoc(doc(db, "permintaan_belanja", id), update);
-        };
-
-        window.renderRealisasi = () => {
-            const body = document.getElementById('body-realisasi');
-            let html = "";
-            dataRPD.forEach(d => {
-                const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
-                const r = Number(d.anggaran), b = lP.reduce((a,c)=>a+Number(c.nilai),0);
-                const g = r - b, p = r > 0 ? Math.round((b/r)*100) : 0;
-                html += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td>${d.pok}</td><td>${d.bulan}</td><td>-</td><td>Rp ${r.toLocaleString()}</td><td>Rp ${b.toLocaleString()}</td><td>Rp ${g.toLocaleString()}</td><td>${p}%</td></tr>`;
-            });
-            body.innerHTML = html;
-        };
-
-        window.saveEditRPD = async (id) => {
-            await updateDoc(doc(db, "rpd_entries", id), { tim: document.getElementById('e-tim').value, jenis: document.getElementById('e-jen').value, akun: document.getElementById('e-aku').value, pok: document.getElementById('e-pok').value, uraian: document.getElementById('e-ura').value, anggaran: Number(document.getElementById('e-ang').value) });
-            editIdRPD = null; renderRPD();
-        };
-
-        window.simpanRPD = async () => {
-            const d = { tim: document.getElementById('in-tim').value, jenis: document.getElementById('in-jenis').value, anggaran: Number(document.getElementById('in-anggaran').value), bulan: document.getElementById('in-bulan').value, createdAt: serverTimestamp() };
-            await addDoc(collection(db, "rpd_entries"), d); alert("OK!");
-        };
-
-        window.simpanPermintaan = async () => {
-            const d = { noForm: document.getElementById('req-no').value, nilai: Number(document.getElementById('req-nilai').value), uraian: document.getElementById('req-uraian').value, rpdId: document.getElementById('req-rpd-id').value, isPosted: false, createdAt: serverTimestamp() };
-            await addDoc(collection(db, "permintaan_belanja"), d); alert("OK!");
-        };
-
-        window.postToReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
-        window.unpostFromReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: false }); };
-        window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
-        window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
-        window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
-        window.setEditRPD = (id) => { editIdRPD = id; renderRPD(); };
-        window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
-
-        document.addEventListener('DOMContentLoaded', () => { loadPagu(); filterAkunByJenis("51"); });
-    </script>
+</script>
 </body>
 </html>
