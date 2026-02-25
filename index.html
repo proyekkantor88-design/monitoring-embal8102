@@ -187,23 +187,63 @@
         window.renderAll = () => { renderDashboard(); renderRPD(); renderPermintaan(); renderRealisasi(); };
 
         window.renderDashboard = () => {
-            const fT = document.getElementById('f-dash-tim').value, fB = document.getElementById('f-dash-bulan').value;
-            let sR = 0, sB = 0, dashHtml = "";
-            dataRPD.forEach(d => { if ((!fT || d.tim === fT) && (!fB || d.bulan === bMap[fB])) sR += Number(d.anggaran); });
-            dataPerm.filter(p => p.isPosted).forEach(p => {
-                const bI = p.tglReal ? p.tglReal.split('-')[1] : '';
-                if ((!fT || p.tim === fT) && (!fB || bI === fB)) {
-                    sB += Number(p.nilai);
-                    dashHtml += `<tr><td>${p.noForm}</td><td class="font-bold">${p.tim}</td><td>${p.uraian}</td><td class="text-right">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold">POSTED</td></tr>`;
-                }
-            });
-            document.getElementById('dash-total-rpd').innerText = "Rp " + sR.toLocaleString();
-            document.getElementById('dash-total-real').innerText = "Rp " + sB.toLocaleString();
-            document.getElementById('dash-total-gap').innerText = "Rp " + (sR - sB).toLocaleString();
-            document.getElementById('dash-total-sisa').innerText = "Rp " + (sR - sB > 0 ? (sR - sB).toLocaleString() : "0");
-            document.getElementById('dash-total-persen').innerText = (sR > 0 ? Math.round((sB / sR) * 100) : 0) + "%";
-            document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
-        };
+    const fT = document.getElementById('f-dash-tim').value;
+    const fB = document.getElementById('f-dash-bulan').value;
+    
+    let totalRencanaRPD = 0; // Total Rencana di Hal 3 DIPA
+    let totalRealisasiBayar = 0; // Total Realisasi (SP2D)
+    let dashHtml = "";
+
+    // 1. Hitung Rencana (Berdasarkan Bulan RPD yang dipilih)
+    dataRPD.forEach(d => {
+        const matchTim = !fT || d.tim === fT;
+        const matchBulan = !fB || d.bulan === bMap[fB];
+        
+        if (matchTim && matchBulan) {
+            totalRencanaRPD += Number(d.anggaran);
+        }
+    });
+
+    // 2. Hitung Realisasi (Berdasarkan Bulan Bayar/Tgl Realisasi)
+    dataPerm.filter(p => p.isPosted).forEach(p => {
+        const tglBayar = p.tglReal ? p.tglReal.split('-') : null; // [YYYY, MM, DD]
+        const bulanBayar = tglBayar ? tglBayar[1] : '';
+        
+        const matchTim = !fT || p.tim === fT;
+        const matchBulanBayar = !fB || bulanBayar === fB;
+
+        if (matchTim && matchBulanBayar) {
+            totalRealisasiBayar += Number(p.nilai);
+            dashHtml += `<tr>
+                <td>${p.noForm}</td>
+                <td class="font-bold">${p.tim}</td>
+                <td>${p.uraian}</td>
+                <td class="text-right">Rp ${Number(p.nilai).toLocaleString()}</td>
+                <td class="text-emerald-600 font-bold">POSTED</td>
+            </tr>`;
+        }
+    });
+
+    // 3. Rumus Standar Halaman 3 DIPA
+    const deviasiGap = totalRencanaRPD - totalRealisasiBayar;
+    const persentaseCapaian = totalRencanaRPD > 0 ? Math.round((totalRealisasiBayar / totalRencanaRPD) * 100) : 0;
+
+    // Update Tampilan UI
+    document.getElementById('dash-total-rpd').innerText = "Rp " + totalRencanaRPD.toLocaleString();
+    document.getElementById('dash-total-real').innerText = "Rp " + totalRealisasiBayar.toLocaleString();
+    
+    // GAP (Deviasi) - Merah jika realisasi < rencana, Hijau jika sesuai/lebih
+    const gapEl = document.getElementById('dash-total-gap');
+    gapEl.innerText = "Rp " + deviasiGap.toLocaleString();
+    gapEl.className = `text-base font-black ${deviasiGap > 0 ? 'text-red-600' : 'text-emerald-600'}`;
+
+    // Sisa Anggaran (Kumulatif Rencana - Kumulatif Realisasi)
+    document.getElementById('dash-total-sisa').innerText = "Rp " + (deviasiGap > 0 ? deviasiGap.toLocaleString() : "0");
+    
+    // Persentase Deviasi/Serapan
+    document.getElementById('dash-total-persen').innerText = persentaseCapaian + "%";
+    document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
+};
 
         window.renderRPD = () => {
             const body = document.getElementById('body-rpd'), foot = document.getElementById('foot-rpd');
