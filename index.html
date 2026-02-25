@@ -75,19 +75,63 @@
 
         <section id="section-input-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-indigo-600 no-print">
-                <div class="grid grid-cols-7 gap-2 mb-4">
-    <div><label class="text-[9px] font-bold uppercase">Tim</label><input list="list-tim" id="in-tim" class="searchable-input"><datalist id="list-tim"><option value="Sosial"><option value="Produksi"><option value="Distribusi"><option value="Neraca"><option value="IPDS"><option value="Umum"></datalist></div>
-    <div><label class="text-[9px] font-bold uppercase">Keg.</label><input id="in-kegiatan" class="searchable-input"></div>
-    <div><label class="text-[9px] font-bold uppercase">KRO</label><input id="in-kro" class="searchable-input"></div>
-    <div><label class="text-[9px] font-bold uppercase">RO</label><input id="in-ro" class="searchable-input"></div>
-    <div><label class="text-[9px] font-bold uppercase">Komp</label><input id="in-komp" class="searchable-input"></div>
+               <div class="grid grid-cols-7 gap-2 mb-4">
+    <div>
+        <label class="text-[9px] font-bold uppercase">Tim</label>
+        <input list="list-tim" id="in-tim" class="searchable-input">
+        <datalist id="list-tim">
+            <option value="Sosial"><option value="Produksi"><option value="Distribusi"><option value="Neraca"><option value="IPDS"><option value="Umum">
+        </datalist>
+    </div>
+    <div>
+        <label class="text-[9px] font-bold uppercase">Keg.</label>
+        <select id="in-kegiatan" class="searchable-input">
+            <option value="2886">2886</option><option value="2896">2896</option><option value="2897">2897</option>
+            <option value="2898">2898</option><option value="2899">2899</option><option value="2900">2900</option>
+            <option value="2901">2901</option><option value="2902">2902</option><option value="2903">2903</option>
+            <option value="2904">2904</option><option value="2905">2905</option><option value="2906">2906</option>
+            <option value="2907">2907</option><option value="2908">2908</option><option value="2909">2909</option>
+            <option value="2910">2910</option>
+        </select>
+    </div>
+    <div>
+        <label class="text-[9px] font-bold uppercase">KRO</label>
+        <select id="in-kro" class="searchable-input">
+            <option value="BMA">BMA</option><option value="QBD">QBD</option><option value="CAN">CAN</option>
+            <option value="EBA">EBA</option><option value="EBB">EBB</option><option value="EBD">EBD</option>
+        </select>
+    </div>
+    <div>
+        <label class="text-[9px] font-bold uppercase">RO</label>
+        <select id="in-ro" class="searchable-input">
+            <option value="003">003</option><option value="004">004</option><option value="005">005</option>
+            <option value="006">006</option><option value="007">007</option><option value="008">008</option>
+            <option value="009">009</option><option value="056">056</option><option value="951">951</option>
+            <option value="955">955</option><option value="962">962</option><option value="994">994</option>
+        </select>
+    </div>
+    <div>
+        <label class="text-[9px] font-bold uppercase">Komp</label>
+        <select id="in-komp" class="searchable-input">
+            <option value="001">001</option><option value="002">002</option><option value="005">005</option>
+            <option value="051">051</option><option value="052">052</option><option value="053">053</option>
+            <option value="054">054</option><option value="056">056</option><option value="506">506</option>
+            <option value="519">519</option><option value="530">530</option>
+        </select>
+    </div>
     <div>
         <label class="text-[9px] font-bold uppercase">Jenis</label>
-        <select id="in-jenis" class="w-full p-2 border rounded text-xs mt-1 font-bold outline-none bg-white">
+        <select id="in-jenis" onchange="filterAkunByJenis(this.value)" class="searchable-input font-bold bg-yellow-50">
             <option value="51">51</option>
             <option value="52">52</option>
             <option value="53">53</option>
         </select>
+    </div>
+    <div>
+        <label class="text-[9px] font-bold uppercase">Akun</label>
+        <select id="in-akun" class="searchable-input font-bold"></select>
+    </div>
+</div>
     </div>
     <div><label class="text-[9px] font-bold uppercase">Akun</label><input id="in-akun" class="searchable-input"></div>
 </div>
