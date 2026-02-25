@@ -179,7 +179,7 @@
 
         window.renderAll = () => { renderRPD(); renderPermintaan(); renderRealisasi(); renderDashboard(); };
 
-       // --- FUNGSI UTAMA UNTUK UPDATE SEMUA TABEL ---
+       // --- 1. FUNGSI UTAMA (HANYA SATU) ---
         window.renderAll = () => {
             renderDashboard();
             renderRPD();
@@ -187,7 +187,7 @@
             renderRealisasi();
         };
 
-        // --- FUNGSI DASHBOARD ---
+        // --- 2. FUNGSI DASHBOARD ---
         window.renderDashboard = () => {
             const fT = document.getElementById('f-dash-tim').value;
             const fB = document.getElementById('f-dash-bulan').value;
@@ -213,7 +213,7 @@
             document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
         };
 
-        // --- FUNGSI RPD (VERSI KRO, RO, KOMPONEN) ---
+        // --- 3. FUNGSI RPD (VERSI GABUNG TITIK) ---
         window.renderRPD = () => {
             const body = document.getElementById('body-rpd');
             const foot = document.getElementById('foot-rpd');
@@ -225,15 +225,19 @@
             let html = "", total = 0;
             dataRPD.forEach(d => {
                 if ((!fT || d.tim === fT) && (!fK || d.kegiatan === fK) && (!fA || d.akun === fA) && (!fB || d.bulan === fB)) {
+                    
+                    // FORMAT GABUNGAN: KEG.KRO.RO.KOMP
+                    const kodeGabung = `${d.kegiatan || ''}.${d.kro || ''}.${d.ro || ''}.${d.komp || ''}`;
+
                     if (editIdRPD === d.id) {
                         html += `<tr class="bg-indigo-50">
                             <td><input id="e-tim" class="w-full border p-1" value="${d.tim}"></td>
-                            <td><input id="e-keg" class="w-full border p-1" value="${d.kegiatan}"></td>
                             <td>
                                 <div class="flex flex-col gap-1">
-                                    <input id="e-kro" placeholder="KRO" class="text-[8px] border" value="${d.kro || ''}">
-                                    <input id="e-ro" placeholder="RO" class="text-[8px] border" value="${d.ro || ''}">
-                                    <input id="e-komp" placeholder="KOMP" class="text-[8px] border" value="${d.komp || ''}">
+                                    <input id="e-keg" placeholder="KEG" class="text-[9px] border" value="${d.kegiatan || ''}">
+                                    <input id="e-kro" placeholder="KRO" class="text-[9px] border" value="${d.kro || ''}">
+                                    <input id="e-ro" placeholder="RO" class="text-[9px] border" value="${d.ro || ''}">
+                                    <input id="e-komp" placeholder="KOMP" class="text-[9px] border" value="${d.komp || ''}">
                                 </div>
                             </td>
                             <td><input id="e-aku" class="w-full border p-1" value="${d.akun}"></td>
@@ -246,10 +250,7 @@
                     } else {
                         html += `<tr>
                             <td>${d.tim}</td>
-                            <td>${d.kegiatan}</td>
-                            <td class="text-[8px] leading-tight text-slate-500 text-left">
-                                KRO: ${d.kro || '-'}<br>RO: ${d.ro || '-'}<br>KOMP: ${d.komp || '-'}
-                            </td>
+                            <td class="font-mono font-bold text-indigo-900 text-[10px]">${kodeGabung}</td>
                             <td>${d.akun}</td>
                             <td class="text-left">${d.pok || '-'}</td>
                             <td class="text-left">${d.uraian || '-'}</td>
@@ -265,9 +266,8 @@
                 }
             });
             body.innerHTML = html;
-            foot.innerHTML = `<tr><td colspan="6" class="text-right p-2 font-bold uppercase">Total:</td><td class="text-right p-2 font-bold text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            foot.innerHTML = `<tr><td colspan="5" class="text-right p-2 font-bold uppercase">Total:</td><td class="text-right p-2 font-bold text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
             
-            // Sync Dropdown
             const drop = document.getElementById('req-rpd-id');
             if(drop) { 
                 let opt = '<option value="">-- Pilih Rincian RPD --</option>'; 
@@ -276,7 +276,7 @@
             }
         };
 
-        // --- FUNGSI PERMINTAAN ---
+        // --- 4. FUNGSI PERMINTAAN ---
         window.renderPermintaan = () => {
             const body = document.getElementById('body-permintaan');
             let html = "", total = 0;
@@ -293,10 +293,9 @@
             document.getElementById('foot-permintaan').innerHTML = `<tr><td colspan="3" class="text-right font-bold">Total:</td><td class="text-right font-bold text-green-700">Rp ${total.toLocaleString()}</td><td colspan="5"></td></tr>`;
         };
 
-        // --- FUNGSI REALISASI ---
+        // --- 5. FUNGSI REALISASI ---
         window.renderRealisasi = () => {
-            const body = document.getElementById('body-realisasi');
-            const foot = document.getElementById('foot-realisasi');
+            const body = document.getElementById('body-realisasi'), foot = document.getElementById('foot-realisasi');
             const fRB = document.getElementById('f-real-bulan').value, fRT = document.getElementById('f-real-tim').value;
             let html = "", sR = 0, sB = 0, sG = 0;
             dataRPD.forEach(d => {
@@ -315,7 +314,7 @@
             foot.innerHTML = `<tr><td colspan="4" class="text-right font-black uppercase">Total GAP:</td><td class="text-right font-bold text-indigo-700">Rp ${sR.toLocaleString()}</td><td class="text-right font-bold text-orange-700">Rp ${sB.toLocaleString()}</td><td class="text-right text-red-700 font-black">Rp ${sG.toLocaleString()}</td><td></td></tr>`;
         };
 
-        // --- CRUD ACTIONS ---
+        // --- 6. ACTIONS (CRUD) ---
         window.simpanRPD = async () => {
             const tim = document.getElementById('in-tim').value, ang = document.getElementById('in-anggaran').value;
             if(!tim || !ang) return alert("Isi Tim & Anggaran!");
@@ -331,7 +330,6 @@
 
         window.saveEditRPD = async (id) => { await updateDoc(doc(db, "rpd_entries", id), { tim: document.getElementById('e-tim').value, kegiatan: document.getElementById('e-keg').value, kro: document.getElementById('e-kro').value, ro: document.getElementById('e-ro').value, komp: document.getElementById('e-komp').value, akun: document.getElementById('e-aku').value, pok: document.getElementById('e-pok').value, uraian: document.getElementById('e-ura').value, anggaran: Number(document.getElementById('e-ang').value) }); editIdRPD = null; };
         window.saveEditPerm = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { noForm: document.getElementById('p-e-no').value, tglFPB: document.getElementById('p-e-tgl').value, uraian: document.getElementById('p-e-ura').value, nilai: Number(document.getElementById('p-e-nil').value) }); editIdPerm = null; };
-        
         window.validateApprovalDate = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { tglApp: v }); };
         window.validatePaymentDate = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { tglReal: v }); };
         window.upStatusBayar = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { status_realisasi: v, tglReal: v === 'Selesai Bayar' ? new Date().toISOString().split('T')[0] : '' }); };
@@ -343,7 +341,6 @@
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
         window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
-        window.updateFilters = () => {}; // Biarkan kosong atau isi jika perlu
     </script>
 </body>
 </html>
