@@ -187,63 +187,25 @@
         window.renderAll = () => { renderDashboard(); renderRPD(); renderPermintaan(); renderRealisasi(); };
 
         window.renderDashboard = () => {
-    const fT = document.getElementById('f-dash-tim').value;
-    const fB = document.getElementById('f-dash-bulan').value;
-    
-    let totalRencanaRPD = 0; // Total Rencana di Hal 3 DIPA
-    let totalRealisasiBayar = 0; // Total Realisasi (SP2D)
-    let dashHtml = "";
-
-    // 1. Hitung Rencana (Berdasarkan Bulan RPD yang dipilih)
-    dataRPD.forEach(d => {
-        const matchTim = !fT || d.tim === fT;
-        const matchBulan = !fB || d.bulan === bMap[fB];
-        
-        if (matchTim && matchBulan) {
-            totalRencanaRPD += Number(d.anggaran);
-        }
-    });
-
-    // 2. Hitung Realisasi (Berdasarkan Bulan Bayar/Tgl Realisasi)
-    dataPerm.filter(p => p.isPosted).forEach(p => {
-        const tglBayar = p.tglReal ? p.tglReal.split('-') : null; // [YYYY, MM, DD]
-        const bulanBayar = tglBayar ? tglBayar[1] : '';
-        
-        const matchTim = !fT || p.tim === fT;
-        const matchBulanBayar = !fB || bulanBayar === fB;
-
-        if (matchTim && matchBulanBayar) {
-            totalRealisasiBayar += Number(p.nilai);
-            dashHtml += `<tr>
-                <td>${p.noForm}</td>
-                <td class="font-bold">${p.tim}</td>
-                <td>${p.uraian}</td>
-                <td class="text-right">Rp ${Number(p.nilai).toLocaleString()}</td>
-                <td class="text-emerald-600 font-bold">POSTED</td>
-            </tr>`;
-        }
-    });
-
-    // 3. Rumus Standar Halaman 3 DIPA
-    const deviasiGap = totalRencanaRPD - totalRealisasiBayar;
-    const persentaseCapaian = totalRencanaRPD > 0 ? Math.round((totalRealisasiBayar / totalRencanaRPD) * 100) : 0;
-
-    // Update Tampilan UI
-    document.getElementById('dash-total-rpd').innerText = "Rp " + totalRencanaRPD.toLocaleString();
-    document.getElementById('dash-total-real').innerText = "Rp " + totalRealisasiBayar.toLocaleString();
-    
-    // GAP (Deviasi) - Merah jika realisasi < rencana, Hijau jika sesuai/lebih
-    const gapEl = document.getElementById('dash-total-gap');
-    gapEl.innerText = "Rp " + deviasiGap.toLocaleString();
-    gapEl.className = `text-base font-black ${deviasiGap > 0 ? 'text-red-600' : 'text-emerald-600'}`;
-
-    // Sisa Anggaran (Kumulatif Rencana - Kumulatif Realisasi)
-    document.getElementById('dash-total-sisa').innerText = "Rp " + (deviasiGap > 0 ? deviasiGap.toLocaleString() : "0");
-    
-    // Persentase Deviasi/Serapan
-    document.getElementById('dash-total-persen').innerText = persentaseCapaian + "%";
-    document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
-};
+            const fT = document.getElementById('f-dash-tim').value;
+            const fB = document.getElementById('f-dash-bulan').value;
+            let sR = 0, sB = 0, dashHtml = "";
+            dataRPD.forEach(d => { if ((!fT || d.tim === fT) && (!fB || d.bulan === bMap[fB])) sR += Number(d.anggaran); });
+            dataPerm.filter(p => p.isPosted).forEach(p => {
+                const bI = p.tglReal ? p.tglReal.split('-')[1] : '';
+                if ((!fT || p.tim === fT) && (!fB || bI === fB)) {
+                    sB += Number(p.nilai);
+                    dashHtml += `<tr><td>${p.noForm}</td><td class="font-bold">${p.tim}</td><td>${p.uraian}</td><td class="text-right">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold">POSTED</td></tr>`;
+                }
+            });
+            const gap = sR - sB;
+            document.getElementById('dash-total-rpd').innerText = "Rp " + sR.toLocaleString();
+            document.getElementById('dash-total-real').innerText = "Rp " + sB.toLocaleString();
+            document.getElementById('dash-total-gap').innerText = "Rp " + gap.toLocaleString();
+            document.getElementById('dash-total-sisa').innerText = "Rp " + (gap > 0 ? gap.toLocaleString() : "0");
+            document.getElementById('dash-total-persen').innerText = (sR > 0 ? Math.round((sB / sR) * 100) : 0) + "%";
+            document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
+        };
 
         window.renderRPD = () => {
             const body = document.getElementById('body-rpd'), foot = document.getElementById('foot-rpd');
@@ -288,11 +250,47 @@
             let html = "", total = 0;
             dataPerm.forEach(d => {
                 const postBtn = d.isPosted ? `<button onclick="unpostFromReal('${d.id}')" class="btn-unpost">BATAL ↩️</button>` : `<button onclick="postToReal('${d.id}')" class="btn-post">POST 📮</button>`;
-                html += `<tr><td class="font-bold">${d.noForm}</td><td>${d.tglFPB||'-'}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold">Rp ${Number(d.nilai).toLocaleString()}</td><td><select onchange="upDate('${d.id}','approval_status',this.value)" class="status-select"><option ${d.approval_status==='BELUM'?'selected':''}>BELUM</option><option ${d.approval_status==='ACC PJ'?'selected':''}>ACC PJ</option></select></td><td><input type="date" value="${d.tglApp||''}" onchange="upDate('${d.id}','tglApp',this.value)" class="date-edit"></td><td><select onchange="upStatusBayar('${d.id}',this.value)" class="status-select"><option value="Proses" ${d.status_real_bayar!=='Selesai Bayar'?'selected':''}>Proses</option><option value="Selesai Bayar" ${d.status_real_bayar==='Selesai Bayar'?'selected':''}>Selesai Bayar</option></select></td><td><input type="date" value="${d.tglReal||''}" onchange="upDate('${d.id}','tglReal',this.value)" class="date-edit"></td><td class="no-print flex gap-1 justify-center">${postBtn}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
+                
+                // Dropdown Opsi Baru
+                const optApprove = ["App PJ", "App PPK"];
+                const optStatusBayar = ["Pemeriksaan Dokumen", "Pemeriksaan Bendahara", "Proses Permintaan KPPN", "Dana Tersedia", "Selesai Pembayaran"];
+
+                html += `<tr>
+                    <td class="font-bold">${d.noForm}</td>
+                    <td>${d.tglFPB||'-'}</td>
+                    <td class="text-left">${d.uraian}</td>
+                    <td class="text-right font-bold">Rp ${Number(d.nilai).toLocaleString()}</td>
+                    <td>
+                        <select onchange="upDate('${d.id}','approval_status',this.value)" class="status-select">
+                            <option value="">Pilih</option>
+                            ${optApprove.map(o => `<option value="${o}" ${d.approval_status===o?'selected':''}>${o}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td><input type="date" value="${d.tglApp||''}" onchange="upDate('${d.id}','tglApp',this.value)" class="date-edit"></td>
+                    <td>
+                        <select onchange="handleStatusBayar('${d.id}',this.value)" class="status-select">
+                            <option value="">Pilih</option>
+                            ${optStatusBayar.map(o => `<option value="${o}" ${d.status_real_bayar===o?'selected':''}>${o}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td><input type="date" id="tgl-real-${d.id}" value="${d.tglReal||''}" onchange="upDate('${d.id}','tglReal',this.value)" class="date-edit"></td>
+                    <td class="no-print flex gap-1 justify-center">${postBtn}<button onclick="hapusPerm('${d.id}')">🗑️</button></td>
+                </tr>`;
                 total += Number(d.nilai);
             });
             body.innerHTML = html;
             foot.innerHTML = `<tr><td colspan="3" class="text-right font-bold">Total:</td><td class="text-right font-bold">Rp ${total.toLocaleString()}</td><td colspan="5"></td></tr>`;
+        };
+
+        window.handleStatusBayar = async (id, v) => {
+            let dataUpdate = { status_real_bayar: v };
+            if (v === 'Selesai Pembayaran') {
+                const today = new Date().toISOString().split('T')[0];
+                dataUpdate.tglReal = today;
+                const dateInput = document.getElementById(`tgl-real-${id}`);
+                if(dateInput) dateInput.value = today;
+            }
+            await updateDoc(doc(db, "permintaan_belanja", id), dataUpdate);
         };
 
         window.renderRealisasi = () => {
@@ -324,7 +322,7 @@
 
         window.simpanPermintaan = async () => {
             const rpdId = document.getElementById('req-rpd-id').value, type = document.getElementById('req-type').value, selRPD = dataRPD.find(x => x.id === rpdId);
-            const d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), approval_status: "BELUM", status_real_bayar: "Proses", isPosted: false, createdAt: serverTimestamp() };
+            const d = { noForm: document.getElementById('req-no').value, tglFPB: document.getElementById('req-tgl').value, typeRPD: type, rpdId: rpdId || "NON", tim: type==='RPD'?(selRPD?selRPD.tim:'-'):'NON-TIM', uraian: document.getElementById('req-uraian').value, nilai: Number(document.getElementById('req-nilai').value), approval_status: "BELUM", status_real_bayar: "Pemeriksaan Dokumen", isPosted: false, createdAt: serverTimestamp() };
             await addDoc(collection(db, "permintaan_belanja"), d); alert("OK!");
         };
 
@@ -343,13 +341,9 @@
                 editIdRPD = null;
                 renderRPD();
                 alert("Berhasil disimpan!");
-            } catch (err) {
-                console.error(err);
-                alert("Gagal simpan.");
-            }
+            } catch (err) { alert("Gagal simpan."); }
         };
 
-        window.upStatusBayar = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { status_real_bayar: v, tglReal: v === 'Selesai Bayar' ? new Date().toISOString().split('T')[0] : '' }); };
         window.postToReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
         window.unpostFromReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: false }); };
         window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
