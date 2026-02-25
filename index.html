@@ -233,9 +233,12 @@
             const saved = localStorage.getItem('emba_pagu');
             if(saved) {
                 CONFIG_PAGU = JSON.parse(saved);
-                document.getElementById('set-pagu-51').value = CONFIG_PAGU["51"];
-                document.getElementById('set-pagu-52').value = CONFIG_PAGU["52"];
-                document.getElementById('set-pagu-53').value = CONFIG_PAGU["53"];
+                if(document.getElementById('set-pagu-51')){
+                    document.getElementById('set-pagu-51').value = CONFIG_PAGU["51"];
+                    document.getElementById('set-pagu-52').value = CONFIG_PAGU["52"];
+                    document.getElementById('set-pagu-53').value = CONFIG_PAGU["53"];
+                }
+                renderInfoPagu();
             }
         };
 
