@@ -236,14 +236,16 @@
         body.innerHTML = html;
         document.getElementById('info-total-pagu').innerText = "Rp " + totalPagu.toLocaleString();
     };
-    window.simpanSettingPagu = () => {
+   window.simpanSettingPagu = () => {
         CONFIG_PAGU["51"] = Number(document.getElementById('set-pagu-51').value);
         CONFIG_PAGU["52"] = Number(document.getElementById('set-pagu-52').value);
         CONFIG_PAGU["53"] = Number(document.getElementById('set-pagu-53').value);
+        CONFIG_PAGU["periode"] = document.getElementById('set-pagu-periode').value; // Simpan periode
+        
         localStorage.setItem('emba_pagu', JSON.stringify(CONFIG_PAGU));
         renderInfoPagu();
         renderDashboard(); 
-        alert("Pagu Terupdate!");
+        alert(`Pagu Satker untuk ${CONFIG_PAGU["periode"]} Berhasil Diupdate!`);
     };
 
         // LOAD PAGU DARI STORAGE
