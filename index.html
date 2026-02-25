@@ -65,29 +65,52 @@
         </section>
 
         <section id="section-setting-pagu" class="tab-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-600 mb-6">
-                <h3 class="text-sm font-bold uppercase mb-4 text-purple-900 font-black">KONFIGURASI PAGU DIPA (DINAMIS)</h3>
-                <div class="mb-4">
-                    <label class="text-[10px] font-bold uppercase">Periode Triwulan</label>
-                    <select id="set-pagu-periode" onchange="updateFormInputPagu()" class="w-full p-2 border rounded font-bold text-purple-700 bg-purple-50">
-                        <option value="TRIWULAN I">TRIWULAN I</option><option value="TRIWULAN II">TRIWULAN II</option><option value="TRIWULAN III">TRIWULAN III</option><option value="TRIWULAN IV">TRIWULAN IV</option>
-                    </select>
-                </div>
-                <div class="grid grid-cols-3 gap-4">
-                    <div><label class="text-[10px] font-bold">Pagu 51</label><input type="number" id="set-pagu-51" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
-                    <div><label class="text-[10px] font-bold">Pagu 52</label><input type="number" id="set-pagu-52" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
-                    <div><label class="text-[10px] font-bold">Pagu 53</label><input type="number" id="set-pagu-53" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
-                </div>
-                <button onclick="simpanSettingPagu()" class="mt-6 bg-purple-600 text-white px-6 py-2 rounded-lg text-xs font-bold uppercase shadow-lg hover:bg-purple-700">Update Pagu Satker</button>
-                <div class="mt-8 border-t pt-6">
-                    <h4 class="text-xs font-bold uppercase mb-4 text-indigo-900">MATRIKS PAGU DASAR IKPA (SEMUA TW)</h4>
-                    <table class="w-full border-collapse">
-                        <thead><tr class="bg-slate-50 uppercase text-[9px]"><th class="p-2 border">Jenis Belanja</th><th class="p-2 border bg-blue-50">TW I</th><th class="p-2 border bg-emerald-50">TW II</th><th class="p-2 border bg-orange-50">TW III</th><th class="p-2 border bg-red-50">TW IV</th></tr></thead>
-                        <tbody id="body-info-pagu-all" class="text-center font-mono"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-600 mb-6">
+        <h3 class="text-sm font-bold uppercase mb-4 text-purple-900 font-black">KONFIGURASI PAGU DIPA (DINAMIS)</h3>
+        <div class="mb-4">
+            <label class="text-[10px] font-bold uppercase">Periode Triwulan</label>
+            <select id="set-pagu-periode" onchange="updateFormInputPagu()" class="w-full p-2 border rounded font-bold text-purple-700 bg-purple-50">
+                <option value="TRIWULAN I">TRIWULAN I</option><option value="TRIWULAN II">TRIWULAN II</option><option value="TRIWULAN III">TRIWULAN III</option><option value="TRIWULAN IV">TRIWULAN IV</option>
+            </select>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+            <div><label class="text-[10px] font-bold">Pagu 51</label><input type="number" id="set-pagu-51" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
+            <div><label class="text-[10px] font-bold">Pagu 52</label><input type="number" id="set-pagu-52" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
+            <div><label class="text-[10px] font-bold">Pagu 53</label><input type="number" id="set-pagu-53" class="w-full p-2 border rounded font-bold text-indigo-700"></div>
+        </div>
+        <button onclick="simpanSettingPagu()" class="mt-6 bg-purple-600 text-white px-6 py-2 rounded-lg text-xs font-bold uppercase shadow-lg hover:bg-purple-700">Update Pagu Satker</button>
+        
+        <div class="mt-8 border-t pt-6">
+            <h4 class="text-xs font-bold uppercase mb-4 text-indigo-900">MATRIKS PAGU DASAR IKPA (SEMUA TW)</h4>
+            <table class="w-full border-collapse">
+                <thead><tr class="bg-slate-50 uppercase text-[9px]"><th class="p-2 border">Jenis Belanja</th><th class="p-2 border bg-blue-50">TW I</th><th class="p-2 border bg-emerald-50">TW II</th><th class="p-2 border bg-orange-50">TW III</th><th class="p-2 border bg-red-50">TW IV</th></tr></thead>
+                <tbody id="body-info-pagu-all" class="text-center font-mono"></tbody>
+            </table>
+        </div>
+
+        <div class="mt-8 border-t pt-6">
+            <h4 class="text-xs font-bold uppercase mb-4 text-indigo-900">PROPORSI / BOBOT PAGU UNTUK NILAI IKPA</h4>
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 uppercase text-[9px]">
+                        <th class="p-2 border text-left">Jenis Belanja</th>
+                        <th class="p-2 border">Nilai Pagu (Rp)</th>
+                        <th class="p-2 border">Bobot Proporsi (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="body-info-pagu" class="text-center font-bold"></tbody>
+                <tfoot class="bg-indigo-50 font-black">
+                    <tr>
+                        <td class="p-2 border text-left text-[10px]">TOTAL PAGU SATKER</td>
+                        <td id="info-total-pagu" class="p-2 border text-right">Rp 0</td>
+                        <td class="p-2 border text-indigo-600">100%</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <p class="text-[8px] text-slate-400 mt-2 italic">*Bobot ini digunakan untuk menghitung deviasi tertimbang pada Nilai IKPA Halaman III DIPA.</p>
+        </div>
+    </div>
+</section>
 
         <section id="section-input-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-indigo-600 no-print">
