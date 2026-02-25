@@ -169,9 +169,24 @@
         window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); document.getElementById('main-content').classList.toggle('ml-0'); };
 
         window.switchTab = (id) => {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-            document.getElementById('section-' + id).classList.remove('hidden');
-            renderAll();
+    // Sembunyikan semua konten tab
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+    
+    // Tampilkan tab yang dipilih
+    document.getElementById('section-' + id).classList.remove('hidden');
+    
+    // PERBAIKAN JUDUL: Ambil teks dari tombol menu atau buat teks manual
+    let titleText = "";
+    if (id === 'dashboard') titleText = "Dashboard Utama";
+    else if (id === 'input-rpd') titleText = "Input Rencana RPD";
+    else if (id === 'permintaan-belanja') titleText = "Permintaan Belanja";
+    else if (id === 'realisasi-rpd') titleText = "Realisasi & Analisis GAP";
+
+    // Update judul di header
+    document.getElementById('page-title').innerText = titleText;
+    
+    // Refresh data
+    renderAll();
         };
 
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); updateFilters(); renderAll(); });
