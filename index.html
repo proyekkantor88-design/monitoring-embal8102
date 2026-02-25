@@ -104,6 +104,26 @@
             </div>
         </section>
 
+        <section id="section-realisasi-rpd" class="tab-content hidden">
+            <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
+                <div class="flex justify-between items-center mb-4 no-print">
+                    <div class="flex gap-2">
+                        <select id="f-real-bulan" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option></select>
+                        <select id="f-real-tim" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select>
+                        <select id="f-real-jenis" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold bg-indigo-50"><option value="">Semua Jenis</option><option value="51">Jenis 51</option><option value="52">Jenis 52</option><option value="53">Jenis 53</option></select>
+                    </div>
+                    <button onclick="window.print()" class="bg-orange-600 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Analisis GAP</button>
+                </div>
+                <table class="w-full border text-center">
+                    <thead class="bg-slate-50 uppercase">
+                        <tr><th>Tim</th><th>Jenis</th><th>Detil POK</th><th class="bg-indigo-50">Bulan RPD</th><th class="bg-orange-50">Bulan Bayar</th><th>Rencana</th><th>Realisasi</th><th>GAP</th><th>%</th></tr>
+                    </thead>
+                    <tbody id="body-realisasi"></tbody>
+                    <tfoot id="foot-realisasi" class="foot-total"></tfoot>
+                </table>
+            </div>
+        </section>
+        
         <section id="section-permintaan-belanja" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-green-600 no-print">
                 <div class="grid grid-cols-4 gap-3 mb-4">
@@ -123,26 +143,6 @@
                     <thead><tr><th>No. FPB</th><th>Tgl FPB</th><th>Uraian</th><th>Nilai</th><th>Approve</th><th>Tgl App</th><th>Status Bayar</th><th>Tgl Bayar</th><th class="no-print">Aksi</th></tr></thead>
                     <tbody id="body-permintaan"></tbody>
                     <tfoot id="foot-permintaan" class="foot-total"></tfoot>
-                </table>
-            </div>
-        </section>
-
-        <section id="section-realisasi-rpd" class="tab-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
-                <div class="flex justify-between items-center mb-4 no-print">
-                    <div class="flex gap-2">
-                        <select id="f-real-bulan" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option></select>
-                        <select id="f-real-tim" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold"><option value="">Semua Tim</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option><option>Umum</option></select>
-                        <select id="f-real-jenis" onchange="renderRealisasi()" class="p-1 border rounded text-[10px] font-bold bg-indigo-50"><option value="">Semua Jenis</option><option value="51">Jenis 51</option><option value="52">Jenis 52</option><option value="53">Jenis 53</option></select>
-                    </div>
-                    <button onclick="window.print()" class="bg-orange-600 text-white px-4 py-1 rounded text-xs font-bold uppercase">Cetak Analisis GAP</button>
-                </div>
-                <table class="w-full border text-center">
-                    <thead class="bg-slate-50 uppercase">
-                        <tr><th>Tim</th><th>Jenis</th><th>Detil POK</th><th class="bg-indigo-50">Bulan RPD</th><th class="bg-orange-50">Bulan Bayar</th><th>Rencana</th><th>Realisasi</th><th>GAP</th><th>%</th></tr>
-                    </thead>
-                    <tbody id="body-realisasi"></tbody>
-                    <tfoot id="foot-realisasi" class="foot-total"></tfoot>
                 </table>
             </div>
         </section>
@@ -214,25 +214,19 @@
                     const kG = `${d.kegiatan || ''}.${d.kro || ''}.${d.ro || ''}.${d.komp || ''}`;
                     if (editIdRPD === d.id) {
                         html += `<tr class="bg-indigo-50">
-                            <td><input id="e-tim" value="${d.tim}" class="w-full"></td>
-                            <td><input id="e-kg" value="${kG}" class="w-full" readonly></td>
-                            <td><input id="e-jen" value="${d.jenis}" class="w-full"></td>
-                            <td><input id="e-aku" value="${d.akun}" class="w-full"></td>
-                            <td><input id="e-pok" value="${d.pok||''}" class="w-full"></td>
-                            <td><input id="e-ura" value="${d.uraian||''}" class="w-full"></td>
-                            <td><input id="e-ang" type="number" value="${d.anggaran}" class="w-full"></td>
+                            <td><input id="e-tim" value="${d.tim}" class="w-full text-[9px] border p-1 rounded"></td>
+                            <td><input value="${kG}" class="w-full text-[9px] bg-slate-100 p-1" readonly></td>
+                            <td><input id="e-jen" value="${d.jenis}" class="w-full text-[9px] border p-1 rounded"></td>
+                            <td><input id="e-aku" value="${d.akun}" class="w-full text-[9px] border p-1 rounded"></td>
+                            <td><input id="e-pok" value="${d.pok||''}" class="w-full text-[9px] border p-1 rounded"></td>
+                            <td><input id="e-ura" value="${d.uraian||''}" class="w-full text-[9px] border p-1 rounded"></td>
+                            <td><input id="e-ang" type="number" value="${d.anggaran}" class="w-full text-[9px] border p-1 font-bold rounded"></td>
                             <td>${d.bulan}</td>
-                            <td><button onclick="saveEditRPD('${d.id}')">💾</button></td>
+                            <td class="flex gap-1 justify-center">
+                                <button onclick="saveEditRPD('${d.id}')" title="Simpan">💾</button>
+                                <button onclick="setEditRPD(null)" title="Batal">❌</button>
+                            </td>
                         </tr>`;
-                        // Di dalam window.renderRPD pada bagian edit mode
-html += `<tr class="bg-indigo-50">
-    <td><input id="e-ang" type="number" value="${d.anggaran}" class="w-full"></td>
-    <td>${d.bulan}</td>
-    <td class="flex gap-1 justify-center">
-        <button onclick="saveEditRPD('${d.id}')" title="Simpan">💾</button>
-        <button onclick="setEditRPD(null)" title="Batal">❌</button>
-    </td>
-</tr>`;
                     } else {
                         html += `<tr><td>${d.tim}</td><td class="font-mono font-bold text-indigo-900">${kG}</td><td class="font-bold">${d.jenis || '-'}</td><td>${d.akun}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td class="no-print flex gap-1 justify-center"><button onclick="setEditRPD('${d.id}')">✏️</button><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`;
                     }
@@ -295,26 +289,25 @@ html += `<tr class="bg-indigo-50">
         };
 
         window.setEditRPD = (id) => { editIdRPD = id; renderRPD(); };
+
         window.saveEditRPD = async (id) => {
-    try {
-        await updateDoc(doc(db, "rpd_entries", id), { 
-            tim: document.getElementById('e-tim').value, 
-            jenis: document.getElementById('e-jen').value, 
-            akun: document.getElementById('e-aku').value, 
-            pok: document.getElementById('e-pok').value, 
-            uraian: document.getElementById('e-ura').value, 
-            anggaran: Number(document.getElementById('e-ang').value) 
-        });
-        
-        // PENTING: Kembalikan ke mode normal dan refresh tabel
-        editIdRPD = null; 
-        renderRPD(); 
-        alert("Perubahan Berhasil Disimpan!");
-    } catch (error) {
-        console.error("Gagal update:", error);
-        alert("Terjadi kesalahan saat menyimpan.");
-    }
-};
+            try {
+                await updateDoc(doc(db, "rpd_entries", id), { 
+                    tim: document.getElementById('e-tim').value, 
+                    jenis: document.getElementById('e-jen').value, 
+                    akun: document.getElementById('e-aku').value, 
+                    pok: document.getElementById('e-pok').value, 
+                    uraian: document.getElementById('e-ura').value, 
+                    anggaran: Number(document.getElementById('e-ang').value) 
+                });
+                editIdRPD = null;
+                renderRPD();
+                alert("Berhasil disimpan!");
+            } catch (err) {
+                console.error(err);
+                alert("Gagal simpan.");
+            }
+        };
 
         window.upStatusBayar = async (id, v) => { await updateDoc(doc(db, "permintaan_belanja", id), { status_real_bayar: v, tglReal: v === 'Selesai Bayar' ? new Date().toISOString().split('T')[0] : '' }); };
         window.postToReal = async (id) => { await updateDoc(doc(db, "permintaan_belanja", id), { isPosted: true }); };
