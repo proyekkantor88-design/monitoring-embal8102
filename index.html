@@ -214,19 +214,28 @@
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
         const renderInfoPagu = () => {
         const totalPagu = CONFIG_PAGU["51"] + CONFIG_PAGU["52"] + CONFIG_PAGU["53"];
+        const periode = document.getElementById('set-pagu-periode').value;
         const body = document.getElementById('body-info-pagu');
         if (!body) return;
+
+        // Update Judul Tabel agar muncul nama Triwulannya
+        document.querySelector('#section-setting-pagu h4').innerText = `Informasi Pagu Dasar IKPA - ${periode}`;
+
         let html = "";
         ["51", "52", "53"].forEach(jb => {
             const pagu = CONFIG_PAGU[jb];
             const proporsi = totalPagu > 0 ? ((pagu / totalPagu) * 100).toFixed(2) : 0;
             const label = jb === "51" ? "Pegawai (51)" : (jb === "52" ? "Barang (52)" : "Modal (53)");
-            html += `<tr class="text-[11px]"><td class="p-2 border font-bold text-left pl-4">${label}</td><td class="p-2 border text-right">Rp ${pagu.toLocaleString()}</td><td class="p-2 border text-indigo-600 font-bold">${proporsi}%</td></tr>`;
+            html += `
+                <tr class="text-[11px]">
+                    <td class="p-2 border font-bold text-left pl-4">${label}</td>
+                    <td class="p-2 border text-right">Rp ${pagu.toLocaleString()}</td>
+                    <td class="p-2 border text-indigo-600 font-bold">${proporsi}%</td>
+                </tr>`;
         });
         body.innerHTML = html;
         document.getElementById('info-total-pagu').innerText = "Rp " + totalPagu.toLocaleString();
     };
-
     window.simpanSettingPagu = () => {
         CONFIG_PAGU["51"] = Number(document.getElementById('set-pagu-51').value);
         CONFIG_PAGU["52"] = Number(document.getElementById('set-pagu-52').value);
