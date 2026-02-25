@@ -243,6 +243,34 @@
     </main>
 
     <script type="module">
+        // Daftar Akun Lengkap
+const daftarAkunLengkap = [
+    "511111", "511119", "511121", "511122", "511123", "511124", "511125", "511126", "511129", "511151", "512211", "512411",
+    "521111", "521115", "521211", "521213", "521219", "521811", "522111", "522112", "522113", "522119", "522141", "522151", "522191", "523111", "523121", "523123", "521252", "524111", "524113", "524114",
+    "532111"
+];
+
+window.filterAkunByJenis = (jenis) => {
+    const akunSelect = document.getElementById('in-akun');
+    // Bersihkan pilihan lama
+    akunSelect.innerHTML = "";
+    
+    // Filter akun yang 2 angka pertamanya sama dengan jenis belanja
+    const filtered = daftarAkunLengkap.filter(akun => akun.startsWith(jenis));
+    
+    // Masukkan ke dalam dropdown
+    filtered.forEach(akun => {
+        let opt = document.createElement('option');
+        opt.value = akun;
+        opt.innerHTML = akun;
+        akunSelect.appendChild(opt);
+    });
+};
+
+// Jalankan filter pertama kali saat halaman dimuat
+document.addEventListener('DOMContentLoaded', () => {
+    filterAkunByJenis("51"); // Default awal jenis 51
+});
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -460,5 +488,6 @@
         window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
     </script>
+    
 </body>
 </html>
