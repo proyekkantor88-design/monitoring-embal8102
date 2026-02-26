@@ -20,9 +20,8 @@
         th { font-size: 9px !important; text-transform: uppercase; background-color: #f8fafc; border: 1px solid #e2e8f0; text-align: center; color: #64748b; font-weight: 800; }
         td { font-size: 10px !important; border: 1px solid #e2e8f0; padding: 8px; color: #1e293b; }
         .input-card { background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); padding: 2rem; margin-bottom: 2rem; border-left: 8px solid #6366f1; }
-        .input-field { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; font-size: 0.875rem; outline: none; transition: border 0.2s; }
-        .input-field:focus { border-color: #6366f1; }
-        .btn-main { width: 100%; padding: 1rem; color: white; font-weight: 800; text-transform: uppercase; border-radius: 0.75rem; transition: all 0.2s; cursor: pointer; }
+        .input-field { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; font-size: 0.875rem; outline: none; }
+        .btn-main { width: 100%; padding: 1rem; color: white; font-weight: 800; text-transform: uppercase; border-radius: 0.75rem; cursor: pointer; }
     </style>
 </head>
 <body class="bg-[#f8fafc] flex font-sans text-slate-900 overflow-x-hidden">
@@ -31,25 +30,24 @@
         <div class="bg-white p-8 rounded-[2rem] shadow-2xl w-full max-w-md text-center">
             <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" class="w-16 h-16 mx-auto mb-4">
             <h1 class="text-2xl font-black text-indigo-950 mb-2 uppercase">Login EMBAL</h1>
-            <p class="text-xs text-slate-400 mb-6 font-bold">BPS KABUPATEN MALUKU TENGGARA</p>
+            <p class="text-xs text-slate-400 mb-6 font-bold uppercase">BPS Maluku Tenggara</p>
             <input type="password" id="login-pass" class="input-field mb-4 text-center text-lg tracking-widest" placeholder="••••••••">
-            <button onclick="checkLogin()" class="btn-main bg-indigo-600 hover:bg-indigo-700">Masuk Aplikasi</button>
-            <p id="login-err" class="text-red-500 text-[10px] mt-4 font-bold hidden">Password salah! Silakan coba lagi.</p>
+            <button onclick="checkLogin()" class="btn-main bg-indigo-600 hover:bg-indigo-700 transition">Masuk Aplikasi</button>
+            <p id="login-err" class="text-red-500 text-[10px] mt-4 font-bold hidden">Password salah!</p>
         </div>
     </div>
 
     <div id="app-content" class="hidden flex w-full">
-        
         <aside id="sidebar" class="h-screen bg-[#1e1b4b] text-white p-6 fixed top-0 left-0 no-print flex flex-col shadow-2xl z-50">
             <div class="mb-10 border-b border-white/10 pb-6 text-center">
                 <div class="flex items-center justify-center gap-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg" class="w-10 h-10">
                     <h1 class="text-2xl font-black italic tracking-tighter uppercase">EMBAL</h1>
                 </div>
-                <p class="text-[10px] text-orange-400 font-bold uppercase mt-2 tracking-widest">BPS Kab. Maluku Tenggara</p>
+                <p class="text-[10px] text-orange-400 font-bold uppercase mt-2">TA 2026</p>
             </div>
             <nav class="flex-1 space-y-2 font-bold text-sm">
-                <button onclick="switchTab('dashboard')" class="w-full text-left p-3 rounded-xl hover:bg-white/10 transition">Dashboard Utama</button>
+                <button onclick="switchTab('dashboard')" class="w-full text-left p-3 rounded-xl hover:bg-white/10">Dashboard Utama</button>
                 <button onclick="switchTab('setting-pagu')" class="w-full text-left p-3 rounded-xl hover:bg-white/10 text-orange-300">⚙️ Setting Pagu</button>
                 <button onclick="switchTab('input-rpd')" class="w-full text-left p-3 rounded-xl hover:bg-white/10">Input RPD</button>
                 <button onclick="switchTab('permintaan-belanja')" class="w-full text-left p-3 rounded-xl hover:bg-white/10">Permintaan Belanja</button>
@@ -66,118 +64,83 @@
             </div>
 
             <header class="flex justify-between items-center mb-8 no-print border-b pb-4">
-                <div class="flex items-center gap-4">
-                    <button onclick="toggleSidebar()" class="p-2 bg-white border rounded-xl shadow-sm"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-                    <h2 id="page-title" class="text-xl font-black text-indigo-950 uppercase">Dashboard Utama</h2>
-                </div>
-                <div class="flex items-center gap-3">
-                    <button onclick="window.print()" class="bg-slate-800 text-white px-5 py-2 rounded-xl text-[10px] font-bold uppercase shadow-sm hover:bg-black transition-all">🖨️ Cetak Laporan</button>
-                    <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-xl font-bold text-[10px] uppercase">TA 2026</span>
-                </div>
+                <button onclick="toggleSidebar()" class="p-2 bg-white border rounded-xl shadow-sm"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+                <h2 id="page-title" class="text-xl font-black text-indigo-950 uppercase">Dashboard Utama</h2>
+                <button onclick="window.print()" class="bg-slate-800 text-white px-5 py-2 rounded-xl text-[10px] font-bold uppercase shadow-sm">🖨️ Cetak</button>
             </header>
 
             <section id="section-dashboard" class="tab-content">
-                <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl shadow-sm border">
-                    <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label><select id="f-dash-tim" onchange="renderDashboard()" class="input-field mt-1"><option value="">Semua Tim</option><option>Umum</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option></select></div>
-                    <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label><select id="f-dash-bulan" onchange="renderDashboard()" class="input-field mt-1"><option value="">Semua Bulan</option><option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option></select></div>
+                <div class="grid grid-cols-5 gap-4 mb-8">
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border-t-4 border-indigo-500 text-center"><p class="text-[10px] font-bold text-slate-400 uppercase">Rencana RPD</p><h3 id="dash-total-rpd" class="text-lg font-black">Rp 0</h3></div>
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border-t-4 border-orange-500 text-center"><p class="text-[10px] font-bold text-slate-400 uppercase">Total Realisasi</p><h3 id="dash-total-real" class="text-lg font-black text-orange-600">Rp 0</h3></div>
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border-t-4 border-red-500 text-center"><p class="text-[10px] font-bold text-slate-400 uppercase">Deviasi</p><h3 id="dash-total-gap" class="text-lg font-black text-red-600">0.00%</h3></div>
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border-t-4 border-emerald-500 text-center"><p class="text-[10px] font-bold text-slate-400 uppercase">Kategori</p><h3 id="dash-total-sisa" class="text-xs font-black text-emerald-600">-</h3></div>
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border-t-4 border-blue-500 text-center"><p class="text-[10px] font-bold text-slate-400 uppercase">Nilai IKPA</p><h3 id="dash-total-persen" class="text-lg font-black">0</h3></div>
                 </div>
-                <div class="grid grid-cols-5 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border-t-4 border-indigo-500"><p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Rencana RPD</p><h3 id="dash-total-rpd" class="text-xl font-black">Rp 0</h3></div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border-t-4 border-orange-500"><p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Total Realisasi</p><h3 id="dash-total-real" class="text-xl font-black text-orange-600">Rp 0</h3></div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border-t-4 border-red-500"><p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Deviasi Tertimbang</p><h3 id="dash-total-gap" class="text-xl font-black text-red-600">0.00%</h3></div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border-t-4 border-emerald-500"><p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Status IKPA</p><h3 id="dash-total-sisa" class="text-lg font-black text-emerald-600">-</h3></div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border-t-4 border-blue-500"><p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Nilai IKPA</p><h3 id="dash-total-persen" class="text-xl font-black">0</h3></div>
-                </div>
-                <div class="bg-white p-6 rounded-[1.5rem] shadow-sm overflow-hidden border">
-                    <h4 class="text-xs font-black uppercase mb-4 text-indigo-900 tracking-wider">Transaksi Terposting</h4>
-                    <div class="overflow-x-auto"><table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Nilai</th><th>Status</th></tr></thead><tbody id="dash-body-permintaan"></tbody></table></div>
-                </div>
+                <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border overflow-hidden"><h4 class="text-xs font-black uppercase mb-4 text-indigo-900">Transaksi Terposting</h4><table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Nilai</th><th>Status</th></tr></thead><tbody id="dash-body-permintaan"></tbody></table></div>
             </section>
 
             <section id="section-setting-pagu" class="tab-content hidden">
                 <div class="input-card no-print">
-                    <h3 class="text-sm font-black text-indigo-900 uppercase mb-6">Konfigurasi Pagu DIPA</h3>
+                    <h3 class="text-sm font-black text-indigo-900 uppercase mb-6 text-center">Update Pagu DIPA</h3>
                     <div class="grid grid-cols-4 gap-4 mb-6">
-                        <div class="col-span-1"><label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Triwulan</label><select id="set-pagu-periode" onchange="updateFormInputPagu()" class="input-field bg-indigo-50 font-bold"><option value="TRIWULAN I">TRIWULAN I</option><option value="TRIWULAN II">TRIWULAN II</option><option value="TRIWULAN III">TRIWULAN III</option><option value="TRIWULAN IV">TRIWULAN IV</option></select></div>
-                        <div><label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Pagu 51</label><input type="number" id="set-pagu-51" class="input-field"></div>
-                        <div><label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Pagu 52</label><input type="number" id="set-pagu-52" class="input-field"></div>
-                        <div><label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Pagu 53</label><input type="number" id="set-pagu-53" class="input-field"></div>
+                        <select id="set-pagu-periode" onchange="updateFormInputPagu()" class="input-field bg-indigo-50 font-bold"><option value="TRIWULAN I">TRIWULAN I</option><option value="TRIWULAN II">TRIWULAN II</option><option value="TRIWULAN III">TRIWULAN III</option><option value="TRIWULAN IV">TRIWULAN IV</option></select>
+                        <input type="number" id="set-pagu-51" class="input-field" placeholder="Pagu 51">
+                        <input type="number" id="set-pagu-52" class="input-field" placeholder="Pagu 52">
+                        <input type="number" id="set-pagu-53" class="input-field" placeholder="Pagu 53">
                     </div>
-                    <button onclick="simpanSettingPagu()" class="btn-main bg-indigo-600">Update Pagu Satker</button>
+                    <button onclick="simpanSettingPagu()" class="btn-main bg-indigo-600 transition">Update Pagu Satker</button>
                 </div>
-                
-                <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border mb-8">
-                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-6 text-center tracking-widest">Matriks Pagu (Semua TW)</h4>
-                    <table class="w-full">
-                        <thead><tr><th>Jenis</th><th class="bg-blue-50/50">TW I</th><th class="bg-emerald-50/50">TW II</th><th class="bg-orange-50/50">TW III</th><th class="bg-red-50/50">TW IV</th></tr></thead>
-                        <tbody id="body-info-pagu-all" class="text-center font-bold"></tbody>
-                    </table>
-                </div>
-
-                <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border">
-                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-6 text-center tracking-widest">Proporsi Bobot IKPA</h4>
-                    <table class="w-full">
-                        <thead><tr><th class="text-left">Jenis</th><th>Pagu (Rp)</th><th>Bobot (%)</th></tr></thead>
-                        <tbody id="body-info-pagu" class="text-center font-bold"></tbody>
-                        <tfoot class="bg-slate-50 font-black"><tr><td class="p-2">TOTAL</td><td id="info-total-pagu" class="text-right p-2">Rp 0</td><td id="info-total-prop" class="p-2 text-indigo-600">100%</td></tr></tfoot>
-                    </table>
-                </div>
+                <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border mb-8 text-center"><h4 class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">Matriks Pagu Satker</h4><table class="w-full"><thead><tr><th>Jenis</th><th>TW I</th><th>TW II</th><th>TW III</th><th>TW IV</th></tr></thead><tbody id="body-info-pagu-all" class="font-bold"></tbody></table></div>
+                <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border text-center"><h4 class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">Proporsi Bobot IKPA</h4><table class="w-full"><thead><tr><th>Jenis</th><th>Pagu (Rp)</th><th>Bobot (%)</th></tr></thead><tbody id="body-info-pagu" class="font-bold"></tbody><tfoot class="bg-slate-50 font-black"><tr><td>TOTAL</td><td id="info-total-pagu" class="text-right">Rp 0</td><td class="text-indigo-600">100%</td></tr></tfoot></table></div>
             </section>
 
             <section id="section-input-rpd" class="tab-content hidden">
                 <div class="input-card no-print">
-                    <div class="grid grid-cols-5 gap-4 mb-4">
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Tim</label><select id="in-tim" class="input-field"><option>Umum</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option></select></div>
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Jenis</label><select id="in-jenis" class="input-field"><option value="51">51</option><option value="52">52</option><option value="53">53</option></select></div>
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan</label><select id="in-bulan" class="input-field"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Anggaran</label><input type="number" id="in-anggaran" class="input-field"></div>
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block opacity-0">Action</label><button onclick="simpanRPD()" class="w-full bg-indigo-600 text-white p-2.5 rounded-lg font-bold">SIMPAN</button></div>
+                    <div class="grid grid-cols-4 gap-4 mb-4">
+                        <select id="in-tim" class="input-field"><option>Umum</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option></select>
+                        <select id="in-jenis" class="input-field"><option value="51">51</option><option value="52">52</option><option value="53">53</option></select>
+                        <select id="in-bulan" class="input-field"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select>
+                        <input type="number" id="in-anggaran" class="input-field" placeholder="Anggaran (Rp)">
                     </div>
-                    <input type="text" id="in-uraian" class="input-field" placeholder="Keterangan Uraian RPD...">
+                    <div class="flex gap-4">
+                        <input type="text" id="in-uraian" class="input-field flex-1" placeholder="Uraian RPD...">
+                        <button onclick="simpanRPD()" class="bg-indigo-600 text-white px-8 rounded-lg font-bold">SIMPAN</button>
+                    </div>
                 </div>
-                <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl shadow-sm border">
-                    <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label><select id="f-rpd-tim" onchange="renderRPD()" class="input-field mt-1"><option value="">Semua Tim</option><option>Umum</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option></select></div>
-                    <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label><select id="f-rpd-bulan" onchange="renderRPD()" class="input-field mt-1"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
+                <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl border">
+                    <select id="f-rpd-tim" onchange="renderRPD()" class="input-field"><option value="">Semua Tim</option><option>Umum</option><option>Sosial</option></select>
+                    <select id="f-rpd-bulan" onchange="renderRPD()" class="input-field"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option></select>
                 </div>
-                <div class="bg-white rounded-[1.5rem] shadow-sm overflow-hidden border">
-                    <table class="w-full text-center"><thead><tr><th>Tim</th><th>Jenis</th><th>Uraian</th><th>Anggaran</th><th>Bulan</th><th class="no-print">Aksi</th></tr></thead><tbody id="body-rpd"></tbody><tfoot id="foot-rpd" class="bg-slate-50 font-bold font-mono"></tfoot></table>
-                </div>
+                <table class="w-full bg-white rounded-2xl overflow-hidden shadow-sm text-center"><thead><tr><th>Tim</th><th>Jenis</th><th>Uraian</th><th>Anggaran</th><th>Bulan</th><th class="no-print">Aksi</th></tr></thead><tbody id="body-rpd"></tbody><tfoot id="foot-rpd" class="bg-slate-50 font-black"></tfoot></table>
             </section>
 
             <section id="section-permintaan-belanja" class="tab-content hidden">
                 <div class="input-card !border-l-emerald-500 no-print">
                     <div class="grid grid-cols-4 gap-4 mb-4">
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">No. FPB</label><input type="text" id="req-no" class="input-field"></div>
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl FPB</label><input type="date" id="req-tgl" class="input-field"></div>
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Sumber RPD</label><select id="req-rpd-id" class="input-field"></select></div>
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Nilai</label><input type="number" id="req-nilai" class="input-field"></div>
+                        <input type="text" id="req-no" class="input-field" placeholder="No. FPB">
+                        <input type="date" id="req-tgl" class="input-field">
+                        <select id="req-rpd-id" class="input-field"></select>
+                        <input type="number" id="req-nilai" class="input-field" placeholder="Nilai (Rp)">
                     </div>
                     <div class="flex gap-4">
                         <input type="text" id="req-uraian" class="input-field flex-1" placeholder="Uraian Pembayaran...">
-                        <button onclick="simpanPermintaan()" class="bg-emerald-600 text-white px-8 rounded-lg font-black uppercase shadow-lg">AJUKAN</button>
+                        <button onclick="simpanPermintaan()" class="bg-emerald-600 text-white px-8 rounded-lg font-bold">AJUKAN</button>
                     </div>
                 </div>
-                <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl shadow-sm border">
-                    <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label><select id="f-req-tim" onchange="renderPermintaan()" class="input-field mt-1"><option value="">Semua Tim</option><option>Umum</option><option>Sosial</option><option>Produksi</option></select></div>
-                    <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Status</label><select id="f-req-status" onchange="renderPermintaan()" class="input-field mt-1"><option value="">Semua Status</option><option value="posted">Posted</option><option value="pending">Pending</option></select></div>
+                <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl border">
+                    <select id="f-req-tim" onchange="renderPermintaan()" class="input-field"><option value="">Semua Tim</option><option>Umum</option></select>
+                    <select id="f-req-status" onchange="renderPermintaan()" class="input-field"><option value="">Semua Status</option><option value="posted">Posted</option><option value="pending">Pending</option></select>
                 </div>
-                <div class="bg-white rounded-[1.5rem] shadow-sm overflow-hidden border">
-                    <table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Nilai</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="body-permintaan"></tbody><tfoot id="foot-permintaan" class="bg-slate-50 font-bold font-mono"></tfoot></table>
-                </div>
+                <table class="w-full bg-white rounded-2xl overflow-hidden shadow-sm text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Nilai</th><th>Status</th><th class="no-print">Aksi</th></tr></thead><tbody id="body-permintaan"></tbody><tfoot id="foot-permintaan" class="bg-slate-50 font-black"></tfoot></table>
             </section>
 
             <section id="section-realisasi-rpd" class="tab-content hidden">
-                <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl shadow-sm border">
-                    <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label><select id="f-real-tim" onchange="renderRealisasi()" class="input-field mt-1"><option value="">Semua Tim</option><option>Umum</option><option>Sosial</option><option>Produksi</option></select></div>
-                    <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label><select id="f-real-bulan" onchange="renderRealisasi()" class="input-field mt-1"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option></select></div>
+                <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl border">
+                    <select id="f-real-tim" onchange="renderRealisasi()" class="input-field"><option value="">Semua Tim</option></select>
+                    <select id="f-real-bulan" onchange="renderRealisasi()" class="input-field"><option value="">Semua Bulan</option></select>
                 </div>
-                <div class="bg-white p-6 rounded-[1.5rem] shadow-sm overflow-x-auto border">
-                    <table class="w-full text-center">
-                        <thead><tr class="bg-slate-50 uppercase text-[9px]"><th>Tim</th><th>Jenis</th><th>Uraian</th><th>Bulan</th><th>Rencana</th><th>Realisasi</th><th>GAP</th><th>%</th></tr></thead>
-                        <tbody id="body-realisasi"></tbody>
-                        <tfoot id="foot-realisasi" class="bg-slate-50 font-bold font-mono"></tfoot>
-                    </table>
-                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm overflow-x-auto"><table class="w-full text-center"><thead><tr><th>Tim</th><th>Jenis</th><th>Uraian</th><th>Bulan</th><th>Rencana</th><th>Realisasi</th><th>GAP</th><th>%</th></tr></thead><tbody id="body-realisasi"></tbody><tfoot id="foot-realisasi" class="bg-slate-50 font-black"></tfoot></table></div>
             </section>
         </main>
     </div>
@@ -194,50 +157,36 @@
         let dataRPD = [], dataPerm = [];
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
 
-        // LOGIN SYSTEM
+        // LOGIN
         window.checkLogin = () => {
-            const pass = document.getElementById('login-pass').value;
-            if(pass === "bps8101") {
+            if(document.getElementById('login-pass').value === "bps8102") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('app-content').classList.remove('hidden');
-                localStorage.setItem('emba_logged', 'true');
-            } else {
-                document.getElementById('login-err').classList.remove('hidden');
-            }
+                localStorage.setItem('emba_logged_v2', 'true');
+            } else { document.getElementById('login-err').classList.remove('hidden'); }
         };
+        window.logout = () => { localStorage.removeItem('emba_logged_v2'); location.reload(); };
 
-        window.logout = () => {
-            localStorage.removeItem('emba_logged');
-            location.reload();
-        };
-
-        // RENDER LOGIC
+        // PAGU & IKPA
         const renderInfoPagu = () => {
-            const twAktif = document.getElementById('set-pagu-periode').value;
-            const bodyAll = document.getElementById('body-info-pagu-all');
-            const bodyProp = document.getElementById('body-info-pagu');
-            if (!bodyAll) return;
-            
+            const tw = document.getElementById('set-pagu-periode').value;
             let hAll = "";
             ["51", "52", "53"].forEach(jb => {
-                hAll += `<tr><td class="bg-slate-50 font-bold text-center">${jb}</td>`;
-                ["TRIWULAN I", "TRIWULAN II", "TRIWULAN III", "TRIWULAN IV"].forEach(tw => {
-                    const val = CONFIG_PAGU_ALL[tw][jb] || 0;
-                    hAll += `<td class="text-right">Rp ${val.toLocaleString()}</td>`;
+                hAll += `<tr><td class="bg-slate-50 text-center">${jb}</td>`;
+                ["TRIWULAN I", "TRIWULAN II", "TRIWULAN III", "TRIWULAN IV"].forEach(t => {
+                    const v = CONFIG_PAGU_ALL[t][jb] || 0;
+                    hAll += `<td class="text-right p-2 border">Rp ${v.toLocaleString()}</td>`;
                 });
                 hAll += `</tr>`;
             });
-            bodyAll.innerHTML = hAll;
-
-            const dataTW = CONFIG_PAGU_ALL[twAktif];
-            const total = Number(dataTW["51"]) + Number(dataTW["52"]) + Number(dataTW["53"]);
+            document.getElementById('body-info-pagu-all').innerHTML = hAll;
+            const dataTW = CONFIG_PAGU_ALL[tw], total = Number(dataTW["51"]) + Number(dataTW["52"]) + Number(dataTW["53"]);
             let hProp = "";
             ["51", "52", "53"].forEach(jb => {
-                const pagu = dataTW[jb] || 0;
-                const prop = total > 0 ? ((pagu / total) * 100).toFixed(2) : 0;
-                hProp += `<tr><td class="text-left font-bold p-2">${jb}</td><td class="text-right">Rp ${pagu.toLocaleString()}</td><td class="text-indigo-600 font-black">${prop}%</td></tr>`;
+                const v = dataTW[jb] || 0, p = total > 0 ? ((v/total)*100).toFixed(2) : 0;
+                hProp += `<tr><td class="text-left font-bold p-2 border">${jb}</td><td class="text-right border">Rp ${v.toLocaleString()}</td><td class="text-indigo-600 font-black border">${p}%</td></tr>`;
             });
-            bodyProp.innerHTML = hProp;
+            document.getElementById('body-info-pagu').innerHTML = hProp;
             document.getElementById('info-total-pagu').innerText = "Rp " + total.toLocaleString();
         };
 
@@ -250,12 +199,11 @@
 
         window.updateFormInputPagu = () => {
             const tw = document.getElementById('set-pagu-periode').value;
-            document.getElementById('set-pagu-51').value = CONFIG_PAGU_ALL[tw]["51"];
-            document.getElementById('set-pagu-52').value = CONFIG_PAGU_ALL[tw]["52"];
-            document.getElementById('set-pagu-53').value = CONFIG_PAGU_ALL[tw]["53"];
+            ["51","52","53"].forEach(jb => document.getElementById(`set-pagu-${jb}`).value = CONFIG_PAGU_ALL[tw][jb]);
             renderInfoPagu();
         };
 
+        // RENDER TABLES
         window.renderRPD = () => {
             const fT = document.getElementById('f-rpd-tim').value, fB = document.getElementById('f-rpd-bulan').value;
             let h = "", total = 0;
@@ -283,45 +231,32 @@
             const fT = document.getElementById('f-real-tim').value, fB = document.getElementById('f-real-bulan').value;
             let h = "", totR = 0, totB = 0;
             dataRPD.filter(d => (!fT || d.tim === fT) && (!fB || d.bulan === fB)).forEach(d => {
-                const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
-                const r = Number(d.anggaran), re = lP.reduce((acc,c)=>acc+Number(c.nilai),0), g = r - re;
+                const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted), re = lP.reduce((acc,c)=>acc+Number(c.nilai),0), r = Number(d.anggaran), g = r - re;
                 totR += r; totB += re;
-                h += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td class="text-left">${d.uraian}</td><td>${d.bulan}</td><td class="text-right font-mono">Rp ${r.toLocaleString()}</td><td class="text-right text-orange-600">Rp ${re.toLocaleString()}</td><td class="text-right text-red-600">Rp ${g.toLocaleString()}</td><td class="font-bold">${r>0?Math.round((re/r)*100):0}%</td></tr>`;
+                h += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td class="text-left">${d.uraian}</td><td>${d.bulan}</td><td class="text-right">Rp ${r.toLocaleString()}</td><td class="text-right text-orange-600">Rp ${re.toLocaleString()}</td><td class="text-right text-red-600">Rp ${g.toLocaleString()}</td><td class="font-bold">${r>0?Math.round((re/r)*100):0}%</td></tr>`;
             });
             document.getElementById('body-realisasi').innerHTML = h;
-            document.getElementById('foot-realisasi').innerHTML = `<tr><td colspan="4">TOTAL LAPORAN</td><td class="text-right">Rp ${totR.toLocaleString()}</td><td class="text-right">Rp ${totB.toLocaleString()}</td><td class="text-right">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
+            document.getElementById('foot-realisasi').innerHTML = `<tr><td colspan="4">TOTAL</td><td class="text-right">Rp ${totR.toLocaleString()}</td><td class="text-right">Rp ${totB.toLocaleString()}</td><td class="text-right">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
         };
 
         window.renderDashboard = () => {
             const fT = document.getElementById('f-dash-tim').value, fB = document.getElementById('f-dash-bulan').value;
-            let twRef = "TRIWULAN I";
-            if (["04","05","06"].includes(fB)) twRef = "TRIWULAN II";
-            if (["07","08","09"].includes(fB)) twRef = "TRIWULAN III";
-            if (["10","11","12"].includes(fB)) twRef = "TRIWULAN IV";
-            let stats = { "51": { r: 0, b: 0 }, "52": { r: 0, b: 0 }, "53": { r: 0, b: 0 } };
-            let dashHtml = "";
+            let twRef = "TRIWULAN I"; if (["04","05","06"].includes(fB)) twRef = "TRIWULAN II"; if (["07","08","09"].includes(fB)) twRef = "TRIWULAN III"; if (["10","11","12"].includes(fB)) twRef = "TRIWULAN IV";
+            let stats = { "51": { r: 0, b: 0 }, "52": { r: 0, b: 0 }, "53": { r: 0, b: 0 } }, dashHtml = "";
             dataRPD.forEach(d => { if ((!fT || d.tim === fT) && (!fB || d.bulan === bMap[fB])) { if (stats[d.jenis]) stats[d.jenis].r += Number(d.anggaran); } });
             dataPerm.filter(p => p.isPosted).forEach(p => {
-                const bI = p.tglFPB ? p.tglFPB.split('-')[1] : '';
-                if ((!fT || p.tim === fT) && (!fB || bI === fB)) {
-                    const rpd = dataRPD.find(r => r.id === p.rpdId);
-                    const jb = rpd ? rpd.jenis : "52";
-                    if (stats[jb]) stats[jb].b += Number(p.nilai);
-                    dashHtml += `<tr><td>${p.noForm}</td><td>${p.tim}</td><td>${p.uraian}</td><td class="text-right font-bold font-mono">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold uppercase">Posted</td></tr>`;
-                }
+                const bI = p.tglFPB ? p.tglFPB.split('-')[1] : '', rpd = dataRPD.find(r => r.id === p.rpdId), jb = rpd ? rpd.jenis : "52";
+                if ((!fT || p.tim === fT) && (!fB || bI === fB)) { if (stats[jb]) stats[jb].b += Number(p.nilai); dashHtml += `<tr><td>${p.noForm}</td><td>${p.tim}</td><td>${p.uraian}</td><td class="text-right font-bold">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold uppercase">Posted</td></tr>`; }
             });
             const pTW = CONFIG_PAGU_ALL[twRef], totP = Number(pTW["51"]) + Number(pTW["52"]) + Number(pTW["53"]);
             let devT = 0, tR = 0, tB = 0;
-            ["51", "52", "53"].forEach(jb => {
-                tR += stats[jb].r; tB += stats[jb].b;
-                const prop = totP > 0 ? (pTW[jb] / totP) : 0;
-                if (stats[jb].r > 0) devT += (Math.abs(stats[jb].b - stats[jb].r) / stats[jb].r) * prop;
-            });
-            const devFinal = devT * 100, ikpa = Math.max(0, 100 - devFinal);
+            ["51", "52", "53"].forEach(jb => { tR += stats[jb].r; tB += stats[jb].b; const prop = totP > 0 ? (pTW[jb] / totP) : 0; if (stats[jb].r > 0) devT += (Math.abs(stats[jb].b - stats[jb].r) / stats[jb].r) * prop; });
+            const dF = devT * 100, ikpa = Math.max(0, 100 - dF), kat = ikpa >= 95 ? "Sangat Baik" : (ikpa >= 89 ? "Baik" : (ikpa >= 70 ? "Cukup" : "Kurang"));
             document.getElementById('dash-total-rpd').innerText = "Rp " + tR.toLocaleString();
             document.getElementById('dash-total-real').innerText = "Rp " + tB.toLocaleString();
-            document.getElementById('dash-total-gap').innerText = devFinal.toFixed(2) + "%";
+            document.getElementById('dash-total-gap').innerText = dF.toFixed(2) + "%";
             document.getElementById('dash-total-persen').innerText = ikpa.toFixed(2);
+            document.getElementById('dash-total-sisa').innerText = kat;
             document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
         };
 
@@ -329,10 +264,7 @@
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { 
             dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); 
             const drop = document.getElementById('req-rpd-id');
-            if(drop) {
-                drop.innerHTML = '<option value="">-- Pilih RPD --</option>';
-                dataRPD.forEach(r => { drop.innerHTML += `<option value="${r.id}">${r.tim} | Rp ${Number(r.anggaran).toLocaleString()} | ${r.uraian}</option>`; });
-            }
+            if(drop) { drop.innerHTML = '<option value="">-- Pilih RPD --</option>'; dataRPD.forEach(r => { drop.innerHTML += `<option value="${r.id}">${r.tim} | Rp ${Number(r.anggaran).toLocaleString()} | ${r.uraian}</option>`; }); }
             renderAll(); 
         });
         onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => { dataPerm = s.docs.map(d => ({id: d.id, ...d.data()})); renderAll(); });
@@ -346,19 +278,18 @@
 
         window.simpanRPD = async () => {
             const d = { tim: document.getElementById('in-tim').value, jenis: document.getElementById('in-jenis').value, bulan: document.getElementById('in-bulan').value, uraian: document.getElementById('in-uraian').value, anggaran: Number(document.getElementById('in-anggaran').value), createdAt: serverTimestamp() };
-            await addDoc(collection(db, "rpd_entries"), d); alert("Simpan Berhasil!");
+            if(!d.tim || !d.anggaran) return alert("Lengkapi data!"); await addDoc(collection(db, "rpd_entries"), d); alert("Berhasil!");
         };
 
         window.simpanPermintaan = async () => {
             const rId = document.getElementById('req-rpd-id').value, sel = dataRPD.find(x => x.id === rId);
             const d = { noForm: document.getElementById('req-no').value, nilai: Number(document.getElementById('req-nilai').value), uraian: document.getElementById('req-uraian').value, tglFPB: document.getElementById('req-tgl').value, rpdId: rId, tim: sel ? sel.tim : 'Umum', isPosted: false, createdAt: serverTimestamp() };
-            await addDoc(collection(db, "permintaan_belanja"), d); alert("Permintaan Diajukan!");
+            if(!d.noForm || !d.nilai) return alert("Lengkapi data!"); await addDoc(collection(db, "permintaan_belanja"), d); alert("Berhasil!");
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('emba_pagu_all_v4');
-            if(saved) CONFIG_PAGU_ALL = JSON.parse(saved);
-            if(localStorage.getItem('emba_logged') === 'true') { document.getElementById('login-screen').classList.add('hidden'); document.getElementById('app-content').classList.remove('hidden'); }
+            const saved = localStorage.getItem('emba_pagu_all_v4'); if(saved) CONFIG_PAGU_ALL = JSON.parse(saved);
+            if(localStorage.getItem('emba_logged_v2') === 'true') { document.getElementById('login-screen').classList.add('hidden'); document.getElementById('app-content').classList.remove('hidden'); }
             updateFormInputPagu();
         });
     </script>
