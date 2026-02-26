@@ -6,25 +6,33 @@
     <title>EMBAL - BPS Maluku Tenggara</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @media print { 
-            .no-print, #sidebar, button, select, input { display: none !important; } 
-            #main-content { margin-left: 0 !important; padding: 0 !important; width: 100% !important; }
-            table { font-size: 8pt !important; width: 100% !important; border-collapse: collapse !important; border: 1px solid black !important; } 
-            th, td { border: 1px solid black !important; padding: 4px !important; } 
-            @page { size: landscape; margin: 0.5cm; }
-            .print-only { display: block !important; }
+    @media print { 
+        /* Sembunyikan sidebar, tombol, dropdown filter, dan kartu input */
+        .no-print, #sidebar, button, select, .input-card, .mb-6.no-print { 
+            display: none !important; 
+        } 
+        
+        /* Hilangkan margin kiri agar tabel memenuhi kertas */
+        #main-content { 
+            margin-left: 0 !important; 
+            padding: 0 !important; 
+            width: 100% !important; 
         }
-        .print-only { display: none; }
-        .tab-content { transition: opacity 0.2s; }
-        #sidebar { transition: all 0.3s; width: 17rem; }
-        #sidebar.hidden-sidebar { margin-left: -17rem; }
-        th { font-size: 9px !important; text-transform: uppercase; background-color: #f8fafc; border: 1px solid #e2e8f0; text-align: center; color: #64748b; font-weight: 800; }
-        td { font-size: 10px !important; border: 1px solid #e2e8f0; padding: 8px; color: #1e293b; }
-        .input-card { background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); padding: 2rem; margin-bottom: 2rem; border-left: 8px solid #6366f1; }
-        .input-field { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; font-size: 0.875rem; outline: none; transition: border 0.2s; }
-        .input-field:focus { border-color: #6366f1; }
-        .btn-main { width: 100%; padding: 1rem; color: white; font-weight: 800; text-transform: uppercase; border-radius: 0.75rem; transition: all 0.2s; cursor: pointer; }
-    </style>
+
+        /* Pastikan tabel rapi dan garisnya terlihat jelas */
+        table { 
+            width: 100% !important; 
+            border-collapse: collapse !important; 
+            border: 1px solid black !important;
+            font-size: 9pt !important;
+        } 
+        th, td { 
+            border: 1px solid black !important; 
+            padding: 6px !important; 
+        } 
+        @page { size: landscape; margin: 0.5cm; }
+    }
+</style>
 </head>
 <body class="bg-[#f8fafc] flex font-sans text-slate-900 overflow-x-hidden">
 
