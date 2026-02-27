@@ -329,6 +329,94 @@
         window.renderRPD = () => { /* Logic Kakak yang sudah ada tetap sama */ };
         window.renderPermintaan = () => { /* Logic Kakak yang sudah ada tetap sama */ };
         window.renderRealisasi = () => { /* Logic Kakak yang sudah ada tetap sama */ };
+         // --- FUNGSI RENDER TABEL RPD (DETAIL) ---
+        window.renderRPD = () => {
+            const b = document.getElementById('body-rpd'), f = document.getElementById('foot-rpd'); 
+            if (!b) return;
+            let h = "", total = 0;
+            dataRPD.forEach(d => { 
+                total += Number(d.anggaran);
+                const k = `${d.kegiatan || ''}.${d.kro || ''}.${d.ro || ''}.${d.komp || ''}`;
+                h += `<tr class="hover:bg-slate-50">
+                    <td class="font-bold">${d.tim}</td>
+                    <td class="font-mono text-[8px]">${k}</td>
+                    <td>${d.jenis}</td>
+                    <td class="font-bold">${d.akun}</td>
+                    <td class="text-left max-w-[150px] truncate">${d.pok || '-'}</td>
+                    <td class="text-left max-w-[150px] truncate italic">${d.uraian || '-'}</td>
+                    <td class="text-right font-bold text-indigo-700">Rp ${Number(d.anggaran).toLocaleString()}</td>
+                    <td>${d.bulan}</td>
+                    <td class="no-print"><button onclick="hapusRPD('${d.id}')" class="text-red-500 hover:scale-125 transition">🗑️</button></td>
+                </tr>`; 
+            });
+            b.innerHTML = h;
+            if(f) f.innerHTML = `<tr class="bg-indigo-50 font-black"><td colspan="6" class="p-2 text-right uppercase">Total RPD Terinput:</td><td class="text-right p-2 text-indigo-700">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+        };
+
+        // --- FUNGSI RENDER PERMINTAAN & BIROKRASI ---
+        window.renderPermintaan = () => {
+            const b = document.getElementById('body-permintaan'), f = document.getElementById('foot-permintaan'); 
+            if (!b) return;
+            let h = "", total = 0;
+            dataPerm.forEach(d => {
+                total += Number(d.nilai);
+                const statusCol = d.isPosted ? 'text-emerald-600 bg-emerald-50' : 'text-orange-500 bg-orange-50';
+                const postBtn = d.isPosted ? 
+                    `<button onclick="upDate('${d.id}','isPosted',false)" class="btn-unpost">BATAL POST</button>` : 
+                    `<button onclick="upDate('${d.id}','isPosted',true)" class="btn-post">POSTING</button>`;
+                
+                h += `<tr>
+                    <td class="font-mono">${d.noForm}</td>
+                    <td class="font-bold">${d.tim}</td>
+                    <td class="text-left text-[8px]">${d.uraian}</td>
+                    <td class="text-right font-bold font-mono">Rp ${Number(d.nilai).toLocaleString()}</td>
+                    <td><span class="px-2 py-1 rounded-full text-[7px] font-black uppercase ${statusCol}">${d.isPosted ? 'Posted' : 'Pending'}</span></td>
+                    <td class="flex gap-1 justify-center no-print">
+                        ${postBtn}
+                        <button onclick="hapusPerm('${d.id}')" class="text-red-400 p-1">🗑️</button>
+                    </td>
+                </tr>`;
+            });
+            b.innerHTML = h;
+            if(f) f.innerHTML = `<tr class="bg-emerald-50 font-black"><td colspan="3" class="p-2 text-right uppercase">Total Ajuan FPB:</td><td class="text-right p-2 text-emerald-700 font-mono">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+        };
+
+        // --- FUNGSI ANALISIS REALISASI & GAP (IKPA CORE) ---
+        window.renderRealisasi = () => {
+            const fT = document.getElementById('f-real-tim').value, fB = document.getElementById('f-real-bulan').value;
+            const b = document.getElementById('body-realisasi'), f = document.getElementById('foot-realisasi'); 
+            if (!b) return;
+            let h = "", totR = 0, totRe = 0;
+
+            dataRPD.filter(d => (!fT || d.tim === fT) && (!fB || d.bulan === fB)).forEach(d => {
+                const listPerm = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
+                const rencana = Number(d.anggaran), realisasi = listPerm.reduce((acc,c)=>acc+Number(c.nilai), 0);
+                const gap = rencana - realisasi;
+                const persen = rencana > 0 ? Math.round((realisasi / rencana) * 100) : 0;
+                
+                totR += rencana; totRe += realisasi;
+                h += `<tr class="hover:bg-orange-50/30">
+                    <td class="font-bold">${d.tim}</td>
+                    <td class="text-center italic">${d.jenis}</td>
+                    <td class="text-left text-[8px]">${d.pok || '-'}</td>
+                    <td class="text-left text-[8px] italic">${d.uraian || '-'}</td>
+                    <td>${d.bulan}</td>
+                    <td class="text-right font-mono">Rp ${rencana.toLocaleString()}</td>
+                    <td class="text-right text-emerald-600 font-bold font-mono">Rp ${realisasi.toLocaleString()}</td>
+                    <td class="text-right text-red-600 font-bold font-mono">Rp ${gap.toLocaleString()}</td>
+                    <td class="font-black ${persen < 95 || persen > 105 ? 'text-red-500' : 'text-emerald-600'}">${persen}%</td>
+                </tr>`;
+            });
+            b.innerHTML = h;
+            const gapTotal = totR - totRe;
+            if(f) f.innerHTML = `<tr class="bg-slate-100 font-black">
+                <td colspan="5" class="p-3 text-right uppercase tracking-widest text-slate-500">Total Deviasi Halaman III:</td>
+                <td class="text-right p-3">Rp ${totR.toLocaleString()}</td>
+                <td class="text-right p-3 text-emerald-700">Rp ${totRe.toLocaleString()}</td>
+                <td class="text-right p-3 text-red-700">Rp ${gapTotal.toLocaleString()}</td>
+                <td class="text-indigo-700">${totR > 0 ? Math.round((totRe/totR)*100) : 0}%</td>
+            </tr>`;
+        };
     </script>
 </body>
 </html>
