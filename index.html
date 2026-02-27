@@ -176,8 +176,7 @@
             </section>
         </main>
     </div>
-    <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = { 
@@ -196,24 +195,17 @@
     const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
 
     // LOGIN LOGIC
-   // Ganti bagian window.checkLogin Kakak dengan ini:
-window.checkLogin = () => {
-    const pass = document.getElementById('login-pass').value;
-    if(pass === "bps8102") {
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('app-content').classList.remove('hidden');
-        localStorage.setItem('emba_logged', 'true');
-        renderDashboard();
-    } else { 
-        document.getElementById('login-err').classList.remove('hidden'); 
-    }
-};
-
-// Pastikan semua fungsi window. lainnya sudah didefinisikan seperti ini:
-window.logout = () => { ... };
-window.simpanSettingPagu = async () => { ... };
-window.switchTab = (id) => { ... };
-window.toggleSidebar = () => { ... };
+    window.checkLogin = () => {
+        const pass = document.getElementById('login-pass').value;
+        if(pass === "bps8102") {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app-content').classList.remove('hidden');
+            localStorage.setItem('emba_logged', 'true');
+            renderDashboard();
+        } else { 
+            document.getElementById('login-err').classList.remove('hidden'); 
+        }
+    };
 
     window.logout = () => {
         localStorage.removeItem('emba_logged');
@@ -247,7 +239,8 @@ window.toggleSidebar = () => { ... };
             });
             hAll += `</tr>`;
         });
-        document.getElementById('body-info-pagu-all').innerHTML = hAll;
+        const infoTable = document.getElementById('body-info-pagu-all');
+        if(infoTable) infoTable.innerHTML = hAll;
     };
 
     // RENDER LOGICS
@@ -300,10 +293,10 @@ window.toggleSidebar = () => { ... };
             h += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td class="text-left">${d.uraian}</td><td>${d.bulan}</td><td class="text-right">Rp ${d.anggaran.toLocaleString()}</td><td class="text-right text-orange-600 font-bold">Rp ${re.toLocaleString()}</td><td class="text-right text-red-600 font-bold">Rp ${(d.anggaran-re).toLocaleString()}</td><td class="font-black">${d.anggaran>0?Math.round((re/d.anggaran)*100):0}%</td></tr>`;
         });
         document.getElementById('body-realisasi').innerHTML = h;
-        document.getElementById('foot-realisasi').innerHTML = `<tr><td colspan="4">TOTAL</td><td class="text-right">Rp ${totR.toLocaleString()}</td><td class="text-right">Rp ${totRe.toLocaleString()}</td><td class="text-right">Rp ${(totR-totRe).toLocaleString()}</td><td></td></tr>`;
+        const foot = document.getElementById('foot-realisasi');
+        if(foot) foot.innerHTML = `<tr><td colspan="4">TOTAL</td><td class="text-right">Rp ${totR.toLocaleString()}</td><td class="text-right">Rp ${totRe.toLocaleString()}</td><td class="text-right">Rp ${(totR-totRe).toLocaleString()}</td><td></td></tr>`;
     };
 
-    // DATABASE TOOLS
     window.simpanRPD = async () => {
         const d = { tim: document.getElementById('in-tim').value, jenis: document.getElementById('in-jenis').value, bulan: document.getElementById('in-bulan').value, anggaran: Number(document.getElementById('in-anggaran').value), uraian: document.getElementById('in-uraian').value, createdAt: serverTimestamp() };
         if(!d.anggaran) return alert("Isi Anggaran!");
@@ -322,10 +315,10 @@ window.toggleSidebar = () => { ... };
     window.updateRow = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
     window.hapusRow = async (col, id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, col, id)); };
 
-    // NAVIGATION
     window.switchTab = (id) => {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-        document.getElementById('section-' + id).classList.remove('hidden');
+        const target = document.getElementById('section-' + id);
+        if(target) target.classList.remove('hidden');
         document.getElementById('page-title').innerText = id.replace('-', ' ').toUpperCase();
     };
 
@@ -335,39 +328,32 @@ window.toggleSidebar = () => { ... };
         document.getElementById('main-content').classList.toggle('ml-0');
     };
 
-    // INITIALIZATION & LISTENERS
     const initApp = () => {
-        // Load Pagu
         onSnapshot(doc(db, "config", "setting_pagu"), (snap) => {
             if(snap.exists()) {
                 CONFIG_PAGU_ALL = snap.data().paguData;
                 updateFormInputPagu();
             }
         });
-
-        // Sync RPD
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => {
             dataRPD = s.docs.map(d => ({id: d.id, ...d.data()}));
             const drop = document.getElementById('req-rpd-id');
-            drop.innerHTML = '<option value="">-- Pilih RPD --</option>';
-            dataRPD.forEach(r => drop.innerHTML += `<option value="${r.id}">${r.tim} | Rp ${r.anggaran.toLocaleString()} | ${r.uraian}</option>`);
+            if(drop) {
+                drop.innerHTML = '<option value="">-- Pilih RPD --</option>';
+                dataRPD.forEach(r => drop.innerHTML += `<option value="${r.id}">${r.tim} | Rp ${r.anggaran.toLocaleString()} | ${r.uraian}</option>`);
+            }
             renderRPD(); renderRealisasi(); renderDashboard();
         });
-
-        // Sync Permintaan
         onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => {
             dataPerm = s.docs.map(d => ({id: d.id, ...d.data()}));
             renderPermintaan(); renderRealisasi(); renderDashboard();
         });
-
-        // Check Session
         if(localStorage.getItem('emba_logged') === 'true') {
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('app-content').classList.remove('hidden');
         }
     };
 
-    initApp();
-</script>
+    initApp();</script>
 </body>
 </html>
