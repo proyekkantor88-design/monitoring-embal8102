@@ -196,18 +196,24 @@
     const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
 
     // LOGIN LOGIC
-    window.checkLogin = () => {
-        const pass = document.getElementById('login-pass').value;
-        if(pass === "bps8102") {
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('app-content').classList.remove('hidden');
-            localStorage.setItem('emba_logged', 'true');
-            // Re-render data setelah login
-            renderDashboard();
-        } else { 
-            document.getElementById('login-err').classList.remove('hidden'); 
-        }
-    };
+   // Ganti bagian window.checkLogin Kakak dengan ini:
+window.checkLogin = () => {
+    const pass = document.getElementById('login-pass').value;
+    if(pass === "bps8102") {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('app-content').classList.remove('hidden');
+        localStorage.setItem('emba_logged', 'true');
+        renderDashboard();
+    } else { 
+        document.getElementById('login-err').classList.remove('hidden'); 
+    }
+};
+
+// Pastikan semua fungsi window. lainnya sudah didefinisikan seperti ini:
+window.logout = () => { ... };
+window.simpanSettingPagu = async () => { ... };
+window.switchTab = (id) => { ... };
+window.toggleSidebar = () => { ... };
 
     window.logout = () => {
         localStorage.removeItem('emba_logged');
