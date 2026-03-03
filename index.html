@@ -520,13 +520,13 @@
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
 
         // --- RENDER SEMUA TAB ---
-        window.renderAll = () => { 
-            renderDashboard(); 
-            renderRPD(); 
-            renderPermintaan(); 
-            renderRealisasi(); // Memastikan tabel realisasi dipanggil
-            renderInfoPagu(); 
-        };
+        window.renderAll = () => {
+    renderDashboard();
+    renderRPD();
+    renderPermintaan();
+    renderRealisasi(); // Tambahkan baris ini jika sebelumnya belum ada
+    if (typeof renderInfoPagu === 'function') renderInfoPagu();
+};
 
         // Snapshot Real-time dari Firebase
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { 
