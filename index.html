@@ -442,41 +442,81 @@
             if(f) f.innerHTML = `<tr><td colspan="6" class="p-2">TOTAL RENCANA RPD</td><td class="text-right p-2 text-indigo-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
-        window.renderRealisasi = () => {
-            const fT = document.getElementById('f-real-tim').value, fB = document.getElementById('f-real-bulan').value;
-            const b = document.getElementById('body-realisasi'), f = document.getElementById('foot-realisasi'); 
-            let h = "", totR = 0, totB = 0;
+       window.renderRealisasi = () => {
+    const container = document.getElementById('body-realisasi');
+    if (!container) return; // Mencegah error jika element tidak ditemukan
 
-            // Filter data RPD
-            const filteredRPD = dataRPD.filter(d => (!fT || d.tim === fT) && (!fB || d.bulan === fB));
+    let html = "", totalRencana = 0, totalRealisasi = 0;
 
-            filteredRPD.forEach(d => {
-                // Cari realisasi yang sudah ter-POSTING dan cocok dengan ID RPD ini
-                const listPosted = dataPerm.filter(p => p.rpdId === d.id && p.isPosted === true);
-                const r = Number(d.anggaran), re = listPosted.reduce((acc, c) => acc + Number(c.nilai), 0), g = r - re;
-                
-                totR += r; totB += re;
-                
-                h += `<tr>
-                    <td>${d.tim}</td>
-                    <td>${d.jenis}</td>
-                    <td class="text-left">${d.pok || '-'}</td>
-                    <td class="text-left">${d.uraian || '-'}</td>
-                    <td>${d.bulan}</td>
-                    <td class="text-right font-mono">Rp ${r.toLocaleString()}</td>
-                    <td class="text-right text-orange-600 font-bold font-mono">Rp ${re.toLocaleString()}</td>
-                    <td class="text-right text-red-600 font-bold font-mono">Rp ${g.toLocaleString()}</td>
-                    <td class="font-bold">${r > 0 ? Math.round((re/r)*100) : 0}%</td>
-                </tr>`;
-            });
-            if(b) b.innerHTML = h;
-            if(f) f.innerHTML = `<tr><td colspan="5" class="p-2 font-bold uppercase">Total Keseluruhan</td><td class="text-right p-2 font-bold font-mono">Rp ${totR.toLocaleString()}</td><td class="text-right p-2 text-orange-600 font-bold font-mono">Rp ${totB.toLocaleString()}</td><td class="text-right p-2 text-red-600 font-bold font-mono">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
-        };
+    // Pastikan data RPD tersedia
+    if (dataRPD.length === 0) {
+        container.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-400">Belum ada data RPD yang diinput.</td></tr>';
+        return;
+    }
 
+    dataRPD.forEach(d => {
+        // Filter: Hanya hitung realisasi yang "POSTED" (isPosted: true) dan memiliki ID RPD yang cocok
+        const terkait = dataPerm.filter(p => p.rpdId === d.id && p.isPosted === true);
+        
+        const rencana = Number(d.anggaran) || 0;
+        const realisasi = terkait.reduce((acc, curr) => acc + Number(curr.nilai), 0);
+        const sisa = rencana - realisasi;
+        const persentase = rencana > 0 ? ((realisasi / rencana) * 100).toFixed(1) : 0;
+
+        totalRencana += rencana;
+        totalRealisasi += realisasi;
+
+        html += `
+        <tr class="hover:bg-slate-50">
+            <td class="border">${d.tim}</td>
+            <td class="border text-center">${d.jenis}</td>
+            <td class="border text-left px-2">${d.pok || '-'}</td>
+            <td class="border text-left px-2">${d.uraian || '-'}</td>
+            <td class="border text-center">${d.bulan}</td>
+            <td class="border text-right font-mono">Rp ${rencana.toLocaleString('id-ID')}</td>
+            <td class="border text-right font-mono text-orange-600 font-bold">Rp ${realisasi.toLocaleString('id-ID')}</td>
+            <td class="border text-right font-mono text-red-600 font-bold">Rp ${sisa.toLocaleString('id-ID')}</td>
+            <td class="border text-center font-black ${persentase >= 90 ? 'text-emerald-600' : 'text-red-500'}">${persentase}%</td>
+        </tr>`;
+    });
+
+    container.innerHTML = html;
+
+    // Update Footer Total
+    const footer = document.getElementById('foot-realisasi');
+    if (footer) {
+        footer.innerHTML = `
+        <tr class="bg-slate-100 font-bold">
+            <td colspan="5" class="p-2">TOTAL KESELURUHAN</td>
+            <td class="text-right">Rp ${totalRencana.toLocaleString('id-ID')}</td>
+            <td class="text-right text-orange-600">Rp ${totalRealisasi.toLocaleString('id-ID')}</td>
+            <td class="text-right text-red-600">Rp ${(totalRencana - totalRealisasi).toLocaleString('id-ID')}</td>
+            <td></td>
+        </tr>`;
+    }
+};
         window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
-        window.switchTab = (id) => { document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); document.getElementById('section-' + id).classList.remove('hidden'); document.getElementById('page-title').innerText = id.replace('-', ' ').toUpperCase(); };
-        window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); };
+        window.switchTab = (id) => {
+    // 1. Sembunyikan semua konten tab
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+    
+    // 2. Tampilkan konten tab yang dipilih
+    const targetSection = document.getElementById('section-' + id);
+    if (targetSection) {
+        targetSection.classList.remove('hidden');
+    }
+
+    // 3. Perbarui Judul di Header secara dinamis
+    const pageTitle = document.getElementById('page-title');
+    if (id === 'realisasi-rpd') {
+        pageTitle.innerText = "REALISASI & GAP";
+    } else if (id === 'dashboard') {
+        pageTitle.innerText = "DASHBOARD UTAMA";
+    } else {
+        pageTitle.innerText = id.replace('-', ' ').toUpperCase();
+    }
+};
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
 
         // --- RENDER SEMUA TAB ---
