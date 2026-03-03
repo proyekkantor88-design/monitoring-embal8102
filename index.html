@@ -359,17 +359,66 @@
             if(f) f.innerHTML = `<tr><td colspan="6" class="p-2">TOTAL RENCANA PENARIKAN (RPD)</td><td class="text-right p-2 text-indigo-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
-        window.renderPermintaan = () => {
-            const b = document.getElementById('body-permintaan'), f = document.getElementById('foot-permintaan'); 
-            let h = "", total = 0;
-            dataPerm.forEach(d => {
-                total += Number(d.nilai);
-                const pB = d.isPosted ? `<button onclick="upDate('${d.id}','isPosted',false)" class="btn-unpost">BATAL</button>` : `<button onclick="upDate('${d.id}','isPosted',true)" class="btn-post">POST</button>`;
-                h += `<tr><td>${d.noForm}</td><td>${d.tim}</td><td class="text-left">${d.uraian}</td><td class="text-right font-bold font-mono">Rp ${Number(d.nilai).toLocaleString()}</td><td class="uppercase text-[8px] font-bold ${d.isPosted?'text-emerald-600':'text-orange-500'}">${d.isPosted ? 'Posted' : 'Pending'}</td><td class="flex gap-1 justify-center no-print">${pB}<button onclick="hapusPerm('${d.id}')">🗑️</button></td></tr>`;
-            });
-            if(b) b.innerHTML = h;
-            if(f) f.innerHTML = `<tr><td colspan="3" class="p-2">TOTAL AJUAN PERMINTAAN</td><td class="text-right p-2 text-green-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
-        };
+       window.renderPermintaan = () => {
+    const b = document.getElementById('body-permintaan'), f = document.getElementById('foot-permintaan'); 
+    let h = "", total = 0;
+
+    dataPerm.forEach(d => {
+        total += Number(d.nilai);
+        
+        // Logika Tombol Post (Orange) dan Unpost (Merah)
+        const pB = d.isPosted ? 
+            `<button onclick="updateStatusPerm('${d.id}','isPosted',false)" class="btn-unpost">BATAL</button>` : 
+            `<button onclick="updateStatusPerm('${d.id}','isPosted',true)" class="btn-post">POSTING</button>`;
+
+        h += `
+        <tr>
+            <td class="font-bold border">${d.noForm}</td>
+            <td class="border">${d.tim}</td>
+            <td class="text-left border p-2">${d.uraian}</td>
+            <td class="text-right font-bold font-mono border">Rp ${Number(d.nilai).toLocaleString('id-ID')}</td>
+            
+            <td class="border">
+                <select onchange="updateStatusPerm('${d.id}', 'appStatus', this.value)" class="text-[9px] p-1 border rounded bg-white w-full">
+                    <option value="" ${!d.appStatus ? 'selected' : ''}>-- Pilih --</option>
+                    <option value="App PJ" ${d.appStatus === 'App PJ' ? 'selected' : ''}>App PJ</option>
+                    <option value="App PPK" ${d.appStatus === 'App PPK' ? 'selected' : ''}>App PPK</option>
+                </select>
+            </td>
+            
+            <td class="border"><input type="date" value="${d.tglApp || ''}" onchange="updateStatusPerm('${d.id}', 'tglApp', this.value)" class="text-[9px] border rounded w-full"></td>
+            
+            <td class="border">
+                <select onchange="updateStatusPerm('${d.id}', 'prosesBayar', this.value)" class="text-[9px] p-1 border rounded bg-white w-full">
+                    <option value="" ${!d.prosesBayar ? 'selected' : ''}>-- Pilih Tahapan --</option>
+                    <option value="Pemeriksaan Dokumen" ${d.prosesBayar === 'Pemeriksaan Dokumen' ? 'selected' : ''}>1. Pemeriksaan Dokumen</option>
+                    <option value="Pemeriksaan Bendahara" ${d.prosesBayar === 'Pemeriksaan Bendahara' ? 'selected' : ''}>2. Pemeriksaan Bendahara</option>
+                    <option value="Pengajuan KPPN" ${d.prosesBayar === 'Pengajuan KPPN' ? 'selected' : ''}>3. Pengajuan KPPN</option>
+                    <option value="Dana Tersedia" ${d.prosesBayar === 'Dana Tersedia' ? 'selected' : ''}>4. Dana Tersedia</option>
+                    <option value="Selesai Pembayaran" ${d.prosesBayar === 'Selesai Pembayaran' ? 'selected' : ''}>5. Selesai Pembayaran</option>
+                </select>
+            </td>
+            
+            <td class="border"><input type="date" value="${d.tglBayar || ''}" onchange="updateStatusPerm('${d.id}', 'tglBayar', this.value)" class="text-[9px] border rounded w-full"></td>
+            
+            <td class="border">
+                <select onchange="updateStatusPerm('${d.id}', 'statusDok', this.value)" class="text-[9px] p-1 border rounded font-bold w-full bg-orange-50">
+                    <option value="" ${!d.statusDok ? 'selected' : ''}>-- Dokumen --</option>
+                    <option value="Kwitansi" ${d.statusDok === 'Kwitansi' ? 'selected' : ''}>Kwitansi</option>
+                    <option value="SP2D" ${d.statusDok === 'SP2D' ? 'selected' : ''}>SP2D</option>
+                </select>
+            </td>
+
+            <td class="flex gap-1 justify-center no-print border p-2">
+                ${pB}
+                <button onclick="hapusPerm('${d.id}')" class="p-1 grayscale hover:grayscale-0 transition">🗑️</button>
+            </td>
+        </tr>`;
+    });
+
+    if(b) b.innerHTML = h;
+    if(f) f.innerHTML = `<tr><td colspan="3" class="p-2 border uppercase">Total Ajuan Terdata</td><td class="text-right p-2 text-indigo-700 font-black border">Rp ${total.toLocaleString('id-ID')}</td><td colspan="6" class="border"></td></tr>`;
+};
 
         window.renderRealisasi = () => {
             const fT = document.getElementById('f-real-tim').value, fB = document.getElementById('f-real-bulan').value;
