@@ -172,7 +172,7 @@
         </section>
     </main>
 
-   <script type="module">
+<script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -198,16 +198,119 @@
         const bMap = {"01":"Januari", "02":"Februari", "03":"Maret", "04":"April", "05":"Mei", "06":"Juni", "07":"Juli", "08":"Agustus", "09":"September", "10":"Oktober", "11":"November", "12":"Desember"};
         const allAkuns = ["521211","521213","521219","521811","522141","522151","524111","521252","524113","524114","532111","511111","511119","511121","511122","511123","511124","511125","511126","523123","511129","511151","512211","512411","521111","521115","522111","522112","522113","522119","522191","523111","523121","511611","511628","512414"];
 
-        // --- 1. LOGIKA SETTING PAGU (FIXED MATRIKS & PROPORSI) ---
-        const renderInfoPagu = () => {
+        // --- ROLE SIMULATION ---
+        let isSuperAdmin = true; // Set ke false untuk simulasi user biasa (tidak bisa batal post)
+
+        // --- 1. LOGIKA RENDER PERMINTAAN ---
+        window.renderPermintaan = () => {
+            const b = document.getElementById('body-permintaan'), f = document.getElementById('foot-permintaan'); 
+            let h = "", total = 0;
+
+            dataPerm.forEach(d => {
+                total += Number(d.nilai);
+                
+                // Logika Tombol Posting / Batal Post
+                let actionBtn = "";
+                if (!d.isPosted) {
+                    actionBtn = `<button onclick="handlePosting('${d.id}', true)" class="bg-orange-500 text-white px-2 py-1 rounded text-[8px] font-bold hover:bg-orange-600">POSTING</button>`;
+                } else {
+                    if (isSuperAdmin) {
+                        actionBtn = `<button onclick="handlePosting('${d.id}', false)" class="bg-red-500 text-white px-2 py-1 rounded text-[8px] font-bold hover:bg-red-600">BATAL POST</button>`;
+                    } else {
+                        actionBtn = `<span class="text-emerald-600 font-bold text-[8px]">✓ LOCKED</span>`;
+                    }
+                }
+
+                h += `
+                <tr id="row-${d.id}" class="${d.isPosted ? 'bg-slate-50' : ''}">
+                    <td class="font-bold border">${d.noForm}</td>
+                    <td class="border bg-blue-50 font-mono text-[8px]">${d.tglFPB || '-'}</td>
+                    <td class="border">${d.tim}</td>
+                    <td class="text-left border p-2">${d.uraian}</td>
+                    <td class="text-right font-bold font-mono border">Rp ${Number(d.nilai).toLocaleString('id-ID')}</td>
+                    <td class="border">
+                        <select onchange="updateStatusPerm('${d.id}', 'appStatus', this.value)" class="text-[9px] p-1 border rounded w-full bg-white">
+                            <option value="" ${!d.appStatus ? 'selected' : ''}>-- Pilih --</option>
+                            <option value="App PJ" ${d.appStatus === 'App PJ' ? 'selected' : ''}>App PJ</option>
+                            <option value="App PPK" ${d.appStatus === 'App PPK' ? 'selected' : ''}>App PPK</option>
+                        </select>
+                    </td>
+                    <td class="border"><input type="date" value="${d.tglApp || ''}" onchange="updateStatusPerm('${d.id}', 'tglApp', this.value)" class="text-[9px] border rounded w-full"></td>
+                    <td class="border">
+                        <select onchange="updateStatusPerm('${d.id}', 'prosesBayar', this.value)" class="text-[9px] p-1 border rounded w-full bg-white">
+                            <option value="" ${!d.prosesBayar ? 'selected' : ''}>-- Tahapan --</option>
+                            <option value="Pemeriksaan Dokumen" ${d.prosesBayar === 'Pemeriksaan Dokumen' ? 'selected' : ''}>Pemeriksaan Dokumen</option>
+                            <option value="Pemeriksaan Bendahara" ${d.prosesBayar === 'Pemeriksaan Bendahara' ? 'selected' : ''}>Pemeriksaan Bendahara</option>
+                            <option value="Pengajuan KPPN" ${d.prosesBayar === 'Pengajuan KPPN' ? 'selected' : ''}>Pengajuan KPPN</option>
+                            <option value="Dana Tersedia" ${d.prosesBayar === 'Dana Tersedia' ? 'selected' : ''}>Dana Tersedia</option>
+                            <option value="Selesai Pembayaran" ${d.prosesBayar === 'Selesai Pembayaran' ? 'selected' : ''}>Selesai Pembayaran</option>
+                        </select>
+                    </td>
+                    <td class="border"><input type="date" value="${d.tglBayar || ''}" onchange="updateStatusPerm('${d.id}', 'tglBayar', this.value)" class="text-[9px] border rounded w-full"></td>
+                    <td class="border">
+                        <select onchange="updateStatusPerm('${d.id}', 'statusDok', this.value)" class="text-[9px] p-1 border rounded font-bold w-full bg-orange-50">
+                            <option value="" ${!d.statusDok ? 'selected' : ''}>-- Pilih --</option>
+                            <option value="Kwitansi" ${d.statusDok === 'Kwitansi' ? 'selected' : ''}>Kwitansi</option>
+                            <option value="SP2D" ${d.statusDok === 'SP2D' ? 'selected' : ''}>SP2D</option>
+                        </select>
+                    </td>
+                    <td class="flex flex-col gap-1 justify-center no-print border p-1">
+                        <div class="flex gap-1 justify-center">
+                            <button onclick="editRow('${d.id}')" class="text-[8px] bg-slate-200 p-1 rounded hover:bg-slate-300">EDIT</button>
+                            <button onclick="saveRow('${d.id}')" class="text-[8px] bg-blue-600 text-white p-1 rounded font-bold hover:bg-blue-700">SIMPAN</button>
+                        </div>
+                        ${actionBtn}
+                        <button onclick="hapusPerm('${d.id}')" class="text-[8px] text-slate-400 mt-1 hover:text-red-500">🗑️ Hapus</button>
+                    </td>
+                </tr>`;
+            });
+            if(b) b.innerHTML = h;
+            if(f) f.innerHTML = `<tr><td colspan="4" class="p-2 border uppercase font-bold text-slate-500 text-left text-[10px]">Total Ajuan Terdata</td><td class="text-right p-2 text-indigo-700 font-black border">Rp ${total.toLocaleString('id-ID')}</td><td colspan="6" class="border"></td></tr>`;
+        };
+
+        // --- 2. ENGINE FUNGSI (POSTING & UPDATE) ---
+        window.handlePosting = async (id, status) => {
+            try {
+                const docRef = doc(db, "permintaan_belanja", id);
+                await updateDoc(docRef, { isPosted: status });
+            } catch (e) { alert("Gagal memperbarui status: " + e.message); }
+        };
+
+        window.updateStatusPerm = async (id, field, value) => {
+            try {
+                const docRef = doc(db, "permintaan_belanja", id);
+                await updateDoc(docRef, { [field]: value });
+            } catch (e) { console.error("Update Gagal:", e); }
+        };
+
+        window.editRow = (id) => {
+            document.getElementById(`row-${id}`).classList.add('bg-yellow-50');
+        };
+
+        window.saveRow = (id) => {
+            document.getElementById(`row-${id}`).classList.remove('bg-yellow-50');
+            alert("Data Transaksi Telah Diverifikasi.");
+        };
+
+        // --- 3. PAGU & DASHBOARD ENGINE ---
+        window.simpanSettingPagu = () => {
+            const tw = document.getElementById('set-pagu-periode').value;
+            CONFIG_PAGU_ALL[tw] = {
+                "51": Number(document.getElementById('set-pagu-51').value) || 0,
+                "52": Number(document.getElementById('set-pagu-52').value) || 0,
+                "53": Number(document.getElementById('set-pagu-53').value) || 0
+            };
+            localStorage.setItem('emba_pagu_all_final_v4', JSON.stringify(CONFIG_PAGU_ALL));
+            renderAll();
+            alert(`Pagu ${tw} berhasil diperbarui.`);
+        };
+
+        window.renderInfoPagu = () => {
             const twAktif = document.getElementById('set-pagu-periode').value;
             const bodyAll = document.getElementById('body-info-pagu-all');
             const bodyProp = document.getElementById('body-info-pagu');
             const infoTotalPagu = document.getElementById('info-total-pagu');
 
-            if (!bodyAll) return;
-            
-            // A. RENDER MATRIKS SEMUA TW
             let htmlAll = "";
             ["51", "52", "53"].forEach(jb => {
                 const label = jb === "51" ? "Pegawai (51)" : (jb === "52" ? "Barang (52)" : "Modal (53)");
@@ -218,21 +321,18 @@
                 });
                 htmlAll += `</tr>`;
             });
-            bodyAll.innerHTML = htmlAll;
+            if(bodyAll) bodyAll.innerHTML = htmlAll;
 
-            // B. RENDER PROPORSI/BOBOT
-            if (bodyProp) {
-                const dataTW = CONFIG_PAGU_ALL[twAktif];
-                const total = Number(dataTW["51"]) + Number(dataTW["52"]) + Number(dataTW["53"]);
-                let htmlProp = "";
-                ["51", "52", "53"].forEach(jb => {
-                    const pagu = dataTW[jb] || 0;
-                    const prop = total > 0 ? ((pagu / total) * 100).toFixed(2) : 0;
-                    htmlProp += `<tr><td class="p-2 border text-left pl-4 font-bold text-slate-600">${jb}</td><td class="p-2 border text-right">Rp ${pagu.toLocaleString('id-ID')}</td><td class="p-2 border text-indigo-600 font-black">${prop}%</td></tr>`;
-                });
-                bodyProp.innerHTML = htmlProp;
-                if(infoTotalPagu) infoTotalPagu.innerText = "Rp " + total.toLocaleString('id-ID');
-            }
+            const dataTW = CONFIG_PAGU_ALL[twAktif];
+            const total = Number(dataTW["51"]) + Number(dataTW["52"]) + Number(dataTW["53"]);
+            let htmlProp = "";
+            ["51", "52", "53"].forEach(jb => {
+                const pagu = dataTW[jb] || 0;
+                const prop = total > 0 ? ((pagu / total) * 100).toFixed(2) : 0;
+                htmlProp += `<tr><td class="p-2 border text-left pl-4 font-bold text-slate-600">${jb}</td><td class="p-2 border text-right">Rp ${pagu.toLocaleString('id-ID')}</td><td class="p-2 border text-indigo-600 font-black">${prop}%</td></tr>`;
+            });
+            if(bodyProp) bodyProp.innerHTML = htmlProp;
+            if(infoTotalPagu) infoTotalPagu.innerText = "Rp " + total.toLocaleString('id-ID');
         };
 
         window.updateFormInputPagu = () => {
@@ -243,41 +343,6 @@
             renderInfoPagu();
         };
 
-        window.simpanSettingPagu = () => {
-            const tw = document.getElementById('set-pagu-periode').value;
-            CONFIG_PAGU_ALL[tw] = {
-                "51": Number(document.getElementById('set-pagu-51').value) || 0,
-                "52": Number(document.getElementById('set-pagu-52').value) || 0,
-                "53": Number(document.getElementById('set-pagu-53').value) || 0
-            };
-            localStorage.setItem('emba_pagu_all_final_v4', JSON.stringify(CONFIG_PAGU_ALL));
-            renderInfoPagu(); 
-            renderDashboard();
-            alert(`Berhasil! Pagu & Proporsi ${tw} telah diperbarui.`);
-        };
-
-        const loadPagu = () => {
-            const saved = localStorage.getItem('emba_pagu_all_final_v4');
-            if(saved) {
-                CONFIG_PAGU_ALL = JSON.parse(saved);
-            }
-            renderInfoPagu(); 
-            updateFormInputPagu();
-        };
-
-        // --- 2. FILTER AKUN ---
-        window.filterAkunByJenis = (jenis) => {
-            const akunSelect = document.getElementById('in-akun');
-            akunSelect.innerHTML = '<option value="">Pilih Akun</option>';
-            if(!jenis) return;
-            allAkuns.filter(a => a.startsWith(jenis)).forEach(a => {
-                let opt = document.createElement('option');
-                opt.value = a; opt.innerText = a;
-                akunSelect.appendChild(opt);
-            });
-        };
-
-        // --- 3. RENDER DASHBOARD ---
         window.renderDashboard = () => {
             const fT = document.getElementById('f-dash-tim').value, fB = document.getElementById('f-dash-bulan').value;
             let twRef = "TRIWULAN I";
@@ -289,14 +354,13 @@
             let dashHtml = "";
             
             dataRPD.forEach(d => { if ((!fT || d.tim === fT) && (!fB || d.bulan === bMap[fB])) { if (stats[d.jenis]) stats[d.jenis].r += Number(d.anggaran); } });
-            
             dataPerm.filter(p => p.isPosted).forEach(p => {
                 const bI = p.tglFPB ? p.tglFPB.split('-')[1] : '';
                 if ((!fT || p.tim === fT) && (!fB || bI === fB)) {
                     const rpd = dataRPD.find(r => r.id === p.rpdId);
                     const jb = rpd ? rpd.jenis : "52";
                     if (stats[jb]) stats[jb].b += Number(p.nilai);
-                    dashHtml += `<tr><td>${p.noForm}</td><td>${p.tim}</td><td>${p.uraian}</td><td class="text-right font-mono font-bold">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold uppercase">Posted</td></tr>`;
+                    dashHtml += `<tr><td>${p.noForm}</td><td>${p.tim}</td><td>${p.uraian}</td><td class="text-right font-mono font-bold">Rp ${Number(p.nilai).toLocaleString()}</td><td class="text-emerald-600 font-bold uppercase text-[8px]">Posted</td></tr>`;
                 }
             });
 
@@ -309,43 +373,40 @@
             });
 
             const devFinal = devT * 100, ikpa = Math.max(0, 100 - devFinal);
-            let kat = ikpa >= 95 ? "A. SANGAT BAIK" : (ikpa >= 89 ? "B. BAIK" : (ikpa >= 70 ? "C. CUKUP" : "D. KURANG"));
-            let col = ikpa >= 95 ? "text-blue-600" : (ikpa >= 89 ? "text-sky-500" : (ikpa >= 70 ? "text-amber-500" : "text-red-600"));
-
             document.getElementById('dash-total-rpd').innerText = "Rp " + tR.toLocaleString();
             document.getElementById('dash-total-real').innerText = "Rp " + tB.toLocaleString();
             document.getElementById('dash-total-gap').innerText = devFinal.toFixed(2) + "%";
             document.getElementById('dash-total-persen').innerText = ikpa.toFixed(2);
             const sEl = document.getElementById('dash-total-sisa'); 
-            if(sEl) { sEl.innerText = kat; sEl.className = `text-base font-black ${col}`; }
+            if(sEl) sEl.innerText = ikpa >= 95 ? "SANGAT BAIK" : (ikpa >= 89 ? "BAIK" : "CUKUP");
             document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
         };
 
-        // --- 4. FIREBASE LISTENERS ---
-        onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { 
-            dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); 
-            // Update Dropdown di Permintaan Belanja
-            const drop = document.getElementById('req-rpd-id');
-            if(drop) {
-                drop.innerHTML = '<option value="">-- Pilih RPD --</option>';
-                dataRPD.forEach(r => { 
-                    const opt = document.createElement('option');
-                    opt.value = r.id;
-                    opt.innerText = `${r.tim} | Rp ${Number(r.anggaran).toLocaleString()} | ${r.pok || r.uraian}`;
-                    drop.appendChild(opt);
-                });
-            }
-            renderAll(); 
-        });
+        // --- 4. CRUD & LISTENERS ---
+        window.simpanRPD = async () => {
+            const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, jenis: document.getElementById('in-jenis').value, akun: document.getElementById('in-akun').value, pok: document.getElementById('in-pok').value, anggaran: Number(document.getElementById('in-anggaran').value), bulan: document.getElementById('in-bulan').value, uraian: document.getElementById('in-uraian').value, createdAt: serverTimestamp() };
+            if(!d.tim || !d.anggaran) return alert("Lengkapi data!");
+            await addDoc(collection(db, "rpd_entries"), d); alert("Data RPD Berhasil Disimpan!");
+        };
 
-        onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => { 
-            dataPerm = s.docs.map(d => ({id: d.id, ...d.data()})); 
-            renderAll(); 
-        });
+        window.simpanPermintaan = async () => {
+            const rType = document.getElementById('req-type').value, rId = document.getElementById('req-rpd-id').value;
+            const sel = dataRPD.find(x => x.id === rId);
+            const d = { noForm: document.getElementById('req-no').value, nilai: Number(document.getElementById('req-nilai').value), uraian: document.getElementById('req-uraian').value, tglFPB: document.getElementById('req-tgl').value, rpdId: rType === 'RPD' ? rId : 'NON_RPD', tim: (rType === 'RPD' && sel) ? sel.tim : 'Umum', isPosted: false, createdAt: serverTimestamp() };
+            if(!d.noForm || !d.nilai) return alert("Lengkapi data FPB!");
+            await addDoc(collection(db, "permintaan_belanja"), d); alert("Permintaan Belanja Diajukan!");
+        };
 
-        window.renderAll = () => { renderDashboard(); renderRPD(); renderPermintaan(); renderRealisasi(); };
-        window.switchTab = (id) => { document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); document.getElementById('section-' + id).classList.remove('hidden'); document.getElementById('page-title').innerText = id.replace('-', ' ').toUpperCase(); };
-        window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); };
+        window.filterAkunByJenis = (jenis) => {
+            const akunSelect = document.getElementById('in-akun');
+            akunSelect.innerHTML = '<option value="">Pilih Akun</option>';
+            if(!jenis) return;
+            allAkuns.filter(a => a.startsWith(jenis)).forEach(a => {
+                let opt = document.createElement('option');
+                opt.value = a; opt.innerText = a;
+                akunSelect.appendChild(opt);
+            });
+        };
 
         window.renderRPD = () => {
             const b = document.getElementById('body-rpd'), f = document.getElementById('foot-rpd'); 
@@ -356,79 +417,8 @@
                 h += `<tr><td>${d.tim}</td><td>${k}</td><td>${d.jenis}</td><td>${d.akun}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td class="text-right font-bold">Rp ${Number(d.anggaran).toLocaleString()}</td><td>${d.bulan}</td><td><button onclick="hapusRPD('${d.id}')">🗑️</button></td></tr>`; 
             });
             if(b) b.innerHTML = h;
-            if(f) f.innerHTML = `<tr><td colspan="6" class="p-2">TOTAL RENCANA PENARIKAN (RPD)</td><td class="text-right p-2 text-indigo-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
+            if(f) f.innerHTML = `<tr><td colspan="6" class="p-2">TOTAL RENCANA RPD</td><td class="text-right p-2 text-indigo-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
-
-       window.renderPermintaan = () => {
-    const b = document.getElementById('body-permintaan'), f = document.getElementById('foot-permintaan'); 
-    let h = "", total = 0;
-
-    dataPerm.forEach(d => {
-        total += Number(d.nilai);
-        
-        // Logika Tombol Post (Orange) dan Unpost (Merah)
-        const pB = d.isPosted ? 
-            `<button onclick="updateStatusPerm('${d.id}','isPosted',false)" class="btn-unpost">BATAL</button>` : 
-            `<button onclick="updateStatusPerm('${d.id}','isPosted',true)" class="btn-post">POSTING</button>`;
-
-        h += `
-        <tr>
-            <td class="font-bold border">${d.noForm}</td>
-            <td class="border">${d.tim}</td>
-            <td class="text-left border p-2">${d.uraian}</td>
-            <td class="text-right font-bold font-mono border">Rp ${Number(d.nilai).toLocaleString('id-ID')}</td>
-            
-            <td class="border">
-                <select onchange="updateStatusPerm('${d.id}', 'appStatus', this.value)" class="text-[9px] p-1 border rounded bg-white w-full">
-                    <option value="" ${!d.appStatus ? 'selected' : ''}>-- Pilih --</option>
-                    <option value="App PJ" ${d.appStatus === 'App PJ' ? 'selected' : ''}>App PJ</option>
-                    <option value="App PPK" ${d.appStatus === 'App PPK' ? 'selected' : ''}>App PPK</option>
-                </select>
-            </td>
-            
-            <td class="border"><input type="date" value="${d.tglApp || ''}" onchange="updateStatusPerm('${d.id}', 'tglApp', this.value)" class="text-[9px] border rounded w-full"></td>
-            
-            <td class="border">
-                <select onchange="updateStatusPerm('${d.id}', 'prosesBayar', this.value)" class="text-[9px] p-1 border rounded bg-white w-full">
-                    <option value="" ${!d.prosesBayar ? 'selected' : ''}>-- Pilih Tahapan --</option>
-                    <option value="Pemeriksaan Dokumen" ${d.prosesBayar === 'Pemeriksaan Dokumen' ? 'selected' : ''}>1. Pemeriksaan Dokumen</option>
-                    <option value="Pemeriksaan Bendahara" ${d.prosesBayar === 'Pemeriksaan Bendahara' ? 'selected' : ''}>2. Pemeriksaan Bendahara</option>
-                    <option value="Pengajuan KPPN" ${d.prosesBayar === 'Pengajuan KPPN' ? 'selected' : ''}>3. Pengajuan KPPN</option>
-                    <option value="Dana Tersedia" ${d.prosesBayar === 'Dana Tersedia' ? 'selected' : ''}>4. Dana Tersedia</option>
-                    <option value="Selesai Pembayaran" ${d.prosesBayar === 'Selesai Pembayaran' ? 'selected' : ''}>5. Selesai Pembayaran</option>
-                </select>
-            </td>
-            
-            <td class="border"><input type="date" value="${d.tglBayar || ''}" onchange="updateStatusPerm('${d.id}', 'tglBayar', this.value)" class="text-[9px] border rounded w-full"></td>
-            
-            <td class="border">
-                <select onchange="updateStatusPerm('${d.id}', 'statusDok', this.value)" class="text-[9px] p-1 border rounded font-bold w-full bg-orange-50">
-                    <option value="" ${!d.statusDok ? 'selected' : ''}>-- Dokumen --</option>
-                    <option value="Kwitansi" ${d.statusDok === 'Kwitansi' ? 'selected' : ''}>Kwitansi</option>
-                    <option value="SP2D" ${d.statusDok === 'SP2D' ? 'selected' : ''}>SP2D</option>
-                </select>
-            </td>
-
-            <td class="flex gap-1 justify-center no-print border p-2">
-                ${pB}
-                <button onclick="hapusPerm('${d.id}')" class="p-1 grayscale hover:grayscale-0 transition">🗑️</button>
-            </td>
-        </tr>`;
-    });
-
-    if(b) b.innerHTML = h;
-    if(f) f.innerHTML = `<tr><td colspan="3" class="p-2 border uppercase">Total Ajuan Terdata</td><td class="text-right p-2 text-indigo-700 font-black border">Rp ${total.toLocaleString('id-ID')}</td><td colspan="6" class="border"></td></tr>`;
-};
-       window.updateStatusPerm = async (id, field, value) => {
-    try {
-        const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-        const docRef = doc(db, "permintaan_belanja", id);
-        await updateDoc(docRef, { [field]: value });
-        // Data tersimpan otomatis tanpa perlu refresh
-    } catch (e) {
-        console.error("Gagal Update:", e);
-    }
-};
 
         window.renderRealisasi = () => {
             const fT = document.getElementById('f-real-tim').value, fB = document.getElementById('f-real-bulan').value;
@@ -444,27 +434,35 @@
             if(f) f.innerHTML = `<tr><td colspan="5" class="p-2 font-bold uppercase">Total Keseluruhan</td><td class="text-right p-2 font-bold">Rp ${totR.toLocaleString()}</td><td class="text-right p-2 text-orange-600 font-bold">Rp ${totB.toLocaleString()}</td><td class="text-right p-2 text-red-600 font-bold">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
         };
 
+        window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
+        window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
+        window.switchTab = (id) => { document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); document.getElementById('section-' + id).classList.remove('hidden'); document.getElementById('page-title').innerText = id.replace('-', ' ').toUpperCase(); };
+        window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); };
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
-        window.upDate = async (id, f, v) => await updateDoc(doc(db, "permintaan_belanja", id), { [f]: v });
-        window.hapusRPD = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "rpd_entries", id)); };
-        window.hapusPerm = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
 
-        window.simpanRPD = async () => {
-            const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, jenis: document.getElementById('in-jenis').value, akun: document.getElementById('in-akun').value, pok: document.getElementById('in-pok').value, anggaran: Number(document.getElementById('in-anggaran').value), bulan: document.getElementById('in-bulan').value, uraian: document.getElementById('in-uraian').value, createdAt: serverTimestamp() };
-            if(!d.tim || !d.anggaran) return alert("Lengkapi data!");
-            await addDoc(collection(db, "rpd_entries"), d); alert("Data RPD Berhasil Disimpan!");
-        };
+        window.renderAll = () => { renderDashboard(); renderRPD(); renderPermintaan(); renderRealisasi(); renderInfoPagu(); };
 
-        window.simpanPermintaan = async () => {
-            const rType = document.getElementById('req-type').value, rId = document.getElementById('req-rpd-id').value;
-            const sel = dataRPD.find(x => x.id === rId);
-            const d = { noForm: document.getElementById('req-no').value, nilai: Number(document.getElementById('req-nilai').value), uraian: document.getElementById('req-uraian').value, tglFPB: document.getElementById('req-tgl').value, rpdId: rType === 'RPD' ? rId : 'NON_RPD', tim: (rType === 'RPD' && sel) ? sel.tim : 'Umum', isPosted: false, createdAt: serverTimestamp() };
-            if(!d.noForm || !d.nilai) return alert("Lengkapi data FPB!");
-            await addDoc(collection(db, "permintaan_belanja"), d); alert("Permintaan Belanja Diajukan!");
-        };
+        onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { 
+            dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); 
+            const drop = document.getElementById('req-rpd-id');
+            if(drop) {
+                drop.innerHTML = '<option value="">-- Pilih RPD --</option>';
+                dataRPD.forEach(r => drop.innerHTML += `<option value="${r.id}">${r.tim} | Rp ${Number(r.anggaran).toLocaleString()} | ${r.pok || r.uraian}</option>`);
+            }
+            renderAll(); 
+        });
 
-        // Panggil saat pertama buka
-        document.addEventListener('DOMContentLoaded', loadPagu);
+        onSnapshot(query(collection(db, "permintaan_belanja"), orderBy("createdAt", "desc")), (s) => { 
+            dataPerm = s.docs.map(d => ({id: d.id, ...d.data()})); 
+            renderAll(); 
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('emba_pagu_all_final_v4');
+            if(saved) CONFIG_PAGU_ALL = JSON.parse(saved);
+            renderAll();
+            updateFormInputPagu();
+        });
     </script>
 </body>
 </html>
