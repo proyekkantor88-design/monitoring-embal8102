@@ -473,7 +473,7 @@
 
     let h = "", totR = 0, totB = 0;
 
-    // 1. RENDER DATA YANG SESUAI RPD (Target vs Realisasi)
+    // 1. RENDER DATA YANG SESUAI RPD
     dataRPD.forEach(d => {
         const listPosted = dataPerm.filter(p => p.rpdId === d.id && p.isPosted === true);
         const r = Number(d.anggaran), re = listPosted.reduce((acc, c) => acc + Number(c.nilai), 0), g = r - re;
@@ -493,16 +493,13 @@
         </tr>`;
     });
 
-    // 2. RENDER DATA NON RPD (Hanya Realisasi)
+    // 2. RENDER DATA NON RPD
     const nonRPD = dataPerm.filter(p => p.rpdId === 'NON_RPD' && p.isPosted === true);
-    
     if (nonRPD.length > 0) {
         h += `<tr class="bg-slate-100"><td colspan="9" class="text-left p-1 font-bold italic text-[8px] text-slate-500">-- Transaksi Non RPD (Tanpa Anggaran Rencana) --</td></tr>`;
-        
         nonRPD.forEach(p => {
             const re = Number(p.nilai);
-            totB += re; // Menambah total pengeluaran keseluruhan
-
+            totB += re; 
             h += `<tr class="bg-orange-50/50">
                 <td>${p.tim || 'Umum'}</td>
                 <td>-</td>
@@ -512,22 +509,26 @@
                 <td class="text-right font-mono text-slate-400">Rp 0</td>
                 <td class="text-right text-orange-600 font-bold font-mono">Rp ${re.toLocaleString()}</td>
                 <td class="text-right text-red-600 font-bold font-mono">Rp -${re.toLocaleString()}</td>
-                <td class="text-red-500 font-bold">Over</td>
+                <td class="text-red-500 font-bold text-[8px]">OVER</td>
             </tr>`;
         });
     }
 
     b.innerHTML = h;
 
-    // 3. RENDER FOOTER TOTAL
+    // 3. RENDER FOOTER TOTAL DENGAN PERSENTASE KESELURUHAN
     const f = document.getElementById('foot-realisasi');
     if (f) {
+        // Hitung persentase akumulatif
+        const totalPersen = totR > 0 ? ((totB / totR) * 100).toFixed(1) : 0;
+        const colorPersen = totalPersen >= 95 ? 'text-emerald-600' : (totalPersen >= 90 ? 'text-blue-600' : 'text-red-600');
+
         f.innerHTML = `<tr>
-            <td colspan="5" class="p-2 font-bold uppercase">Total Keseluruhan</td>
-            <td class="text-right p-2 font-bold font-mono">Rp ${totR.toLocaleString()}</td>
-            <td class="text-right p-2 text-orange-600 font-bold font-mono">Rp ${totB.toLocaleString()}</td>
-            <td class="text-right p-2 text-red-600 font-bold font-mono">Rp ${(totR-totB).toLocaleString()}</td>
-            <td></td>
+            <td colspan="5" class="p-2 font-bold uppercase text-slate-600">Total Keseluruhan</td>
+            <td class="text-right p-2 font-black font-mono">Rp ${totR.toLocaleString()}</td>
+            <td class="text-right p-2 text-orange-600 font-black font-mono">Rp ${totB.toLocaleString()}</td>
+            <td class="text-right p-2 text-red-600 font-black font-mono">Rp ${(totR - totB).toLocaleString()}</td>
+            <td class="text-center font-black ${colorPersen}">${totalPersen}%</td>
         </tr>`;
     }
 };
