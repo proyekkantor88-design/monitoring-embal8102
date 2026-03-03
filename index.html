@@ -382,9 +382,22 @@
             document.getElementById('dash-body-permintaan').innerHTML = dashHtml;
         };
 
-        // --- 4. CRUD & LISTENERS ---
+       // --- 4. CRUD & LISTENERS (VERSI PERBAIKAN) ---
         window.simpanRPD = async () => {
-            const d = { tim: document.getElementById('in-tim').value, kegiatan: document.getElementById('in-kegiatan').value, kro: document.getElementById('in-kro').value, ro: document.getElementById('in-ro').value, komp: document.getElementById('in-komp').value, jenis: document.getElementById('in-jenis').value, akun: document.getElementById('in-akun').value, pok: document.getElementById('in-pok').value, anggaran: Number(document.getElementById('in-anggaran').value), bulan: document.getElementById('in-bulan').value, uraian: document.getElementById('in-uraian').value, createdAt: serverTimestamp() };
+            const d = { 
+                tim: document.getElementById('in-tim').value, 
+                kegiatan: document.getElementById('in-kegiatan').value, 
+                kro: document.getElementById('in-kro').value, 
+                ro: document.getElementById('in-ro').value, 
+                komp: document.getElementById('in-komp').value, 
+                jenis: document.getElementById('in-jenis').value, 
+                akun: document.getElementById('in-akun').value, 
+                pok: document.getElementById('in-pok').value, 
+                anggaran: Number(document.getElementById('in-anggaran').value), 
+                bulan: document.getElementById('in-bulan').value, 
+                uraian: document.getElementById('in-uraian').value, 
+                createdAt: serverTimestamp() 
+            };
             if(!d.tim || !d.anggaran) return alert("Lengkapi data!");
             await addDoc(collection(db, "rpd_entries"), d); alert("Data RPD Berhasil Disimpan!");
         };
@@ -392,7 +405,16 @@
         window.simpanPermintaan = async () => {
             const rType = document.getElementById('req-type').value, rId = document.getElementById('req-rpd-id').value;
             const sel = dataRPD.find(x => x.id === rId);
-            const d = { noForm: document.getElementById('req-no').value, nilai: Number(document.getElementById('req-nilai').value), uraian: document.getElementById('req-uraian').value, tglFPB: document.getElementById('req-tgl').value, rpdId: rType === 'RPD' ? rId : 'NON_RPD', tim: (rType === 'RPD' && sel) ? sel.tim : 'Umum', isPosted: false, createdAt: serverTimestamp() };
+            const d = { 
+                noForm: document.getElementById('req-no').value, 
+                nilai: Number(document.getElementById('req-nilai').value), 
+                uraian: document.getElementById('req-uraian').value, 
+                tglFPB: document.getElementById('req-tgl').value, 
+                rpdId: rType === 'RPD' ? rId : 'NON_RPD', 
+                tim: (rType === 'RPD' && sel) ? sel.tim : 'Umum', 
+                isPosted: false, 
+                createdAt: serverTimestamp() 
+            };
             if(!d.noForm || !d.nilai) return alert("Lengkapi data FPB!");
             await addDoc(collection(db, "permintaan_belanja"), d); alert("Permintaan Belanja Diajukan!");
         };
@@ -424,14 +446,31 @@
             const fT = document.getElementById('f-real-tim').value, fB = document.getElementById('f-real-bulan').value;
             const b = document.getElementById('body-realisasi'), f = document.getElementById('foot-realisasi'); 
             let h = "", totR = 0, totB = 0;
-            dataRPD.filter(d => (!fT || d.tim === fT) && (!fB || d.bulan === fB)).forEach(d => {
-                const lP = dataPerm.filter(p => p.rpdId === d.id && p.isPosted);
-                const r = Number(d.anggaran), re = lP.reduce((acc,c)=>acc+Number(c.nilai),0), g = r - re;
+
+            // Filter data RPD
+            const filteredRPD = dataRPD.filter(d => (!fT || d.tim === fT) && (!fB || d.bulan === fB));
+
+            filteredRPD.forEach(d => {
+                // Cari realisasi yang sudah ter-POSTING dan cocok dengan ID RPD ini
+                const listPosted = dataPerm.filter(p => p.rpdId === d.id && p.isPosted === true);
+                const r = Number(d.anggaran), re = listPosted.reduce((acc, c) => acc + Number(c.nilai), 0), g = r - re;
+                
                 totR += r; totB += re;
-                h += `<tr><td>${d.tim}</td><td>${d.jenis}</td><td class="text-left">${d.pok || '-'}</td><td class="text-left">${d.uraian || '-'}</td><td>${d.bulan}</td><td class="text-right">Rp ${r.toLocaleString()}</td><td class="text-right text-orange-600 font-bold">Rp ${re.toLocaleString()}</td><td class="text-right text-red-600 font-bold">Rp ${g.toLocaleString()}</td><td class="font-bold">${r>0?Math.round((re/r)*100):0}%</td></tr>`;
+                
+                h += `<tr>
+                    <td>${d.tim}</td>
+                    <td>${d.jenis}</td>
+                    <td class="text-left">${d.pok || '-'}</td>
+                    <td class="text-left">${d.uraian || '-'}</td>
+                    <td>${d.bulan}</td>
+                    <td class="text-right font-mono">Rp ${r.toLocaleString()}</td>
+                    <td class="text-right text-orange-600 font-bold font-mono">Rp ${re.toLocaleString()}</td>
+                    <td class="text-right text-red-600 font-bold font-mono">Rp ${g.toLocaleString()}</td>
+                    <td class="font-bold">${r > 0 ? Math.round((re/r)*100) : 0}%</td>
+                </tr>`;
             });
             if(b) b.innerHTML = h;
-            if(f) f.innerHTML = `<tr><td colspan="5" class="p-2 font-bold uppercase">Total Keseluruhan</td><td class="text-right p-2 font-bold">Rp ${totR.toLocaleString()}</td><td class="text-right p-2 text-orange-600 font-bold">Rp ${totB.toLocaleString()}</td><td class="text-right p-2 text-red-600 font-bold">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
+            if(f) f.innerHTML = `<tr><td colspan="5" class="p-2 font-bold uppercase">Total Keseluruhan</td><td class="text-right p-2 font-bold font-mono">Rp ${totR.toLocaleString()}</td><td class="text-right p-2 text-orange-600 font-bold font-mono">Rp ${totB.toLocaleString()}</td><td class="text-right p-2 text-red-600 font-bold font-mono">Rp ${(totR-totB).toLocaleString()}</td><td></td></tr>`;
         };
 
         window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
@@ -440,8 +479,16 @@
         window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('hidden-sidebar'); document.getElementById('main-content').classList.toggle('ml-64'); };
         window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
 
-        window.renderAll = () => { renderDashboard(); renderRPD(); renderPermintaan(); renderRealisasi(); renderInfoPagu(); };
+        // --- RENDER SEMUA TAB ---
+        window.renderAll = () => { 
+            renderDashboard(); 
+            renderRPD(); 
+            renderPermintaan(); 
+            renderRealisasi(); // Memastikan tabel realisasi dipanggil
+            renderInfoPagu(); 
+        };
 
+        // Snapshot Real-time dari Firebase
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { 
             dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); 
             const drop = document.getElementById('req-rpd-id');
