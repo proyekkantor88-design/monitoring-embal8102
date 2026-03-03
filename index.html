@@ -521,21 +521,6 @@
     }
 };
 
-    container.innerHTML = html;
-
-    // Update Footer Total
-    const footer = document.getElementById('foot-realisasi');
-    if (footer) {
-        footer.innerHTML = `
-        <tr class="bg-slate-100 font-bold">
-            <td colspan="5" class="p-2">TOTAL KESELURUHAN</td>
-            <td class="text-right">Rp ${totalRencana.toLocaleString('id-ID')}</td>
-            <td class="text-right text-orange-600">Rp ${totalRealisasi.toLocaleString('id-ID')}</td>
-            <td class="text-right text-red-600">Rp ${(totalRencana - totalRealisasi).toLocaleString('id-ID')}</td>
-            <td></td>
-        </tr>`;
-    }
-};
         window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
         window.switchTab = (id) => {
