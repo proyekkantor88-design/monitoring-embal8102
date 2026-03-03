@@ -63,6 +63,31 @@
                 <div class="overflow-x-auto"><table class="w-full text-center"><thead><tr><th>No. FPB</th><th>Tim</th><th>Uraian</th><th>Nilai</th><th>Status</th></tr></thead><tbody id="dash-body-permintaan"></tbody></table></div>
             </div>
         </section>
+        <section id="section-realisasi-rpd" class="tab-content hidden">
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-t-4 border-emerald-500">
+        <div class="overflow-x-auto">
+            <table class="w-full text-center border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 uppercase text-[9px]">
+                        <th class="p-2 border">Tim</th>
+                        <th class="p-2 border">Jenis</th>
+                        <th class="p-2 border">Rincian POK</th>
+                        <th class="p-2 border">Uraian RPD</th>
+                        <th class="p-2 border">Bulan</th>
+                        <th class="p-2 border">Anggaran (RPD)</th>
+                        <th class="p-2 border">Realisasi (Posted)</th>
+                        <th class="p-2 border">GAP / Sisa</th>
+                        <th class="p-2 border">%</th>
+                    </tr>
+                </thead>
+                <tbody id="body-realisasi">
+                    </tbody>
+                <tfoot id="foot-realisasi" class="bg-slate-50 font-bold">
+                    </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
 
         <section id="section-setting-pagu" class="tab-content hidden">
     <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-600 mb-6">
@@ -442,43 +467,59 @@
             if(f) f.innerHTML = `<tr><td colspan="6" class="p-2">TOTAL RENCANA RPD</td><td class="text-right p-2 text-indigo-700 font-bold">Rp ${total.toLocaleString()}</td><td colspan="2"></td></tr>`;
         };
 
-       window.renderRealisasi = () => {
+      window.renderRealisasi = () => {
     const container = document.getElementById('body-realisasi');
-    if (!container) return; // Mencegah error jika element tidak ditemukan
+    if (!container) return;
 
-    let html = "", totalRencana = 0, totalRealisasi = 0;
+    let h = "", totalRencana = 0, totalRealisasi = 0;
 
-    // Pastikan data RPD tersedia
+    // Pastikan data RPD ada
     if (dataRPD.length === 0) {
-        container.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-400">Belum ada data RPD yang diinput.</td></tr>';
+        container.innerHTML = '<tr><td colspan="9" class="p-4 text-slate-400">Belum ada data RPD.</td></tr>';
         return;
     }
 
     dataRPD.forEach(d => {
-        // Filter: Hanya hitung realisasi yang "POSTED" (isPosted: true) dan memiliki ID RPD yang cocok
-        const terkait = dataPerm.filter(p => p.rpdId === d.id && p.isPosted === true);
+        // Cari data permintaan yang berstatus 'isPosted' dan merujuk ke RPD ini
+        const listPosted = dataPerm.filter(p => p.rpdId === d.id && p.isPosted === true);
         
-        const rencana = Number(d.anggaran) || 0;
-        const realisasi = terkait.reduce((acc, curr) => acc + Number(curr.nilai), 0);
-        const sisa = rencana - realisasi;
-        const persentase = rencana > 0 ? ((realisasi / rencana) * 100).toFixed(1) : 0;
+        const r = Number(d.anggaran) || 0;
+        const re = listPosted.reduce((acc, curr) => acc + Number(curr.nilai), 0);
+        const gap = r - re;
+        const persen = r > 0 ? ((re / r) * 100).toFixed(1) : 0;
 
-        totalRencana += rencana;
-        totalRealisasi += realisasi;
+        totalRencana += r;
+        totalRealisasi += re;
 
-        html += `
-        <tr class="hover:bg-slate-50">
-            <td class="border">${d.tim}</td>
-            <td class="border text-center">${d.jenis}</td>
-            <td class="border text-left px-2">${d.pok || '-'}</td>
-            <td class="border text-left px-2">${d.uraian || '-'}</td>
-            <td class="border text-center">${d.bulan}</td>
-            <td class="border text-right font-mono">Rp ${rencana.toLocaleString('id-ID')}</td>
-            <td class="border text-right font-mono text-orange-600 font-bold">Rp ${realisasi.toLocaleString('id-ID')}</td>
-            <td class="border text-right font-mono text-red-600 font-bold">Rp ${sisa.toLocaleString('id-ID')}</td>
-            <td class="border text-center font-black ${persentase >= 90 ? 'text-emerald-600' : 'text-red-500'}">${persentase}%</td>
+        h += `
+        <tr class="hover:bg-slate-50 transition">
+            <td class="p-2 border">${d.tim}</td>
+            <td class="p-2 border font-bold">${d.jenis}</td>
+            <td class="p-2 border text-left">${d.pok || '-'}</td>
+            <td class="p-2 border text-left">${d.uraian || '-'}</td>
+            <td class="p-2 border">${d.bulan}</td>
+            <td class="p-2 border text-right font-mono">Rp ${r.toLocaleString('id-ID')}</td>
+            <td class="p-2 border text-right font-mono text-orange-600 font-bold">Rp ${re.toLocaleString('id-ID')}</td>
+            <td class="p-2 border text-right font-mono text-red-600 font-bold">Rp ${gap.toLocaleString('id-ID')}</td>
+            <td class="p-2 border font-black ${persen >= 90 ? 'text-emerald-600' : 'text-red-500'}">${persen}%</td>
         </tr>`;
     });
+
+    container.innerHTML = h;
+
+    // Update Footer Total
+    const f = document.getElementById('foot-realisasi');
+    if (f) {
+        f.innerHTML = `
+        <tr class="bg-indigo-50 font-bold">
+            <td colspan="5" class="p-2 border text-left">TOTAL KESELURUHAN</td>
+            <td class="p-2 border text-right font-mono">Rp ${totalRencana.toLocaleString('id-ID')}</td>
+            <td class="p-2 border text-right font-mono text-orange-600">Rp ${totalRealisasi.toLocaleString('id-ID')}</td>
+            <td class="p-2 border text-right font-mono text-red-600">Rp ${(totalRencana - totalRealisasi).toLocaleString('id-ID')}</td>
+            <td class="p-2 border"></td>
+        </tr>`;
+    }
+};
 
     container.innerHTML = html;
 
@@ -498,21 +539,23 @@
         window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
         window.switchTab = (id) => {
-    // 1. Sembunyikan semua konten tab
+    // 1. Sembunyikan semua tab-content
     document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
     
-    // 2. Tampilkan konten tab yang dipilih
-    const targetSection = document.getElementById('section-' + id);
-    if (targetSection) {
-        targetSection.classList.remove('hidden');
+    // 2. Tampilkan tab yang dipilih
+    const target = document.getElementById('section-' + id);
+    if (target) {
+        target.classList.remove('hidden');
     }
 
-    // 3. Perbarui Judul di Header secara dinamis
+    // 3. Update Judul Header agar sinkron dengan menu sidebar
     const pageTitle = document.getElementById('page-title');
     if (id === 'realisasi-rpd') {
         pageTitle.innerText = "REALISASI & GAP";
+        renderRealisasi(); // Pastikan data dirender ulang saat tab dibuka
     } else if (id === 'dashboard') {
         pageTitle.innerText = "DASHBOARD UTAMA";
+        renderDashboard();
     } else {
         pageTitle.innerText = id.replace('-', ' ').toUpperCase();
     }
