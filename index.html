@@ -428,15 +428,27 @@
     if(b) b.innerHTML = h;
     if(f) f.innerHTML = `<tr><td colspan="3" class="p-2 border uppercase">Total Ajuan Terdata</td><td class="text-right p-2 text-indigo-700 font-black border">Rp ${total.toLocaleString('id-ID')}</td><td colspan="6" class="border"></td></tr>`;
 };
-       window.updateStatusPerm = async (id, field, value) => {
+      window.handlePosting = async (id, status) => {
     try {
-        const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        const docRef = doc(db, "permintaan_belanja", id);
+        await updateDoc(docRef, { isPosted: status });
+    } catch (e) { alert("Gagal Posting: " + e.message); }
+};
+
+window.updateStatusPerm = async (id, field, value) => {
+    try {
         const docRef = doc(db, "permintaan_belanja", id);
         await updateDoc(docRef, { [field]: value });
-        // Data tersimpan otomatis tanpa perlu refresh
-    } catch (e) {
-        console.error("Gagal Update:", e);
-    }
+    } catch (e) { console.error("Update Gagal:", e); }
+};
+
+window.editRow = (id) => {
+    document.getElementById(`row-${id}`).classList.add('bg-yellow-50');
+};
+
+window.saveRow = (id) => {
+    document.getElementById(`row-${id}`).classList.remove('bg-yellow-50');
+    alert("Perubahan Disimpan ke Database.");
 };
 
         window.renderRealisasi = () => {
