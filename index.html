@@ -148,20 +148,26 @@
                 </div>
                 <button onclick="simpanPermintaan()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold text-xs shadow">AJUKAN PERMINTAAN</button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto"><table class="w-full text-center"><thead><tr><th>NO. FPB</th><th>TIM</th><th>URAIAN</th><th>NILAI</th><th>STATUS</th><th class="no-print">AKSI</th></tr></thead><tbody id="body-permintaan"></tbody><tfoot id="foot-permintaan" class="foot-total"></tfoot></table></div>
-        </section>
-
-        <section id="section-realisasi-rpd" class="tab-content hidden">
-            <div class="mb-6 no-print flex gap-4 bg-white p-4 rounded-xl shadow-sm border">
-                <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Tim</label><select id="f-real-tim" onchange="renderRealisasi()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Tim</option><option>Umum</option><option>Sosial</option><option>Produksi</option><option>Distribusi</option><option>Neraca</option><option>IPDS</option></select></div>
-                <div class="flex-1"><label class="text-[10px] font-bold uppercase text-slate-400">Filter Bulan</label><select id="f-real-bulan" onchange="renderRealisasi()" class="w-full p-2 border rounded text-xs mt-1"><option value="">Semua Bulan</option><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-500 overflow-x-auto">
-                <table class="w-full border text-center">
-                    <thead class="bg-slate-50 uppercase"><tr><th>Tim</th><th>Jenis</th><th>Rincian POK</th><th>Uraian</th><th>Bulan RPD</th><th>Rencana</th><th>Realisasi</th><th>GAP</th><th>%</th></tr></thead>
-                    <tbody id="body-realisasi"></tbody>
-                    <tfoot id="foot-realisasi" class="foot-total"></tfoot>
-                </table>
+            <div class="bg-white rounded-xl shadow-sm border p-4 overflow-x-auto">
+    <table class="w-full text-center min-w-[1500px]">
+        <thead>
+            <tr>
+                <th class="p-2">NO. FPB</th>
+                <th class="p-2">TIM</th>
+                <th class="p-2">URAIAN</th>
+                <th class="p-2">NILAI</th>
+                <th class="bg-indigo-50 text-indigo-900 border-x">APPROVAL</th>
+                <th class="bg-indigo-50 text-indigo-900 border-x">TGL APP</th>
+                <th class="bg-emerald-50 text-emerald-900 border-x">PROSES BAYAR</th>
+                <th class="bg-emerald-50 text-emerald-900 border-x">TGL BAYAR</th>
+                <th class="bg-orange-50 text-orange-900 border-x">STATUS DOK</th>
+                <th class="no-print">AKSI</th>
+            </tr>
+        </thead>
+        <tbody id="body-permintaan"></tbody>
+        <tfoot id="foot-permintaan" class="foot-total"></tfoot>
+    </table>
+</div>
             </div>
         </section>
     </main>
