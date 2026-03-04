@@ -149,7 +149,6 @@
         </div>
     </div>
 </section>
-
         <section id="section-input-rpd" class="tab-content hidden">
             <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border-l-4 border-indigo-600 no-print">
                 <div class="grid grid-cols-7 gap-2 mb-4">
@@ -542,38 +541,33 @@
         window.hapusRPD = async (id) => { if(confirm("Hapus RPD?")) await deleteDoc(doc(db, "rpd_entries", id)); };
         window.hapusPerm = async (id) => { if(confirm("Hapus Permintaan?")) await deleteDoc(doc(db, "permintaan_belanja", id)); };
         window.switchTab = (id) => {
-    // 1. Sembunyikan semua tab-content
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-    
-    // 2. Tampilkan tab yang dipilih
+    // Sembunyikan semua konten dengan paksa
+    document.querySelectorAll('.tab-content').forEach(t => {
+        t.classList.add('hidden');
+    });
+
+    // Tampilkan konten yang dipilih
     const target = document.getElementById('section-' + id);
     if (target) {
         target.classList.remove('hidden');
     }
 
-    // 3. Update Judul Header agar sinkron dengan menu sidebar
-    const pageTitle = document.getElementById('page-title');
-    if (id === 'realisasi-rpd') {
-        pageTitle.innerText = "REALISASI & GAP";
-        renderRealisasi(); // Pastikan data dirender ulang saat tab dibuka
-    } else if (id === 'dashboard') {
-        pageTitle.innerText = "DASHBOARD UTAMA";
-        renderDashboard();
-    } else {
-        pageTitle.innerText = id.replace('-', ' ').toUpperCase();
-    }
-};
-        window.toggleSourceRPD = (v) => document.getElementById('source-rpd-wrap').style.display = v === 'Non RPD' ? 'none' : 'block';
+    // Ganti Judul
+    const titles = {
+        'dashboard': 'DASHBOARD UTAMA',
+        'setting-pagu': 'SETTING PAGU & IKPA',
+        'input-rpd': 'INPUT RPD',
+        'permintaan-belanja': 'PERMINTAAN BELANJA',
+        'realisasi-rpd': 'REALISASI & GAP'
+    };
+    document.getElementById('page-title').innerText = titles[id] || "EMBAL";
 
-        // --- RENDER SEMUA TAB ---
-        window.renderAll = () => {
-    renderDashboard();
-    renderRPD();
-    renderPermintaan();
-    renderRealisasi(); // Tambahkan baris ini jika sebelumnya belum ada
-    if (typeof renderInfoPagu === 'function') renderInfoPagu();
+    // Pemicu Render Data: Inilah yang membuat isi menu TIDAK KOSONG
+    if (id === 'dashboard') renderDashboard();
+    if (id === 'realisasi-rpd') renderRealisasi();
+    if (id === 'permintaan-belanja') renderPermintaan();
+    if (id === 'input-rpd') renderRPD();
 };
-
         // Snapshot Real-time dari Firebase
         onSnapshot(query(collection(db, "rpd_entries"), orderBy("createdAt", "desc")), (s) => { 
             dataRPD = s.docs.map(d => ({id: d.id, ...d.data()})); 
